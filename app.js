@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=1")
+    return fetch("./print-index.json?v=2")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -203,13 +203,20 @@
       body.innerHTML = "<p>暂无答案文件。</p>";
       return;
     }
-    fetch(mdUrl + "?v=1")
-      .then((r) => r.text())
+    fetch(mdUrl + "?v=2")
+      .then((r) => {
+        if (!r.ok) throw new Error("missing");
+        return r.text();
+      })
       .then((text) => {
         body.innerHTML = renderMd(text);
       })
       .catch(() => {
-        body.innerHTML = "<p>答案加载失败，请直接下载 PDF。</p>";
+        if (pr && pr.answerHtml) {
+          body.innerHTML = "<div>" + pr.answerHtml + "</div>";
+        } else {
+          body.innerHTML = "<p>答案加载失败，请直接下载 PDF。</p>";
+        }
       });
   }
 

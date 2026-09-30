@@ -452,31 +452,42 @@ def write_answers():
 
 
 def patch_data_js_print_paths():
-    """Inject printables paths into data.js lessons for the app download buttons."""
-    path = ROOT / "data.js"
-    text = path.read_text(encoding="utf-8")
-    # Build map bookNo -> files
-    mapping = {}
-    for les in LESSONS:
-        n = les["bookNo"]
-        stem = f"L{n:02d}-{les['title']}-每日10分钟"
-        mapping[n] = {
-            "daily": f"printables/lessons/{stem}.pdf",
-            "recite": f"printables/lessons/L{n:02d}-{les['title']}-背诵默写10分钟.pdf" if les.get("recite") else None,
-        }
-    # simplistic inject: add printables field after each bookNo line by regenerating is hard;
-    # write a small print-index JSON instead for app.js
+    """Inject printables paths into print-index.json (preserve answer fields if present)."""
+    path = ROOT / "print-index.json"
+    existing = {}
+    if path.exists():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            existing = {}
+    old_lessons = (existing.get("lessons") or {}) if isinstance(existing, dict) else {}
     idx = {
-        "lessons": {
-            str(k): v for k, v in mapping.items()
-        },
+        "lessons": {},
         "sprint": {
             "u1": "printables/sprint/U1-第一单元冲刺.pdf",
             "u2": "printables/sprint/U2-第二单元冲刺.pdf",
             "u3": "printables/sprint/U3-第三单元冲刺.pdf",
         },
     }
-    (ROOT / "print-index.json").write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
+    for les in LESSONS:
+        n = les["bookNo"]
+        stem = f"L{n:02d}-{les['title']}-每日10分钟"
+        entry = {
+            "daily": f"printables/lessons/{stem}.pdf",
+            "recite": f"printables/lessons/L{n:02d}-{les['title']}-背诵默写10分钟.pdf" if les.get("recite") else None,
+            "title": les["title"],
+        }
+        prev = old_lessons.get(str(n)) or {}
+        for k in ("answerPdf", "answerMd", "answerHtml"):
+            if prev.get(k):
+                entry[k] = prev[k]
+        # default answer paths even if answers not yet regenerated
+        if not entry.get("answerPdf"):
+            entry["answerPdf"] = f"printables/answers/L{n:02d}-{les['title']}-答案.pdf"
+        if not entry.get("answerMd"):
+            entry["answerMd"] = f"answers/lessons/L{n:02d}-{les['title']}-答案.md"
+        idx["lessons"][str(n)] = entry
+    path.write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
     print("wrote print-index.json")
 
 
