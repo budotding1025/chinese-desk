@@ -8,134 +8,74 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --brand: #E85D04;
-      --warm: #F4A261;
-      --deep: #C2410C;
-      --ink: #1C1917;
-      --paper: #FFFBF5;
-      --line: rgba(232, 93, 4, 0.22);
-    }
+    :root { --brand:#E85D04; --warm:#F4A261; --deep:#C2410C; --ink:#1C1917; --paper:#FFFBF5; --line:rgba(232,93,4,.22); }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Noto Sans SC", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(1200px 500px at 10% -10%, rgba(244, 162, 97, 0.35), transparent 60%),
-        radial-gradient(900px 400px at 100% 0%, rgba(232, 93, 4, 0.18), transparent 55%),
-        var(--paper);
-    }
-    main {
-      width: min(920px, 92vw);
-      margin: 0 auto;
-      padding: 2.5rem 0 4rem;
-    }
-    .brand {
-      font-family: "Noto Serif SC", serif;
-      font-size: clamp(2rem, 5vw, 2.8rem);
-      color: var(--brand);
-      margin: 0 0 0.35rem;
-      letter-spacing: 0.04em;
-    }
-    .sub {
-      margin: 0 0 1.5rem;
-      color: var(--deep);
-      font-size: 0.95rem;
-    }
-    .note {
-      border-left: 4px solid var(--warm);
-      padding: 0.75rem 1rem;
-      background: rgba(255,255,255,0.65);
-      margin-bottom: 1.75rem;
-      font-size: 0.92rem;
-      line-height: 1.55;
-    }
-    h2 {
-      font-family: "Noto Serif SC", serif;
-      font-size: 1.15rem;
-      color: var(--deep);
-      margin: 1.75rem 0 0.75rem;
-    }
-    .grid {
-      display: grid;
-      gap: 0.75rem;
-    }
-    a.item {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      align-items: baseline;
-      text-decoration: none;
-      color: var(--ink);
-      padding: 0.85rem 1rem;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 2px;
-      transition: border-color 0.15s, transform 0.15s;
-    }
-    a.item:hover {
-      border-color: var(--brand);
-      transform: translateY(-1px);
-    }
-    a.item strong { color: var(--brand); font-weight: 700; }
-    a.item span { color: #78716c; font-size: 0.85rem; white-space: nowrap; }
-    .meta {
-      margin-top: 2rem;
-      font-size: 0.85rem;
-      color: #78716c;
-    }
-    .meta a { color: var(--deep); }
+    body { margin:0; min-height:100vh; font-family:"Noto Sans SC",sans-serif; color:var(--ink);
+      background: radial-gradient(1200px 500px at 10% -10%, rgba(244,162,97,.35), transparent 60%),
+        radial-gradient(900px 400px at 100% 0%, rgba(232,93,4,.18), transparent 55%), var(--paper); }
+    main { width:min(920px,92vw); margin:0 auto; padding:2.5rem 0 4rem; }
+    .brand { font-family:"Noto Serif SC",serif; font-size:clamp(2rem,5vw,2.8rem); color:var(--brand); margin:0 0 .35rem; }
+    .sub { margin:0 0 1.25rem; color:var(--deep); font-size:.95rem; }
+    .note { border-left:4px solid var(--warm); padding:.75rem 1rem; background:rgba(255,255,255,.65); margin-bottom:1.5rem; font-size:.92rem; line-height:1.55; }
+    h2 { font-family:"Noto Serif SC",serif; font-size:1.15rem; color:var(--deep); margin:1.6rem 0 .7rem; }
+    .grid { display:grid; gap:.65rem; }
+    a.item { display:flex; justify-content:space-between; gap:1rem; align-items:baseline; text-decoration:none; color:var(--ink);
+      padding:.8rem 1rem; background:#fff; border:1px solid var(--line); }
+    a.item:hover { border-color:var(--brand); }
+    a.item strong { color:var(--brand); }
+    a.item span { color:#78716c; font-size:.85rem; white-space:nowrap; }
+    .meta { margin-top:2rem; font-size:.85rem; color:#78716c; }
+    .meta a { color:var(--deep); }
   </style>
 </head>
 <body>
   <main>
     <p class="brand">语文书桌</p>
-    <p class="sub">Chinese Desk · 考前查漏补缺 · 打印优先</p>
+    <p class="sub">Chinese Desk · 先默写过关，再练考点 · 打印优先</p>
     <div class="note">
-      工作日 8–15 分钟迷你补漏；周末作文仿写 + 教委课外阅读；测前整卷摸底。
-      推荐按 <a href="schedule.md">日程</a> 做，也可自选。错题记入
-      <a href="mistakes/错题档案.md">错题档案</a>，考前复习。
+      结构对齐翻翻英语（按课 / 分场次）：<b>工作日①默写</b> → <b>工作日②考点</b> → <b>周末作文+课外阅读</b> → 测前整卷。
+      卷面 A4，少留白、填空加大。错题进 <a href="mistakes/错题档案.md">错题档案</a>。日程见 <a href="schedule.md">schedule.md</a>。
     </div>
 
-    <h2>工作日迷你（U1–U3）</h2>
+    <h2>工作日① 默写过关（每课）</h2>
+    <div class="grid" id="dictation">
+      <a class="item" href="printables/weekday/dictation/u1-l01-观潮-默写过关.pdf"><strong>1 观潮</strong><span>字词+背诵3–4段</span></a>
+      <a class="item" href="printables/weekday/dictation/u1-l02-走月亮-默写过关.pdf"><strong>2 走月亮</strong><span>字词+背诵第4段</span></a>
+      <a class="item" href="printables/weekday/dictation/u1-l04-繁星-默写过关.pdf"><strong>4 繁星</strong><span>积累词</span></a>
+      <a class="item" href="printables/weekday/dictation/u2-l05-一个豆荚里的五粒豆-默写过关.pdf"><strong>5 豆荚里的五粒豆</strong><span>字词</span></a>
+      <a class="item" href="printables/weekday/dictation/u2-l06-夜间飞行的秘密-默写过关.pdf"><strong>6 夜间飞行的秘密</strong><span>字词</span></a>
+      <a class="item" href="printables/weekday/dictation/u2-l07-呼风唤雨的世纪-默写过关.pdf"><strong>7 呼风唤雨的世纪</strong><span>字词</span></a>
+      <a class="item" href="printables/weekday/dictation/u3-l09-古诗三首-默写过关.pdf"><strong>9 古诗三首</strong><span>诗句默写</span></a>
+      <a class="item" href="printables/weekday/dictation/u3-l10-爬山虎的脚-默写过关.pdf"><strong>10 爬山虎的脚</strong><span>字词</span></a>
+      <a class="item" href="printables/weekday/dictation/u3-l11-蟋蟀的住宅-默写过关.pdf"><strong>11 蟋蟀的住宅</strong><span>字词</span></a>
+    </div>
+
+    <h2>工作日② 考点练习（默写过关后 · 8–15 分钟）</h2>
     <div class="grid">
-      <a class="item" href="printables/weekday/u01-工作日迷你-8至15分钟.pdf"><strong>U1 工作日迷你</strong><span>PDF</span></a>
-      <a class="item" href="printables/weekday/u02-工作日迷你-8至15分钟.pdf"><strong>U2 工作日迷你</strong><span>PDF</span></a>
-      <a class="item" href="printables/weekday/u03-工作日迷你-8至15分钟.pdf"><strong>U3 工作日迷你</strong><span>PDF</span></a>
+      <a class="item" href="printables/weekday/practice/u1-考点练习-8至15分钟.pdf"><strong>U1 考点练习</strong><span>对齐单元测题型</span></a>
+      <a class="item" href="printables/weekday/practice/u2-考点练习-8至15分钟.pdf"><strong>U2 考点练习</strong><span>提问·园地·仿写</span></a>
+      <a class="item" href="printables/weekday/practice/u3-考点练习-8至15分钟.pdf"><strong>U3 考点练习</strong><span>观察·古诗</span></a>
       <a class="item" href="printables/weekday/错题登记表.pdf"><strong>错题登记表</strong><span>PDF</span></a>
     </div>
 
-    <h2>周末（作文 + 课外阅读）</h2>
+    <h2>周末 · 作文 + 课外阅读</h2>
     <div class="grid">
-      <a class="item" href="printables/weekend/u01-周末-作文仿写与课外阅读.pdf"><strong>U1 周末</strong><span>PDF</span></a>
-      <a class="item" href="printables/weekend/u02-周末-作文仿写与课外阅读.pdf"><strong>U2 周末</strong><span>PDF</span></a>
-      <a class="item" href="printables/weekend/u03-周末-作文仿写与课外阅读.pdf"><strong>U3 周末</strong><span>PDF</span></a>
+      <a class="item" href="printables/weekend/u01-周末-作文仿写与课外阅读.pdf"><strong>U1 周末</strong><span>推荐一个好地方</span></a>
+      <a class="item" href="printables/weekend/u02-周末-作文仿写与课外阅读.pdf"><strong>U2 周末</strong><span>人物特点+提问</span></a>
+      <a class="item" href="printables/weekend/u03-周末-作文仿写与课外阅读.pdf"><strong>U3 周末</strong><span>观察仿写</span></a>
     </div>
 
-    <h2>大测摸底（整卷）</h2>
+    <h2>大测摸底</h2>
     <div class="grid">
-      <a class="item" href="printables/full/u01-四上第一单元练习.pdf"><strong>U1 整卷</strong><span>PDF · 4 页</span></a>
-      <a class="item" href="printables/full/u02-四上第二单元练习.pdf"><strong>U2 整卷</strong><span>PDF · 4 页</span></a>
-      <a class="item" href="printables/full/u03-四上第三单元练习-不完整.pdf"><strong>U3 整卷</strong><span>PDF · 不完整</span></a>
+      <a class="item" href="printables/full/u01-四上第一单元练习.pdf"><strong>U1 整卷</strong><span>4 页</span></a>
+      <a class="item" href="printables/full/u02-四上第二单元练习.pdf"><strong>U2 整卷</strong><span>4 页</span></a>
+      <a class="item" href="printables/full/u03-四上第三单元练习-不完整.pdf"><strong>U3 整卷</strong><span>不完整</span></a>
     </div>
 
-    <h2>说明与答案</h2>
-    <div class="grid">
-      <a class="item" href="README.md"><strong>使用说明</strong><span>README</span></a>
-      <a class="item" href="schedule.md"><strong>推荐日程</strong><span>MD</span></a>
-      <a class="item" href="answers/weekday-u01-参考答案.md"><strong>工作日答案 U1</strong><span>MD</span></a>
-      <a class="item" href="answers/weekday-u02-参考答案.md"><strong>工作日答案 U2</strong><span>MD</span></a>
-      <a class="item" href="answers/weekday-u03-参考答案.md"><strong>工作日答案 U3</strong><span>MD</span></a>
-      <a class="item" href="answers/u01-四上第一单元-参考答案.md"><strong>整卷答案 U1</strong><span>MD</span></a>
-      <a class="item" href="answers/u02-四上第二单元-参考答案.md"><strong>整卷答案 U2</strong><span>MD</span></a>
-      <a class="item" href="answers/u03-四上第三单元-参考答案.md"><strong>整卷答案 U3</strong><span>MD</span></a>
-    </div>
-
-    <p class="meta" id="url-meta">
-      部署与翻翻英语相同：GitHub Pages · 仓库
-      <a href="https://github.com/budotding1025/chinese-desk">budotding1025/chinese-desk</a>
+    <p class="meta">
+      <a href="https://budotding1025.github.io/chinese-desk/">GitHub Pages</a>
+      · <a href="https://github.com/budotding1025/chinese-desk">仓库</a>
+      · 答案见 <a href="answers/weekday-dictation-practice-参考答案.md">answers/</a>
     </p>
   </main>
 </body>
