@@ -287,5 +287,10 @@
     "u1": "printables/sprint/U1-第一单元冲刺.pdf",
     "u2": "printables/sprint/U2-第二单元冲刺.pdf",
     "u3": "printables/sprint/U3-第三单元冲刺.pdf"
+  },
+  "full": {
+    "u1": "printables/full/u01-四上第一单元练习.pdf",
+    "u2": "printables/full/u02-四上第二单元练习.pdf",
+    "u3": "printables/full/u03-四上第三单元练习-不完整.pdf"
   }
 }
