@@ -1,0 +1,53 @@
+{
+  "lessons": {
+    "1": {
+      "daily": "printables/lessons/L01-观潮-每日10分钟.pdf",
+      "recite": "printables/lessons/L01-观潮-背诵默写10分钟.pdf"
+    },
+    "2": {
+      "daily": "printables/lessons/L02-走月亮-每日10分钟.pdf",
+      "recite": "printables/lessons/L02-走月亮-背诵默写10分钟.pdf"
+    },
+    "3": {
+      "daily": "printables/lessons/L03-现代诗二首-每日10分钟.pdf",
+      "recite": null
+    },
+    "4": {
+      "daily": "printables/lessons/L04-繁星-每日10分钟.pdf",
+      "recite": null
+    },
+    "5": {
+      "daily": "printables/lessons/L05-一个豆荚里的五粒豆-每日10分钟.pdf",
+      "recite": null
+    },
+    "6": {
+      "daily": "printables/lessons/L06-夜间飞行的秘密-每日10分钟.pdf",
+      "recite": null
+    },
+    "7": {
+      "daily": "printables/lessons/L07-呼风唤雨的世纪-每日10分钟.pdf",
+      "recite": null
+    },
+    "8": {
+      "daily": "printables/lessons/L08-蝴蝶的家-每日10分钟.pdf",
+      "recite": null
+    },
+    "9": {
+      "daily": "printables/lessons/L09-古诗三首-每日10分钟.pdf",
+      "recite": "printables/lessons/L09-古诗三首-背诵默写10分钟.pdf"
+    },
+    "10": {
+      "daily": "printables/lessons/L10-爬山虎的脚-每日10分钟.pdf",
+      "recite": null
+    },
+    "11": {
+      "daily": "printables/lessons/L11-蟋蟀的住宅-每日10分钟.pdf",
+      "recite": null
+    }
+  },
+  "sprint": {
+    "u1": "printables/sprint/U1-第一单元冲刺.pdf",
+    "u2": "printables/sprint/U2-第二单元冲刺.pdf",
+    "u3": "printables/sprint/U3-第三单元冲刺.pdf"
+  }
+}

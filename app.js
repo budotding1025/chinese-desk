@@ -12,7 +12,29 @@
     cards: [],
     idx: 0,
     wrong: [],
+    printIndex: null,
   };
+
+  function loadPrintIndex() {
+    return fetch("./print-index.json?v=1")
+      .then((r) => r.json())
+      .then((j) => {
+        state.printIndex = j;
+      })
+      .catch(() => {
+        state.printIndex = null;
+      });
+  }
+
+  function lessonPrint(node) {
+    if (!state.printIndex || !node || node.type !== "lesson") return null;
+    return state.printIndex.lessons[String(node.bookNo)] || null;
+  }
+
+  function openPdf(url) {
+    if (!url) return;
+    window.open(url, "_blank");
+  }
 
   function showView(name) {
     state.view = name;
@@ -63,6 +85,16 @@
     $("unitLine").textContent = node.unitTitle + (node.kind ? " · " + node.kind : "");
     $("pathSummary").textContent =
       "本学期路径 " + P.completedCount() + " / " + P.semesterPath().length + " · 当前第 " + store.currentBookLesson + " 课";
+    const pr = lessonPrint(node);
+    const printBtn = $("btnPrintToday");
+    if (printBtn) {
+      printBtn.textContent = pr ? "下载本课A4（10分钟）" : "打印默写纸";
+    }
+    const reciteBtn = $("btnPrintRecite");
+    if (reciteBtn) {
+      const hasRecite = !!(pr && pr.recite);
+      reciteBtn.classList.toggle("hidden", !hasRecite);
+    }
   }
 
   function renderPath() {
@@ -120,6 +152,23 @@
       grid.appendChild(b);
     });
     if (node.type === "lesson") {
+      const pr = lessonPrint(node);
+      if (pr && pr.daily) {
+        const dl = document.createElement("button");
+        dl.type = "button";
+        dl.className = "mod-btn";
+        dl.innerHTML = "下载本课练习 A4（约10分钟）<small>听写·组词/成语·多音·仿写</small>";
+        dl.addEventListener("click", () => openPdf(pr.daily));
+        grid.appendChild(dl);
+      }
+      if (pr && pr.recite) {
+        const dl2 = document.createElement("button");
+        dl2.type = "button";
+        dl2.className = "mod-btn";
+        dl2.innerHTML = "下载背诵默写 A4（另加约10分钟）<small>有背诵要求</small>";
+        dl2.addEventListener("click", () => openPdf(pr.recite));
+        grid.appendChild(dl2);
+      }
       const setCur = document.createElement("button");
       setCur.type = "button";
       setCur.className = "mod-btn";
@@ -130,6 +179,16 @@
         showView("home");
       });
       grid.appendChild(setCur);
+    } else if (node.type === "garden" && state.printIndex && state.printIndex.sprint) {
+      const sp = state.printIndex.sprint[node.unitId];
+      if (sp) {
+        const dl = document.createElement("button");
+        dl.type = "button";
+        dl.className = "mod-btn";
+        dl.innerHTML = "下载本单元冲刺 A4<small>测前打印</small>";
+        dl.addEventListener("click", () => openPdf(sp));
+        grid.appendChild(dl);
+      }
     }
     $("pathLessonOverlay").classList.remove("hidden");
   }
@@ -465,12 +524,28 @@
       b.innerHTML =
         "<strong>" +
         u.name.split("·")[0].trim() +
-        " · 单元冲刺</strong><div class='meta' style='margin:4px 0 0'>打开摸底卷 PDF（打印）</div>";
+        " · 单元冲刺</strong><div class='meta' style='margin:4px 0 0'>下载冲刺 A4（测前）</div>";
       b.addEventListener("click", () => {
-        const map = { u1: "printables/full/u01-四上第一单元练习.pdf", u2: "printables/full/u02-四上第二单元练习.pdf", u3: "printables/full/u03-四上第三单元练习-不完整.pdf" };
-        window.open(map[u.id] || "printables/full/", "_blank");
+        const sp = state.printIndex && state.printIndex.sprint && state.printIndex.sprint[u.id];
+        openPdf(sp || "printables/sprint/");
       });
       actions.appendChild(b);
+      const full = document.createElement("button");
+      full.type = "button";
+      full.className = "rec-card";
+      full.innerHTML =
+        "<strong>" +
+        u.name.split("·")[0].trim() +
+        " · 完整摸底卷</strong><div class='meta' style='margin:4px 0 0'>学校卷数字化 PDF</div>";
+      full.addEventListener("click", () => {
+        const map = {
+          u1: "printables/full/u01-四上第一单元练习.pdf",
+          u2: "printables/full/u02-四上第二单元练习.pdf",
+          u3: "printables/full/u03-四上第三单元练习-不完整.pdf",
+        };
+        openPdf(map[u.id]);
+      });
+      actions.appendChild(full);
     });
     const focus = document.createElement("button");
     focus.type = "button";
@@ -479,7 +554,7 @@
     focus.addEventListener("click", () => {
       const node = P.currentNode();
       const uid = node.unitId || "u2";
-      window.open("printables/weekday/practice/" + uid + "-考点练习-8至15分钟.pdf", "_blank");
+      openPdf("printables/weekday/practice/" + uid + "-考点练习-8至15分钟.pdf");
     });
     actions.appendChild(focus);
 
@@ -536,24 +611,31 @@
   $("btnStartToday").addEventListener("click", startTodayFlow);
   $("btnPrintToday").addEventListener("click", () => {
     const node = P.currentNode();
-    if (node.type === "lesson") {
-      const name =
-        node.unitId +
-        "-l" +
-        String(node.bookNo).padStart(2, "0") +
-        "-" +
-        node.title +
-        "-默写过关.pdf";
-      window.open("printables/weekday/dictation/" + name, "_blank");
-    } else {
-      showView("path");
-    }
+    const pr = lessonPrint(node);
+    if (pr && pr.daily) openPdf(pr.daily);
+    else if (node.type === "lesson") {
+      openPdf(
+        "printables/lessons/L" +
+          String(node.bookNo).padStart(2, "0") +
+          "-" +
+          node.title +
+          "-每日10分钟.pdf"
+      );
+    } else showView("path");
   });
+  const btnRecite = $("btnPrintRecite");
+  if (btnRecite) {
+    btnRecite.addEventListener("click", () => {
+      const pr = lessonPrint(P.currentNode());
+      if (pr && pr.recite) openPdf(pr.recite);
+      else alert("本课无背诵默写单（或尚未生成）。");
+    });
+  }
   $("pathLessonClose").addEventListener("click", () => $("pathLessonOverlay").classList.add("hidden"));
   $("btnCloseLesson").addEventListener("click", () => showView("home"));
   $("btnRecordsToPath").addEventListener("click", () => showView("path"));
 
   // init current lesson 8
   P.setCurrentBookLesson(DATA.currentBookLesson || 8);
-  showView("home");
+  loadPrintIndex().finally(() => showView("home"));
 })();
