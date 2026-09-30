@@ -358,6 +358,77 @@ button { cursor: pointer; border: none; background: none; }
   overflow: auto;
   box-shadow: 0 8px 32px rgba(28, 25, 23, 0.12);
 }
+.sheet-a4 {
+  width: min(720px, 96vw);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 18px;
+  overflow: hidden;
+}
+.sheet-a4-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.sheet-a4-note {
+  margin: 6px 0 10px;
+  flex-shrink: 0;
+}
+.sheet-a4-actions {
+  flex-shrink: 0;
+  margin-top: 12px;
+}
+.a4-frame {
+  flex: 1;
+  min-height: 58vh;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  background: #e7e5e4;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+}
+.a4-iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 56vh;
+  border: 0;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.12);
+}
+.a4-paper {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+  border-radius: 6px;
+  padding: 22px 24px 28px;
+  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.12);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.a4-paper h2 {
+  margin: 0 0 12px;
+  text-align: center;
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.35rem;
+  color: var(--brand);
+}
+.a4-paper h3 {
+  margin: 18px 0 8px;
+  font-size: 1.12rem;
+  color: var(--brand);
+  font-weight: 800;
+}
+.a4-paper p { margin: 0 0 10px; }
+.a4-paper .meta { color: var(--muted); font-size: 0.95rem; }
+
 .sheet h2 {
   margin: 0;
   font-size: 1.35rem;
@@ -413,10 +484,6 @@ button { cursor: pointer; border: none; background: none; }
   color: var(--brand-deep);
 }
 
-#answerBody {
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
 #answerBody h2 {
   font-size: 1.25rem;
   margin: 0 0 10px;
@@ -427,6 +494,11 @@ button { cursor: pointer; border: none; background: none; }
   color: var(--brand);
 }
 #answerBody p { margin: 0 0 10px; }
+
+@media (max-width: 640px) {
+  .sheet-a4 { width: 100%; max-height: 94vh; padding: 12px; }
+  .a4-frame, .a4-iframe { min-height: 50vh; }
+}
 
 .help-list {
   margin: 12px 0 0;
