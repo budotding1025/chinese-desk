@@ -1,0 +1,20 @@
+# Local / temp
+__pycache__/
+*.pyc
+~$*
+Thumbs.db
+.DS_Store
+*.log
+
+# OCR / split intermediates
+test/_pages/
+test/_ocr/
+
+# Copyrighted full textbook stays local (not published)
+textbook/
+*统编版*
+*语文_统编*
+*.pdf.bak
+
+# Word lock files
+~$*.docx
