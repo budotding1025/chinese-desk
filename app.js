@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=13")
+    return fetch("./print-index.json?v=14")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -56,7 +56,7 @@
     if (!node) return [];
     if (node.type === "garden") {
       return [
-        { id: "garden_write", label: "日积月累默写", blurb: "名句 / 俗语填空" },
+        { id: "garden_write", label: "日积月累过关", blurb: "补全 · 填空 · 对齐试卷" },
         { id: "garden_meaning", label: "据意写句", blurb: "给出意思，写出原句" },
         { id: "garden_bg", label: "作者与背景", blurb: "了解是谁、为什么重要" },
       ];

@@ -158,12 +158,29 @@ def lesson_answer_md(les: dict) -> str:
     return "".join(lines)
 
 
+
+def _half_blank(text: str, prefer_first: bool = True) -> tuple[str, str]:
+    """Split at first ，。？！； return (shown, answer_rest) or reverse."""
+    text = (text or "").strip()
+    for sep in ["，", "。", "？", "！", "；", ","]:
+        if sep in text:
+            a, b = text.split(sep, 1)
+            left, right = a + sep, b
+            if prefer_first:
+                return left, right
+            return right, left
+    cut = max(2, len(text) // 2)
+    return text[:cut], text[cut:]
+
+
 def build_garden_practice(unit_id: str, unit_name: str, garden: dict):
+    """Exam-style 日积月累过关测 (align unit paper question types)."""
     acc = garden.get("accumulate") or {}
     doc = tight_doc()
     p(doc, "语文书桌 · Chinese Desk", size=10, bold=True, color=BRAND_ORANGE_YELLOW, center=True, after=2)
-    p(doc, f"{garden.get('title') or '语文园地'} · 日积月累练习", size=16, bold=True, color=BRAND_ORANGE_RED, center=True, after=2)
-    p(doc, f"{unit_name}　|　A4　|　姓名：________　日期：________", size=11, center=True, after=8)
+    p(doc, f"{garden.get('title') or '语文园地'} · 日积月累过关测", size=16, bold=True, color=BRAND_ORANGE_RED, center=True, after=2)
+    p(doc, f"{unit_name}　|　题型对齐单元卷　|　姓名：________　日期：________", size=11, center=True, after=4)
+    p(doc, "不看书完成。测默写、填空、据意写句（及本单元词句运用）。", size=10, color=BRAND_DEEP, after=8)
 
     items = acc.get("items") or []
     lines = acc.get("lines") or []
@@ -181,56 +198,157 @@ def build_garden_practice(unit_id: str, unit_name: str, garden: dict):
         p(doc, "结果：________________________________________________", size=12, after=8)
         return doc
 
-    section(doc, "一、日积月累默写（不看书）")
+    # —— 外貌词语单元 ——
+    if unit_id == "u8" and items:
+        section(doc, "一、根据意思写词语（日积月累）")
+        for i, it in enumerate(items, 1):
+            tip = (it.get("tip") or "").strip() or "（写出对应外貌词语）"
+            p(doc, f"{i}. {tip}", size=12, after=2)
+            p(doc, "　　词语：____________________", size=13, after=6)
+        section(doc, "二、选词填空（选填序号）")
+        bank = "　".join(f"{i+1}.{it.get('text')}" for i, it in enumerate(items[:8]))
+        p(doc, "词语库：" + bank, size=11, after=6)
+        p(doc, "1. 那位老爷爷头发雪白、脸色红润，真是（　　）。", size=12, after=6)
+        p(doc, "2. 小女孩眼睛明亮、牙齿洁白，可谓（　　）。", size=12, after=6)
+        p(doc, "3. 他个子不高却精明干练，可用（　　）形容。", size=12, after=6)
+        section(doc, "三、分类写一写")
+        p(doc, "写容貌端庄、好看的：____________________　____________________", size=12, after=8)
+        p(doc, "写身材或气势的：____________________　____________________", size=12, after=8)
+        p(doc, "□过关　□错题入档", size=10, color=BRAND_DEEP, before=8)
+        return doc
+
+    # —— 一、补全名句（上下句） ——
+    section(doc, "一、补全名句（给上句写下句 / 给下句写上句）")
     if lines_detail or lines:
-        # poem style
         if acc.get("author"):
             p(doc, (acc.get("title") or "") + "　" + acc.get("author", ""), size=12, after=6)
         src = lines_detail or [{"text": ln} for ln in lines]
         for i, ln in enumerate(src, 1):
             text = (ln.get("text") if isinstance(ln, dict) else ln) or ""
-            # blank half
-            clean = text.replace("，", "").replace("。", "").replace("？", "").replace("！", "")
-            cut = max(2, len(clean) // 2)
-            hint = text[:cut] if len(text) > cut else ""
-            p(doc, f"{i}. {hint}____________________", size=14, after=10)
+            if i % 2 == 1:
+                shown, _ = _half_blank(text, prefer_first=True)
+                p(doc, f"{i}. {shown}____________________", size=13, after=8)
+            else:
+                _, rest = _half_blank(text, prefer_first=True)
+                # give second half, ask first
+                if "，" in text:
+                    a, b = text.split("，", 1)
+                    p(doc, f"{i}. ____________________，{b}", size=13, after=8)
+                else:
+                    shown, _ = _half_blank(text, prefer_first=False)
+                    p(doc, f"{i}. ____________________{shown}", size=13, after=8)
     elif items:
         for i, it in enumerate(items, 1):
             full = it.get("text") or ""
-            cut = max(4, len(full) // 2)
-            p(doc, f"{i}. {full[:cut]}____________________", size=13, after=8)
+            if i % 2 == 1:
+                shown, _ = _half_blank(full, True)
+                p(doc, f"{i}. {shown}____________________", size=12, after=4)
+            else:
+                if "，" in full:
+                    a, b = full.split("，", 1)
+                    p(doc, f"{i}. ____________________，{b}", size=12, after=4)
+                else:
+                    shown, _ = _half_blank(full, True)
+                    p(doc, f"{i}. {shown}____________________", size=12, after=4)
             if it.get("who"):
-                p(doc, f"　　出处 / 作者：________（提示：{it['who'][:6]}…）", size=11, color=BRAND_DEEP, after=6)
+                p(doc, f"　　（出处：________）", size=10, color=BRAND_DEEP, after=6)
 
-    section(doc, "二、根据意思写出原句")
-    if lines_detail:
-        for i, ln in enumerate(lines_detail, 1):
-            tip = (ln.get("tip") or "").strip()
-            if not tip:
-                continue
-            p(doc, f"{i}. 意思：{tip}", size=12, after=4)
-            p(doc, "　　原句：________________________________________________", size=13, after=8)
-    elif items:
-        for i, it in enumerate(items, 1):
-            tip = (it.get("tip") or "").strip()
-            if not tip:
-                continue
-            who = it.get("who") or ""
-            hint = f"（{who}）" if who else ""
-            p(doc, f"{i}. 意思：{tip}{hint}", size=12, after=4)
-            p(doc, "　　原句：________________________________________________", size=13, after=8)
-    elif acc.get("meaning"):
-        p(doc, f"意思：{acc['meaning']}", size=12, after=4)
-        p(doc, "　　原句 / 大意对应的名句：________________________________", size=13, after=8)
+    # —— 二、关键词填空 ——
+    section(doc, "二、关键词填空（试卷常考）")
+    if unit_id == "u2":
+        p(doc, "1. 人非生而知之者，____________________。", size=12, after=6)
+        p(doc, "2. 博____之，审____之，慎____之，明____之，笃____之。", size=12, after=6)
+        p(doc, "3. 智能之士，__________，__________。", size=12, after=6)
+        p(doc, "4. 好问则____，自用则____。", size=12, after=6)
+        p(doc, "5. 善疑者，不疑________疑，而疑________疑。", size=12, after=8)
+    elif unit_id == "u3":
+        p(doc, "1. 一场秋雨一场寒，____________________。", size=12, after=6)
+        p(doc, "2. 立了秋，____________________。", size=12, after=6)
+        p(doc, "3. 八月里来雁门开，____________________。", size=12, after=8)
+    elif unit_id == "u6":
+        p(doc, "1. 尺有所短，____________________。", size=12, after=6)
+        p(doc, "2. 机不可失，____________________。", size=12, after=6)
+        p(doc, "3. 差之毫厘，____________________。", size=12, after=6)
+        p(doc, "4. 一言既出，____________________。", size=12, after=8)
+    elif lines:
+        # poem: blank key chars
+        joined = " / ".join(lines)
+        p(doc, "按课文顺序补全（可写全句）：", size=11, after=4)
+        for i, ln in enumerate(lines, 1):
+            # blank last 2 chars before punctuation
+            core = ln.rstrip("。？！，、")
+            if len(core) >= 4:
+                p(doc, f"{i}. {core[:-2]}____" + (ln[len(core):] if len(ln) > len(core) else ""), size=13, after=8)
+            else:
+                p(doc, f"{i}. ____________________", size=13, after=8)
     else:
-        blank(doc, 2)
+        for i, it in enumerate(items[:4], 1):
+            full = it.get("text") or ""
+            shown, _ = _half_blank(full, True)
+            p(doc, f"{i}. {shown}____________________", size=12, after=6)
 
-    if acc.get("background"):
-        section(doc, "三、背景（选做）")
-        p(doc, "用一两句话写出作者或积累提示：", size=12, after=4)
-        blank(doc, 2)
+    # —— 三、根据意思写原句 ——
+    section(doc, "三、根据意思写出原句")
+    src = lines_detail or items
+    n = 0
+    for it in src:
+        tip = (it.get("tip") or "").strip()
+        if not tip:
+            continue
+        n += 1
+        who = it.get("who") or ""
+        hint = f"　[{who}]" if who else ""
+        p(doc, f"{n}. 意思：{tip}{hint}", size=11, after=3)
+        p(doc, "　　原句：________________________________________________", size=12, after=7)
+    if n == 0 and acc.get("meaning"):
+        p(doc, f"意思：{acc['meaning']}", size=12, after=4)
+        p(doc, "　　原句：________________________________________________", size=12, after=8)
 
-    p(doc, "□默写过关　□据意能写原句　□错题入档", size=10, color=BRAND_DEEP, before=8)
+    # —— 四、综合语段 / 词句运用 ——
+    if unit_id == "u2":
+        section(doc, "四、综合填空（对齐单元卷）")
+        p(
+            doc,
+            "从韩愈的“____________________，孰能无惑”和王充的“智能之士，____________________，____________________”这两句话中，我们明白了学习中遇到问题很正常，要敢于提问；像《中庸》中说的那样，努力做到“博____之，审____之，慎____之，明____之，笃____之”；正如方以智所说“善疑者，不疑________疑，而疑________疑”。",
+            size=11,
+            after=10,
+        )
+        section(doc, "五、照样子，改写句子（词句段运用）")
+        p(doc, "1. 例：那条狗高兴、紧张、发怒的时候都叫。", size=11, after=2)
+        p(doc, "　　→ 那条狗高兴的时候叫，紧张的时候叫，发怒的时候也叫。", size=10, color=BRAND_DEEP, after=4)
+        p(doc, "　　原句：那盏灯晴天、阴天、雨天的时候都亮着。", size=11, after=2)
+        p(doc, "　　改写：________________________________________________", size=12, after=8)
+        p(doc, "2. 例：人类呼风唤雨。→ 是谁呼风唤雨呢？当然是人类。", size=11, after=2)
+        p(doc, "　　原句：妈妈把家里打扫得干干净净。", size=11, after=2)
+        p(doc, "　　改写：________________________________________________", size=12, after=8)
+    elif unit_id in ("u1", "u4", "u7") and lines:
+        section(doc, "四、整首默写（不提示）")
+        title = acc.get("title") or "古诗"
+        author = acc.get("author") or ""
+        p(doc, f"默写{title}　{author}", size=12, after=6)
+        for _ in lines:
+            p(doc, "________________________________________________", size=13, after=8)
+    elif unit_id == "u3":
+        section(doc, "四、选择正确的谚语（填序号）")
+        for i, it in enumerate(items, 1):
+            p(doc, f"{i}. {it.get('text')}", size=11, after=2)
+        p(doc, "A. 立秋后天气转凉，扇子可以收起来：选（　　）", size=12, after=6)
+        p(doc, "B. 秋天一场雨比一场冷，多场雨后要穿棉衣：选（　　）", size=12, after=6)
+        p(doc, "C. 二月八月忽冷忽热，衣服穿得乱：选（　　）", size=12, after=8)
+    elif unit_id == "u6":
+        section(doc, "四、据意选俗语（填序号）")
+        for i, it in enumerate(items, 1):
+            p(doc, f"{i}. {it.get('text')}", size=11, after=2)
+        p(doc, "A. 每个人都有长处和短处：选（　　）", size=12, after=6)
+        p(doc, "B. 机会错过就难再来：选（　　）", size=12, after=6)
+        p(doc, "C. 话说出去就收不回来：选（　　）", size=12, after=8)
+    else:
+        if acc.get("background"):
+            section(doc, "四、背景提示（选做）")
+            p(doc, "读一读，记住出处即可（不用抄写长段）：", size=11, after=4)
+            p(doc, acc["background"], size=11, color=BRAND_DEEP, after=6)
+
+    p(doc, "□补全过关　□填空过关　□据意写句过关　□错题入档", size=10, color=BRAND_DEEP, before=8)
     return doc
 
 
@@ -241,14 +359,14 @@ def build_garden_answer(unit_id: str, unit_name: str, garden: dict):
 def _garden_answer_doc(unit_id: str, garden: dict):
     acc = garden.get("accumulate") or {}
     doc = tight_doc()
-    p(doc, "语文书桌 · 园地参考答案（做完再看）", size=10, bold=True, color=BRAND_ORANGE_YELLOW, center=True, after=2)
+    p(doc, "语文书桌 · 园地过关测参考答案（做完再看）", size=10, bold=True, color=BRAND_ORANGE_YELLOW, center=True, after=2)
     p(doc, f"{garden.get('title') or '语文园地'} · 答案", size=16, bold=True, color=BRAND_ORANGE_RED, center=True, after=6)
 
     items = acc.get("items") or []
     lines = acc.get("lines") or []
     lines_detail = acc.get("linesDetail") or []
 
-    section(doc, "一、默写（全文）")
+    section(doc, "一、补全名句 / 全文")
     if lines:
         if acc.get("author"):
             p(doc, acc["author"], size=12, after=4)
@@ -258,7 +376,26 @@ def _garden_answer_doc(unit_id: str, garden: dict):
         for it in items:
             p(doc, (it.get("text") or "") + ("　——" + it["who"] if it.get("who") else ""), size=13, after=6)
 
-    section(doc, "二、根据意思写原句（答案）")
+    section(doc, "二、关键词填空")
+    if unit_id == "u2":
+        p(doc, "1. 孰能无惑", size=12, after=4)
+        p(doc, "2. 学 / 问 / 思 / 辨 / 行", size=12, after=4)
+        p(doc, "3. 不学不成，不问不知", size=12, after=4)
+        p(doc, "4. 裕 / 小", size=12, after=4)
+        p(doc, "5. 人之所 / 人之所不", size=12, after=6)
+    elif unit_id == "u3":
+        p(doc, "1. 十场秋雨要穿棉", size=12, after=4)
+        p(doc, "2. 把扇丢", size=12, after=4)
+        p(doc, "3. 雁儿脚上带霜来", size=12, after=6)
+    elif unit_id == "u6":
+        p(doc, "1. 寸有所长　2. 时不再来　3. 谬以千里　4. 驷马难追", size=12, after=6)
+    elif unit_id == "u8":
+        for it in items:
+            p(doc, f"{it.get('text')}　←　{it.get('tip') or ''}", size=12, after=4)
+    else:
+        p(doc, "见「一、全文」原句。", size=12, after=6)
+
+    section(doc, "三、根据意思写原句")
     if lines_detail:
         for ln in lines_detail:
             tip = (ln.get("tip") or "").strip()
@@ -274,14 +411,30 @@ def _garden_answer_doc(unit_id: str, garden: dict):
                 who = ("　——" + it["who"]) if it.get("who") else ""
                 p(doc, "意思：" + tip, size=11, color=BRAND_DEEP, after=2)
                 p(doc, "原句：" + text + who, size=13, after=6)
-    if acc.get("meaning"):
-        p(doc, "大意：" + acc["meaning"], size=12, after=6)
+
+    if unit_id == "u2":
+        section(doc, "四、综合填空")
+        p(doc, "人非生而知之者；不学不成；不问不知；学/问/思/辨/行；人之所；人之所不", size=12, after=6)
+        section(doc, "五、改写句子（示例）")
+        p(doc, "1. 那盏灯晴天的时候亮着，阴天的时候亮着，雨天的时候也亮着。", size=12, after=4)
+        p(doc, "2. 是谁把家里打扫得干干净净呢？当然是妈妈。（句式对即可）", size=12, after=6)
+    elif unit_id == "u3":
+        section(doc, "四、选择")
+        p(doc, "A→立了秋，把扇丢。　B→一场秋雨一场寒，十场秋雨要穿棉。　C→二八月，乱穿衣。", size=12, after=6)
+    elif unit_id == "u6":
+        section(doc, "四、选择")
+        p(doc, "A→尺有所短，寸有所长。　B→机不可失，时不再来。　C→一言既出，驷马难追。", size=12, after=6)
+    elif unit_id == "u8":
+        section(doc, "二/三参考")
+        p(doc, "1. 鹤发童颜　2. 明眸皓齿　3. 短小精悍（意思对、词语在库中即可）", size=12, after=6)
+
     if acc.get("background"):
-        section(doc, "三、背景")
+        section(doc, "背景")
         p(doc, acc["background"], size=12, after=6)
     if garden.get("extra"):
         p(doc, garden["extra"], size=11, color=BRAND_DEEP, after=4)
     return doc
+
 
 
 def garden_answer_md(garden: dict) -> str:
