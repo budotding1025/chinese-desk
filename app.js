@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=6")
+    return fetch("./print-index.json?v=13")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -57,7 +57,7 @@
     if (node.type === "garden") {
       return [
         { id: "garden_write", label: "日积月累默写", blurb: "名句 / 俗语填空" },
-        { id: "garden_meaning", label: "大意理解", blurb: "说说名句意思" },
+        { id: "garden_meaning", label: "据意写句", blurb: "给出意思，写出原句" },
         { id: "garden_bg", label: "作者与背景", blurb: "了解是谁、为什么重要" },
       ];
     }
@@ -374,14 +374,16 @@
           g.linesDetail ||
           [{ text: (g.lines || []).join(""), tip: g.meaning }];
         items.forEach((it) => {
+          const tip = (it.tip || g.meaning || "").trim();
+          const full = (it.text || "").trim();
+          if (!tip || !full) return;
           cards.push({
             type: "write",
-            title: "大意理解",
-            prompt: "用自己的话说说意思：\n「" + (it.text || "") + "」",
-            answer: it.tip || g.meaning || "意思对即可",
-            tip: "参考：" + (it.tip || g.meaning || ""),
-            soft: true,
-            meta: { moduleId, nodeId: node.id, kind: "园地理解" },
+            title: "据意写句",
+            prompt: "根据意思写出原句：\n" + tip,
+            answer: full,
+            tip: (it.who || g.author || "") ? ("出处：" + (it.who || g.author)) : "",
+            meta: { moduleId, nodeId: node.id, kind: "据意写句" },
           });
         });
       } else if (moduleId === "garden_bg") {

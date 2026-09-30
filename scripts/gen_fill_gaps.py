@@ -202,15 +202,26 @@ def build_garden_practice(unit_id: str, unit_name: str, garden: dict):
             if it.get("who"):
                 p(doc, f"　　出处 / 作者：________（提示：{it['who'][:6]}…）", size=11, color=BRAND_DEEP, after=6)
 
-    section(doc, "二、说说意思（用自己的话）")
+    section(doc, "二、根据意思写出原句")
     if lines_detail:
         for i, ln in enumerate(lines_detail, 1):
-            p(doc, f"{i}. 「{(ln.get('text') or '').strip('，。')}」意思是：", size=12, after=4)
-            blank(doc, 1)
+            tip = (ln.get("tip") or "").strip()
+            if not tip:
+                continue
+            p(doc, f"{i}. 意思：{tip}", size=12, after=4)
+            p(doc, "　　原句：________________________________________________", size=13, after=8)
     elif items:
         for i, it in enumerate(items, 1):
-            p(doc, f"{i}. 「{it.get('text') or ''}」意思是：", size=12, after=4)
-            blank(doc, 1)
+            tip = (it.get("tip") or "").strip()
+            if not tip:
+                continue
+            who = it.get("who") or ""
+            hint = f"（{who}）" if who else ""
+            p(doc, f"{i}. 意思：{tip}{hint}", size=12, after=4)
+            p(doc, "　　原句：________________________________________________", size=13, after=8)
+    elif acc.get("meaning"):
+        p(doc, f"意思：{acc['meaning']}", size=12, after=4)
+        p(doc, "　　原句 / 大意对应的名句：________________________________", size=13, after=8)
     else:
         blank(doc, 2)
 
@@ -219,7 +230,7 @@ def build_garden_practice(unit_id: str, unit_name: str, garden: dict):
         p(doc, "用一两句话写出作者或积累提示：", size=12, after=4)
         blank(doc, 2)
 
-    p(doc, "□默写过关　□意思说得清　□错题入档", size=10, color=BRAND_DEEP, before=8)
+    p(doc, "□默写过关　□据意能写原句　□错题入档", size=10, color=BRAND_DEEP, before=8)
     return doc
 
 
@@ -247,13 +258,22 @@ def _garden_answer_doc(unit_id: str, garden: dict):
         for it in items:
             p(doc, (it.get("text") or "") + ("　——" + it["who"] if it.get("who") else ""), size=13, after=6)
 
-    section(doc, "二、意思")
+    section(doc, "二、根据意思写原句（答案）")
     if lines_detail:
         for ln in lines_detail:
-            p(doc, (ln.get("text") or "") + "　→　" + (ln.get("tip") or ""), size=12, after=6)
+            tip = (ln.get("tip") or "").strip()
+            text = (ln.get("text") or "").strip()
+            if tip and text:
+                p(doc, "意思：" + tip, size=11, color=BRAND_DEEP, after=2)
+                p(doc, "原句：" + text, size=13, after=6)
     elif items:
         for it in items:
-            p(doc, (it.get("text") or "") + "　→　" + (it.get("tip") or ""), size=12, after=6)
+            tip = (it.get("tip") or "").strip()
+            text = (it.get("text") or "").strip()
+            if tip and text:
+                who = ("　——" + it["who"]) if it.get("who") else ""
+                p(doc, "意思：" + tip, size=11, color=BRAND_DEEP, after=2)
+                p(doc, "原句：" + text + who, size=13, after=6)
     if acc.get("meaning"):
         p(doc, "大意：" + acc["meaning"], size=12, after=6)
     if acc.get("background"):
@@ -278,14 +298,20 @@ def garden_answer_md(garden: dict) -> str:
     elif acc.get("items"):
         for it in acc["items"]:
             lines_out.append((it.get("text") or "") + (f"（{it['who']}）" if it.get("who") else "") + "\n\n")
-    lines_out.append("## 意思\n\n")
+    lines_out.append("## 根据意思写原句\n\n")
     if acc.get("linesDetail"):
         for ln in acc["linesDetail"]:
-            lines_out.append(f"- {ln.get('text') or ''} → {ln.get('tip') or ''}\n")
+            tip = (ln.get("tip") or "").strip()
+            text = (ln.get("text") or "").strip()
+            if tip and text:
+                lines_out.append(f"- 意思：{tip}\n  原句：{text}\n")
         lines_out.append("\n")
     elif acc.get("items"):
         for it in acc["items"]:
-            lines_out.append(f"- {it.get('text') or ''} → {it.get('tip') or ''}\n")
+            tip = (it.get("tip") or "").strip()
+            text = (it.get("text") or "").strip()
+            if tip and text:
+                lines_out.append(f"- 意思：{tip}\n  原句：{text}\n")
         lines_out.append("\n")
     if acc.get("meaning"):
         lines_out.append("大意：" + acc["meaning"] + "\n\n")
