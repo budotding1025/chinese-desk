@@ -88,7 +88,7 @@
     const pr = lessonPrint(node);
     const printBtn = $("btnPrintToday");
     if (printBtn) {
-      printBtn.textContent = pr ? "下载本课A4（10分钟）" : "打印默写纸";
+      printBtn.textContent = pr ? "下载本课练习（A4）" : "打印默写纸";
     }
     const reciteBtn = $("btnPrintRecite");
     if (reciteBtn) {
@@ -157,7 +157,7 @@
         const dl = document.createElement("button");
         dl.type = "button";
         dl.className = "mod-btn";
-        dl.innerHTML = "下载本课练习 A4（约10分钟）<small>听写·组词/成语·多音·仿写</small>";
+        dl.innerHTML = "下载本课练习（A4）<small>听写·组词/成语·多音·仿写</small>";
         dl.addEventListener("click", () => openPdf(pr.daily));
         grid.appendChild(dl);
       }
