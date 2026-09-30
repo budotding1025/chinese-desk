@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=14")
+    return fetch("./print-index.json?v=16")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
