@@ -1,7 +1,12 @@
 # 上线核对清单 · 四上 U1–U3
 
 核对日期：2026-09-30  
-结果：**通过 · 已上线**
+结果：**通过 · 已上线（GitHub Pages）**
+
+**网址：https://budotding1025.github.io/chinese-desk/**  
+仓库：https://github.com/budotding1025/chinese-desk  
+
+（与翻翻英语同样部署方式：GitHub 公开仓库 + Pages）
 
 ## 文件
 
