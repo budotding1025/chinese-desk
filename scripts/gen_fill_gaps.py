@@ -203,59 +203,92 @@ def build_garden_practice(unit_id: str, unit_name: str, garden: dict):
             tip = (it.get("tip") or "").strip()
             p(doc, f"{i}. {tip}", size=11, after=2)
             p(doc, "　　____________________", size=12, after=4)
-        section(doc, "二、选词填空（填序号，词语库见上）")
-        p(doc, "1. 白发红颜的老爷爷：（　　）　2. 眼睛明亮牙齿洁白：（　　）", size=12, after=6)
+        section(doc, "二、用词语写一写（不给备选，防抄）")
+        p(doc, "1. 一位气色很好的白发老人：____________________", size=12, after=6)
+        p(doc, "2. 一位举止文雅的人：____________________", size=12, after=6)
         p(doc, "□约10–15分钟　□错题入档", size=10, color=BRAND_DEEP, before=6)
         return doc
 
-    # 一、补全（最多4题）
-    section(doc, "一、补全名句（上/下句，共4题）")
-    src_lines = lines_detail or ([{"text": ln} for ln in lines] if lines else items)
-    for i, ln in enumerate(src_lines[:4], 1):
-        text = (ln.get("text") if isinstance(ln, dict) else ln) or ""
-        if i % 2 == 1:
-            shown, _ = _half_blank(text, True)
-            p(doc, f"{i}. {shown}____________________", size=13, after=6)
-        else:
-            if "，" in text:
-                _, b = text.split("，", 1)
-                p(doc, f"{i}. ____________________，{b}", size=13, after=6)
-            else:
-                shown, _ = _half_blank(text, True)
-                p(doc, f"{i}. {shown}____________________", size=13, after=6)
+    # 出题原则：卷面上已出现的字，后面题目绝不能再挖同一处空（防抄答案）
+    raw_poem = lines_detail or [{"text": x} for x in lines]
+    poem_lines = [((ln.get("text") if isinstance(ln, dict) else ln) or "").strip() for ln in raw_poem]
+    poem_lines = [x for x in poem_lines if x]
 
-    # 二、关键词（2～3题，不与长语段重复堆叠）
-    section(doc, "二、关键词填空（2～3题）")
-    if unit_id == "u2":
-        p(doc, "1. 人非生而知之者，____________________。", size=12, after=5)
-        p(doc, "2. 博____之，审____之，慎____之，明____之，笃____之。", size=12, after=5)
-        p(doc, "3. 善疑者，不疑________疑，而疑________疑。", size=12, after=6)
-    elif unit_id == "u3":
-        p(doc, "1. 一场秋雨一场寒，____________________。", size=12, after=5)
-        p(doc, "2. 立了秋，____________________。", size=12, after=6)
-    elif unit_id == "u6":
-        p(doc, "1. 尺有所短，____________________。", size=12, after=5)
-        p(doc, "2. 一言既出，____________________。", size=12, after=6)
-    elif lines:
-        for i, ln in enumerate(lines[:3], 1):
-            core = ln.rstrip("。？！，、")
-            if len(core) >= 4:
-                p(doc, f"{i}. {core[:-2]}____" + ln[len(core):], size=13, after=5)
-            else:
-                p(doc, f"{i}. ____________________", size=13, after=5)
+    if poem_lines:
+        # 古诗：只出「给出句写下句」，不做关键词挖空（否则必能从上题抄）
+        section(doc, "一、补全诗句（给出句，写下句）")
+        if acc.get("author"):
+            p(doc, (acc.get("title") or "") + "　" + acc.get("author", ""), size=11, after=4)
+        odds = poem_lines[0::2]
+        for i, a in enumerate(odds[:2], 1):
+            p(doc, f"{i}. {a}____________________", size=13, after=8)
+
+        section(doc, "二、根据意思写原句（2题）")
+        tips_src = [x for x in (lines_detail or []) if (x.get("tip") or "").strip()]
+        for i, it in enumerate(tips_src[:2], 1):
+            p(doc, f"{i}. 意思：{(it.get('tip') or '').strip()}", size=11, after=2)
+            p(doc, "　　原句：________________________________________", size=12, after=6)
+        if not tips_src and acc.get("meaning"):
+            p(doc, f"意思：{acc['meaning']}", size=11, after=2)
+            p(doc, "　　原句：________________________________________", size=12, after=6)
     else:
-        for i, it in enumerate(items[:3], 1):
-            shown, _ = _half_blank(it.get("text") or "", True)
-            p(doc, f"{i}. {shown}____________________", size=12, after=5)
+        # 名句/俗语：第一题补后半；第二题只用「未在第一题出示」的句子
+        section(doc, "一、补全名句（写出后半句）")
+        if unit_id == "u2":
+            # 避开「博学之…」（留给关键词填空），避免抄答案
+            first_pool = [it for it in items if "博学之" not in (it.get("text") or "") and "善疑者" not in (it.get("text") or "")]
+        else:
+            first_pool = list(items)
+        shown_texts = []
+        for i, it in enumerate(first_pool[:3], 1):
+            full = (it.get("text") or "").strip()
+            shown_texts.append(full)
+            if "，" in full:
+                left, _right = full.split("，", 1)
+                p(doc, f"{i}. {left}，____________________", size=12, after=6)
+            else:
+                shown, _ = _half_blank(full, True)
+                p(doc, f"{i}. {shown}____________________", size=12, after=6)
 
-    # 三、据意写句（最多2题）
-    section(doc, "三、根据意思写原句（2题）")
-    tips_src = [x for x in (lines_detail or items) if (x.get("tip") or "").strip()]
-    for i, it in enumerate(tips_src[:2], 1):
-        p(doc, f"{i}. 意思：{(it.get('tip') or '').strip()}", size=11, after=2)
-        p(doc, "　　原句：________________________________________", size=12, after=6)
-    if not tips_src:
-        p(doc, "（本课据意题暂略）", size=11, after=4)
+        section(doc, "二、关键词填空（与上一题不重复）")
+        if unit_id == "u2":
+            p(doc, "1. 博____之，审____之，慎____之，明____之，笃____之。", size=12, after=5)
+            p(doc, "2. 善疑者，不疑________疑，而疑________疑。", size=12, after=6)
+        elif unit_id == "u3":
+            unused = [it for it in items if (it.get("text") or "") not in shown_texts]
+            for i, it in enumerate(unused[:2], 1):
+                full = (it.get("text") or "").strip()
+                if "，" in full:
+                    left, _r = full.split("，", 1)
+                    p(doc, f"{i}. {left}，____________________", size=12, after=5)
+                else:
+                    p(doc, f"{i}. ____________________", size=12, after=5)
+            if not unused:
+                p(doc, "（见第三大题据意写句）", size=11, after=4)
+        elif unit_id == "u6":
+            unused = [it for it in items if (it.get("text") or "") not in shown_texts]
+            for i, it in enumerate(unused[:2], 1):
+                full = (it.get("text") or "").strip()
+                if "，" in full:
+                    left, _r = full.split("，", 1)
+                    p(doc, f"{i}. {left}，____________________", size=12, after=5)
+        else:
+            unused = [it for it in items if (it.get("text") or "") not in shown_texts]
+            for i, it in enumerate(unused[:2], 1):
+                full = (it.get("text") or "").strip()
+                if "，" in full:
+                    left, _r = full.split("，", 1)
+                    p(doc, f"{i}. {left}，____________________", size=12, after=5)
+            if not unused:
+                p(doc, "（见第三大题据意写句）", size=11, after=4)
+
+        section(doc, "三、根据意思写原句（2题）")
+        tips_src = [x for x in items if (x.get("tip") or "").strip()]
+        for i, it in enumerate(tips_src[:2], 1):
+            p(doc, f"{i}. 意思：{(it.get('tip') or '').strip()}", size=11, after=2)
+            p(doc, "　　原句：________________________________________", size=12, after=6)
+        if not tips_src:
+            p(doc, "（本课据意题暂略）", size=11, after=4)
 
     # 四、本单元特色（只保留1道，控制时长）
     if unit_id == "u2":
@@ -301,24 +334,26 @@ def _garden_answer_doc(unit_id: str, garden: dict):
         for it in items:
             p(doc, (it.get("text") or "") + ("　——" + it["who"] if it.get("who") else ""), size=13, after=6)
 
-    section(doc, "二、关键词填空")
-    if unit_id == "u2":
-        p(doc, "1. 孰能无惑", size=12, after=4)
-        p(doc, "2. 学 / 问 / 思 / 辨 / 行", size=12, after=4)
-        p(doc, "3. 不学不成，不问不知", size=12, after=4)
-        p(doc, "4. 裕 / 小", size=12, after=4)
-        p(doc, "5. 人之所 / 人之所不", size=12, after=6)
-    elif unit_id == "u3":
-        p(doc, "1. 十场秋雨要穿棉", size=12, after=4)
-        p(doc, "2. 把扇丢", size=12, after=4)
-        p(doc, "3. 雁儿脚上带霜来", size=12, after=6)
-    elif unit_id == "u6":
-        p(doc, "1. 寸有所长　2. 时不再来　3. 谬以千里　4. 驷马难追", size=12, after=6)
-    elif unit_id == "u8":
-        for it in items:
-            p(doc, f"{it.get('text')}　←　{it.get('tip') or ''}", size=12, after=4)
+    if lines or lines_detail:
+        section(doc, "一补充：下句答案")
+        # 给出句写下句：偶数句
+        for i, ln in enumerate(lines[1::2], 1):
+            p(doc, f"{i}. {ln}", size=13, after=4)
     else:
-        p(doc, "见「一、全文」原句。", size=12, after=6)
+        section(doc, "二、关键词填空")
+        if unit_id == "u2":
+            p(doc, "1. 学 / 问 / 思 / 辨 / 行", size=12, after=4)
+            p(doc, "2. 人之所 / 人之所不", size=12, after=6)
+        elif unit_id == "u3":
+            unused = items[3:5] if len(items) > 3 else items[-2:]
+            for it in unused:
+                p(doc, it.get("text") or "", size=12, after=4)
+        elif unit_id == "u6":
+            p(doc, "机不可失，时不再来；差之毫厘，谬以千里。", size=12, after=6)
+        elif unit_id == "u8":
+            p(doc, "选词：鹤发童颜；明眸皓齿（序号以卷面备选为准）", size=12, after=6)
+        else:
+            p(doc, "见「一」后半句。", size=12, after=6)
 
     section(doc, "三、根据意思写原句")
     if lines_detail:
