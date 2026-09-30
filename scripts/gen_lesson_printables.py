@@ -323,7 +323,7 @@ def build_lesson(les: dict) -> Document:
     p(doc, "语文书桌 · Chinese Desk", size=10, bold=True, color=BRAND_ORANGE_YELLOW, center=True, after=2)
     p(
         doc,
-        f"第{les['bookNo']}课《{les['title']}》· 每日练习（约10分钟）",
+        f"第{les['bookNo']}课《{les['title']}》· 每日练习（约10–15分钟）",
         size=16,
         bold=True,
         color=BRAND_ORANGE_RED,
@@ -332,54 +332,44 @@ def build_lesson(les: dict) -> Document:
     )
     p(doc, f"{les['unitName']}　|　A4　|　姓名：________　日期：________　用时：____分钟", size=11, center=True, after=8)
 
-    # 1 dictation — 拼音与填空一一对应（三列，接近单元测卷留白）
-    section(doc, "一、字词听写（看拼音写字词）")
-    add_pinyin_write_grid(doc, les["words"], cols=3, py_size=14, gap_after=12)
+    # 控制在约10–15分钟：字词≤9、组词≤3、多音≤3、仿写1句
+    words = (les.get("words") or [])[:9]
+    compounds = (les.get("compounds") or [])[:3]
+    polys = (les.get("poly") or [])[:3]
 
-    # 2 compounds / idioms
+    section(doc, "一、字词听写（看拼音写，最多9个）")
+    add_pinyin_write_grid(doc, words, cols=3, py_size=14, gap_after=10)
+
     if les.get("idioms"):
-        section(doc, "二、成语练习（看拼音写 + 选词填空）")
-        add_pinyin_write_grid(doc, les["idioms"], cols=2, py_size=14, gap_after=12)
-        p(doc, "选一个成语造句：", size=12, after=4)
-        blank(doc, 1)
+        section(doc, "二、成语（看拼音写）")
+        add_pinyin_write_grid(doc, les["idioms"][:4], cols=2, py_size=14, gap_after=10)
+    elif compounds:
+        section(doc, "二、形近组词（最多3组）")
+        for a, b in compounds:
+            p(doc, f"{a}（　　　　）　　{b}（　　　　）", size=14, after=8)
     else:
-        section(doc, "二、组词练习（形近字）")
-        for a, b in les["compounds"]:
-            p(doc, f"{a}（　　　　）　　{b}（　　　　）", size=14, after=10)
+        section(doc, "二、组词")
+        p(doc, "（本组略）", size=11, after=4)
 
-    if les.get("idioms") and les.get("compounds"):
-        p(
-            doc,
-            "形近组词：" + "　".join(f"{a}（　　）{b}（　　）" for a, b in les["compounds"][:3]),
-            size=12,
-            after=8,
-        )
+    section(doc, "三、多音字（最多3个，正确读音下画√）")
+    if polys:
+        for word, opts, _ in polys:
+            p(doc, f"{word}　（{'　'.join(opts)}）", size=14, after=6)
+    elif les.get("poly_wrong"):
+        bits = [f"{i}.{w}（{py}）" for i, (w, py, ok) in enumerate(les["poly_wrong"][:3], 1)]
+        p(doc, "　".join(bits), size=12, after=4)
+        p(doc, "有误：第____项，应读________", size=12, after=6)
+    else:
+        p(doc, "（本课多音较少，本项可跳过）", size=11, after=4)
 
-    # 3 polyphones
-    section(doc, "三、多音字辨认（参考单元测题型）")
-    if les.get("poly"):
-        p(doc, "在正确读音下面画“√”。", size=11, color=BRAND_DEEP, after=6)
-        for word, opts, _ in les["poly"]:
-            p(doc, f"{word}　（{'　'.join(opts)}）", size=14, after=8)
-    if les.get("poly_wrong"):
-        p(doc, "选出读音有误的一项，把错的字音改正：", size=11, color=BRAND_DEEP, after=6)
-        bits = []
-        for i, (w, py, ok) in enumerate(les["poly_wrong"], 1):
-            bits.append(f"{i}.{w}（{py}）")
-        p(doc, "　".join(bits), size=12, after=6)
-        p(doc, "有误：第____项，应读________", size=12, after=8)
-    if not les.get("poly") and not les.get("poly_wrong"):
-        p(doc, "（本课多音较少）给加点字注音：曲折____　慎重____", size=12, after=8)
-
-    # 4 pattern
-    section(doc, "四、句型仿写")
+    section(doc, "四、句型仿写（写1句即可）")
     pat = les["pattern"]
-    p(doc, pat["label"], size=12, after=4)
-    p(doc, pat["example"], size=11, color=BRAND_DEEP, after=6)
-    blank(doc, 2)
+    p(doc, pat["label"], size=12, after=3)
+    p(doc, pat["example"], size=11, color=BRAND_DEEP, after=4)
+    blank(doc, 1)
 
     p(doc, "□错题记入错题档案　　□已订正", size=10, color=BRAND_DEEP, before=6)
-    p(doc, f"第{les['bookNo']}课每日练习 · 约10分钟 · 有背诵另做默写单", size=9, color=BRAND_ORANGE_YELLOW, center=True, before=6)
+    p(doc, f"第{les['bookNo']}课 · 约10–15分钟 · 有背诵另做默写单", size=9, color=BRAND_ORANGE_YELLOW, center=True, before=6)
     return doc
 
 
@@ -389,7 +379,7 @@ def build_recite(les: dict) -> Document:
     p(doc, "语文书桌 · Chinese Desk", size=9, bold=True, color=BRAND_ORANGE_YELLOW, center=True, after=1)
     p(
         doc,
-        f"第{les['bookNo']}课《{les['title']}》· 课文默写（约10分钟）",
+        f"第{les['bookNo']}课《{les['title']}》· 课文默写（约10–15分钟）",
         size=14,
         bold=True,
         color=BRAND_ORANGE_RED,
@@ -397,12 +387,11 @@ def build_recite(les: dict) -> Document:
         after=1,
     )
     p(doc, f"{r['label']}　|　姓名：________　日期：________", size=9, center=True, after=6)
-    section(doc, "一、根据课文填空（不看书）")
-    for line in r["lines"]:
-        p(doc, line, size=11, after=6)
+    section(doc, "一、根据课文填空（不看书 · 约10分钟）")
+    for line in r["lines"][:6]:
+        p(doc, line, size=11, after=5)
     blank(doc, 1)
-    section(doc, "二、再整段默写（可先写关键词）")
-    blank(doc, 4)
+    p(doc, "（整段默写改日再练，今日只做填空即可）", size=10, color=BRAND_DEEP, after=4)
     p(doc, "□背诵过关　　□错字已订正", size=9, color=BRAND_DEEP, before=6)
     p(doc, "参考答案见 answers/lesson-printables-参考答案.md（做完再看）", size=8, color=BRAND_ORANGE_YELLOW, center=True)
     return doc

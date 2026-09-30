@@ -56,7 +56,7 @@
     if (!node) return [];
     if (node.type === "garden") {
       return [
-        { id: "garden_write", label: "日积月累过关", blurb: "补全 · 填空 · 对齐试卷" },
+        { id: "garden_write", label: "日积月累过关", blurb: "约10–15分钟 · 补全/填空" },
         { id: "garden_meaning", label: "据意写句", blurb: "给出意思，写出原句" },
         { id: "garden_bg", label: "作者与背景", blurb: "了解是谁、为什么重要" },
       ];
@@ -142,7 +142,7 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "练习下载<small>全部题型合订 · 可打印 A4</small>";
+      dl.innerHTML = "练习下载<small>约10–15分钟 · 可打印 A4</small>";
       dl.addEventListener("click", () => {
         if (pr && pr.daily) openPdf(pr.daily);
         if (pr && pr.recite) setTimeout(() => openPdf(pr.recite), 400);
@@ -173,7 +173,7 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "练习下载<small>日积月累默写 · 含义 · 仿写 · A4</small>";
+      dl.innerHTML = "练习下载<small>约10–15分钟 · 日积月累过关 · A4</small>";
       dl.addEventListener("click", () => {
         if (daily) openPdf(daily);
         else alert("本园地练习正在准备，请稍后再试。");
