@@ -79,21 +79,17 @@
     $("sessionEyebrow").textContent = node.unitTitle || DATA.book;
     $("sessionTitle").textContent =
       node.type === "garden" ? node.title : "第" + node.bookNo + "课 · " + node.title;
-    const mods = modulesFor(node);
-    $("sessionMeta").textContent =
-      (node.kind || "") + " · 今日 " + mods.length + " 项练习 · 约 " + Math.max(8, mods.length * 3) + " 分钟";
-    $("unitLine").textContent = node.unitTitle + (node.kind ? " · " + node.kind : "");
-    $("pathSummary").textContent =
-      "本学期路径 " + P.completedCount() + " / " + P.semesterPath().length + " · 当前第 " + store.currentBookLesson + " 课";
-    const pr = lessonPrint(node);
     const printBtn = $("btnPrintToday");
-    if (printBtn) {
-      printBtn.textContent = pr ? "下载本课练习（A4）" : "打印默写纸";
-    }
-    const reciteBtn = $("btnPrintRecite");
-    if (reciteBtn) {
-      const hasRecite = !!(pr && pr.recite);
-      reciteBtn.classList.toggle("hidden", !hasRecite);
+    if (printBtn) printBtn.textContent = "练习下载";
+    $("sessionMeta").textContent =
+      (node.kind || "课文") + " · 打印后自己做 · 做完再看答案";
+    const unitEl = $("unitLine");
+    if (unitEl) unitEl.textContent = node.unitTitle || DATA.book;
+    const sumEl = $("pathSummary");
+    if (sumEl) {
+      const path = P.semesterPath();
+      sumEl.textContent =
+        "本学期 " + P.completedCount() + " / " + path.length + " 站已练";
     }
   }
 
@@ -140,35 +136,26 @@
     $("pathLessonMeta").textContent = node.unitTitle + " · " + (node.kind || "");
     const grid = $("pathModGrid");
     grid.innerHTML = "";
-    modulesFor(node).forEach((m) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "mod-btn";
-      b.innerHTML = m.label + "<small>" + m.blurb + "</small>";
-      b.addEventListener("click", () => {
-        $("pathLessonOverlay").classList.add("hidden");
-        startModule(node, m.id);
-      });
-      grid.appendChild(b);
-    });
+
     if (node.type === "lesson") {
       const pr = lessonPrint(node);
-      if (pr && pr.daily) {
-        const dl = document.createElement("button");
-        dl.type = "button";
-        dl.className = "mod-btn";
-        dl.innerHTML = "下载本课练习（A4）<small>听写·组词/成语·多音·仿写</small>";
-        dl.addEventListener("click", () => openPdf(pr.daily));
-        grid.appendChild(dl);
-      }
-      if (pr && pr.recite) {
-        const dl2 = document.createElement("button");
-        dl2.type = "button";
-        dl2.className = "mod-btn";
-        dl2.innerHTML = "下载背诵默写 A4（另加约10分钟）<small>有背诵要求</small>";
-        dl2.addEventListener("click", () => openPdf(pr.recite));
-        grid.appendChild(dl2);
-      }
+      const dl = document.createElement("button");
+      dl.type = "button";
+      dl.className = "mod-btn is-primary";
+      dl.innerHTML = "练习下载<small>全部题型合订 · 可打印 A4</small>";
+      dl.addEventListener("click", () => {
+        if (pr && pr.daily) openPdf(pr.daily);
+        if (pr && pr.recite) setTimeout(() => openPdf(pr.recite), 400);
+      });
+      grid.appendChild(dl);
+
+      const ans = document.createElement("button");
+      ans.type = "button";
+      ans.className = "mod-btn is-answer";
+      ans.innerHTML = "答案在线看<small>做完再看 · 也可下载</small>";
+      ans.addEventListener("click", () => openAnswers(node));
+      grid.appendChild(ans);
+
       const setCur = document.createElement("button");
       setCur.type = "button";
       setCur.className = "mod-btn";
@@ -179,18 +166,107 @@
         showView("home");
       });
       grid.appendChild(setCur);
-    } else if (node.type === "garden" && state.printIndex && state.printIndex.sprint) {
-      const sp = state.printIndex.sprint[node.unitId];
-      if (sp) {
-        const dl = document.createElement("button");
-        dl.type = "button";
-        dl.className = "mod-btn";
-        dl.innerHTML = "下载本单元冲刺 A4<small>测前打印</small>";
-        dl.addEventListener("click", () => openPdf(sp));
-        grid.appendChild(dl);
-      }
+    } else if (node.type === "garden") {
+      const sp = state.printIndex && state.printIndex.sprint && state.printIndex.sprint[node.unitId];
+      const dl = document.createElement("button");
+      dl.type = "button";
+      dl.className = "mod-btn is-primary";
+      dl.innerHTML = "练习下载<small>单元冲刺 · 可打印 A4</small>";
+      dl.addEventListener("click", () => openPdf(sp));
+      grid.appendChild(dl);
+      const ans = document.createElement("button");
+      ans.type = "button";
+      ans.className = "mod-btn is-answer";
+      ans.innerHTML = "答案在线看<small>日积月累全文 · 句意 · 可下载</small>";
+      ans.addEventListener("click", () => openGardenTips(node));
+      grid.appendChild(ans);
     }
     $("pathLessonOverlay").classList.remove("hidden");
+  }
+
+  function openAnswers(node) {
+    const pr = lessonPrint(node);
+    $("pathLessonOverlay").classList.add("hidden");
+    const box = $("answerOverlay");
+    const body = $("answerBody");
+    const title = $("answerTitle");
+    title.textContent = "第" + node.bookNo + "课《" + node.title + "》答案";
+    body.innerHTML = "<p class='meta'>加载中…</p>";
+    box.classList.remove("hidden");
+    const mdUrl = pr && pr.answerMd;
+    const pdfUrl = pr && pr.answerPdf;
+    $("btnAnswerDownload").onclick = () => {
+      if (pdfUrl) openPdf(pdfUrl);
+      else if (mdUrl) openPdf(mdUrl);
+    };
+    if (!mdUrl) {
+      body.innerHTML = "<p>暂无答案文件。</p>";
+      return;
+    }
+    fetch(mdUrl + "?v=1")
+      .then((r) => r.text())
+      .then((text) => {
+        body.innerHTML = renderMd(text);
+      })
+      .catch(() => {
+        body.innerHTML = "<p>答案加载失败，请直接下载 PDF。</p>";
+      });
+  }
+
+  function openGardenTips(node) {
+    $("pathLessonOverlay").classList.add("hidden");
+    const g = node.garden && node.garden.accumulate;
+    $("answerTitle").textContent = (node.title || "语文园地") + " · 日积月累";
+    let html = "";
+    if (g) {
+      html += "<p><b>" + (g.title || "日积月累") + "</b></p>";
+      if (g.author) html += "<p class='meta'>" + g.author + "</p>";
+      if (g.linesDetail && g.linesDetail.length) {
+        g.linesDetail.forEach((ln) => {
+          html +=
+            "<p><b>" +
+            (ln.text || "") +
+            "</b><br><span class='meta'>" +
+            (ln.tip || "") +
+            "</span></p>";
+        });
+      } else if (g.lines) {
+        html += "<p style='font-size:1.2rem;font-weight:800;line-height:1.7'>" + g.lines.join("<br>") + "</p>";
+      }
+      if (g.items) {
+        g.items.forEach((it) => {
+          html +=
+            "<p><b>" +
+            (it.text || "") +
+            "</b><br><span class='meta'>" +
+            (it.who || "") +
+            (it.tip ? " · " + it.tip : "") +
+            "</span></p>";
+        });
+      }
+      if (g.meaning) html += "<p><b>大意</b><br>" + g.meaning + "</p>";
+      if (g.background) html += "<p class='meta'>" + g.background + "</p>";
+      if (node.garden && node.garden.extra) html += "<p class='meta'>" + node.garden.extra + "</p>";
+    }
+    $("answerBody").innerHTML = html || "<p>暂无内容</p>";
+    $("btnAnswerDownload").onclick = () => {
+      const sp = state.printIndex && state.printIndex.sprint && state.printIndex.sprint[node.unitId];
+      openPdf(sp);
+    };
+    $("answerOverlay").classList.remove("hidden");
+  }
+
+  function renderMd(text) {
+    return text
+      .split("\n")
+      .map((line) => {
+        if (line.startsWith("# ")) return "<h2 style='font-family:Noto Serif SC,serif;color:var(--brand-deep);margin:0 0 8px'>" + line.slice(2) + "</h2>";
+        if (line.startsWith("## ")) return "<h3 style='color:var(--brand);margin:14px 0 6px'>" + line.slice(3) + "</h3>";
+        if (line.startsWith("> ")) return "<p class='meta'>" + line.slice(2) + "</p>";
+        if (!line.trim()) return "";
+        return "<p style='margin:0 0 8px;line-height:1.55'>" + line + "</p>";
+      })
+      .join("");
   }
 
   function buildCards(node, moduleId) {
@@ -198,10 +274,16 @@
     if (node.type === "garden") {
       const g = node.garden.accumulate;
       if (moduleId === "garden_write") {
-        const items = g.items || (g.lines ? [{ text: g.lines.join(""), who: g.author }] : []);
-        items.forEach((it, i) => {
+        const items =
+          g.items ||
+          (g.linesDetail
+            ? g.linesDetail.map((ln) => ({ text: ln.text, who: g.author }))
+            : g.lines
+              ? [{ text: g.lines.join(""), who: g.author }]
+              : []);
+        items.forEach((it) => {
           const full = it.text || "";
-          const cut = Math.max(4, Math.floor(full.length / 2));
+          const cut = Math.max(4, Math.floor(full.replace(/[，。？！、]/g, "").length / 2));
           cards.push({
             type: "write",
             title: "日积月累默写",
@@ -212,7 +294,10 @@
           });
         });
       } else if (moduleId === "garden_meaning") {
-        const items = g.items || [{ text: (g.lines || []).join(""), tip: g.meaning }];
+        const items =
+          g.items ||
+          g.linesDetail ||
+          [{ text: (g.lines || []).join(""), tip: g.meaning }];
         items.forEach((it) => {
           cards.push({
             type: "write",
@@ -608,12 +693,13 @@
   $("navPath").addEventListener("click", () => showView("path"));
   $("navRecords").addEventListener("click", () => showView("records"));
   $("btnOpenPath").addEventListener("click", () => showView("path"));
-  $("btnStartToday").addEventListener("click", startTodayFlow);
   $("btnPrintToday").addEventListener("click", () => {
     const node = P.currentNode();
     const pr = lessonPrint(node);
-    if (pr && pr.daily) openPdf(pr.daily);
-    else if (node.type === "lesson") {
+    if (pr && pr.daily) {
+      openPdf(pr.daily);
+      if (pr.recite) setTimeout(() => openPdf(pr.recite), 400);
+    } else if (node.type === "lesson") {
       openPdf(
         "printables/lessons/L" +
           String(node.bookNo).padStart(2, "0") +
@@ -623,13 +709,17 @@
       );
     } else showView("path");
   });
-  const btnRecite = $("btnPrintRecite");
-  if (btnRecite) {
-    btnRecite.addEventListener("click", () => {
-      const pr = lessonPrint(P.currentNode());
-      if (pr && pr.recite) openPdf(pr.recite);
-      else alert("本课无背诵默写单（或尚未生成）。");
+  const btnAnswers = $("btnViewAnswers");
+  if (btnAnswers) {
+    btnAnswers.addEventListener("click", () => {
+      const node = P.currentNode();
+      if (node.type === "garden") openGardenTips(node);
+      else openAnswers(node);
     });
+  }
+  const btnCloseAns = $("btnCloseAnswer");
+  if (btnCloseAns) {
+    btnCloseAns.addEventListener("click", () => $("answerOverlay").classList.add("hidden"));
   }
   $("pathLessonClose").addEventListener("click", () => $("pathLessonOverlay").classList.add("hidden"));
   $("btnCloseLesson").addEventListener("click", () => showView("home"));

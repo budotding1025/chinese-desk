@@ -3,32 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>语文书桌 · Chinese Desk</title>
+  <title>语文书桌</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./theme.css?v=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./theme.css?v=2" />
 </head>
 <body>
   <!-- HOME -->
   <div class="screen" id="screenHome">
     <div class="top">
       <div class="brand">语文书桌</div>
-      <button type="button" class="icon-btn" id="btnSettings" aria-label="说明" title="说明">?</button>
+      <button type="button" class="icon-btn" id="btnSettings" aria-label="怎么用" title="怎么用">?</button>
     </div>
     <div class="home-main">
       <div class="hero-mark" aria-hidden="true">语</div>
-      <p class="mascot-line">与教材同步 · 先默写过关，再练考点</p>
+      <p class="mascot-line">打印练习 · 自己做题 · 再看答案</p>
       <p class="streak" id="streakLine">连续 <strong>0</strong> 天</p>
       <div class="today-card">
         <p class="eyebrow" id="sessionEyebrow">第二单元</p>
         <h1 id="sessionTitle">第8课 · 蝴蝶的家</h1>
         <p class="meta" id="sessionMeta">今日练习</p>
         <div class="home-cta-row">
-          <button type="button" class="btn-start" id="btnStartToday">开始今日练习</button>
-          <button type="button" class="btn-secondary" id="btnPrintToday">下载本课练习（A4）</button>
+          <button type="button" class="btn-start" id="btnPrintToday">练习下载</button>
+          <button type="button" class="btn-answer" id="btnViewAnswers">答案在线看</button>
         </div>
-        <button type="button" class="btn-warm" id="btnPrintRecite" style="width:100%;margin-top:8px">下载背诵默写（另+10分钟）</button>
         <button type="button" class="btn-path" id="btnOpenPath">看学期路径</button>
       </div>
       <p class="unit-line" id="unitLine">第二单元</p>
@@ -39,17 +38,17 @@
   <!-- PATH -->
   <div class="screen hidden" id="screenPath">
     <div class="path-top">
-      <span style="width:42px"></span>
+      <span style="width:48px"></span>
       <h1>学期学习路径</h1>
-      <span style="width:42px"></span>
+      <span style="width:48px"></span>
     </div>
-    <p class="path-meta" id="pathMeta">按单元 · 课文顺序</p>
+    <p class="path-meta" id="pathMeta">按单元 · 课文顺序 · 点课下载</p>
     <div class="path-scroll" id="pathList"></div>
   </div>
 
   <div class="overlay is-center hidden" id="pathLessonOverlay" aria-hidden="true">
-    <div class="sheet" role="dialog">
-      <div style="display:flex;justify-content:space-between;align-items:center">
+    <div class="sheet" role="dialog" aria-labelledby="pathLessonTitle">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
         <h2 id="pathLessonTitle">这一课</h2>
         <button type="button" class="icon-btn" id="pathLessonClose" aria-label="关闭">×</button>
       </div>
@@ -61,16 +60,16 @@
   <!-- RECORDS -->
   <div class="screen hidden" id="screenRecords">
     <div class="path-top records-top">
-      <span style="width:42px"></span>
+      <span style="width:48px"></span>
       <h1>记录</h1>
-      <span style="width:42px"></span>
+      <span style="width:48px"></span>
     </div>
     <div class="records-score" id="recordsScore"></div>
     <p class="path-meta">单元冲刺 · 重难点</p>
     <div class="records-actions" id="recordsActions"></div>
     <p class="path-meta" id="recordsMeta">错题记录</p>
     <div class="path-scroll" id="recordsList"></div>
-    <div class="path-footer" style="padding:12px 16px">
+    <div class="path-footer">
       <button type="button" class="btn-start" id="btnRecordsToPath">去学期路径</button>
     </div>
   </div>
@@ -80,12 +79,12 @@
     <div class="lesson-top">
       <button type="button" class="icon-btn" id="btnCloseLesson" aria-label="回主页">←</button>
       <div class="progress" aria-hidden="true"><i id="progressFill"></i></div>
-      <span style="width:42px"></span>
+      <span style="width:48px"></span>
     </div>
     <div class="lesson-body">
       <p class="card-type" id="cardType">练习</p>
-      <p class="lesson-unit" id="lessonUnitTitle" style="margin:0;color:var(--muted);font-size:.85rem"></p>
-      <p class="lesson-name" id="lessonNameTitle" style="margin:4px 0 12px;font-weight:800"></p>
+      <p class="lesson-unit" id="lessonUnitTitle"></p>
+      <p class="lesson-name" id="lessonNameTitle"></p>
       <p class="card-prompt" id="cardPrompt">—</p>
       <p class="card-sub" id="cardSub"></p>
       <div id="cardExtra"></div>
@@ -97,36 +96,59 @@
   <nav class="app-nav" id="appNav" aria-label="主导航">
     <button type="button" class="nav-item is-on" data-nav="home" id="navHome">
       <span class="nav-emoji" aria-hidden="true">⌂</span>
-      <span>主页</span>
+      <span class="nav-label">主页</span>
     </button>
     <button type="button" class="nav-item" data-nav="path" id="navPath">
       <span class="nav-emoji" aria-hidden="true">◎</span>
-      <span>路径</span>
+      <span class="nav-label">路径</span>
     </button>
     <button type="button" class="nav-item" data-nav="records" id="navRecords">
       <span class="nav-emoji" aria-hidden="true">≡</span>
-      <span>记录</span>
+      <span class="nav-label">记录</span>
     </button>
   </nav>
 
-  <div class="overlay is-center hidden" id="helpOverlay">
-    <div class="sheet">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h2>怎么用</h2>
-        <button type="button" class="icon-btn" id="btnCloseHelp">×</button>
+  <div class="overlay is-center hidden" id="answerOverlay">
+    <div class="sheet" role="dialog" aria-labelledby="answerTitle">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <h2 id="answerTitle">答案</h2>
+        <button type="button" class="icon-btn" id="btnCloseAnswer" aria-label="关闭">×</button>
       </div>
-      <p style="line-height:1.6;margin:0;color:var(--muted)">
-        <b>主页</b>：当日课文练习（现为第8课）。<br/>
-        <b>路径</b>：按单元→课文→语文园地；每课含字词默写、组词、多音、课文默写、大意等。<br/>
-        <b>记录</b>：错题、单元冲刺卷、重难点练习。<br/>
-        与统编四上教材同步。可打印纸见 printables/。
-      </p>
+      <div id="answerBody" style="max-height:55vh;overflow:auto;margin:14px 0 18px"></div>
+      <button type="button" class="btn-start" id="btnAnswerDownload">下载答案（A4）</button>
     </div>
   </div>
 
-  <script src="./data.js?v=2"></script>
-  <script src="./progress.js?v=2"></script>
-  <script src="./app.js?v=3"></script>
+  <div class="overlay is-center hidden" id="helpOverlay">
+    <div class="sheet">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <h2>怎么用</h2>
+        <button type="button" class="icon-btn" id="btnCloseHelp" aria-label="关闭">×</button>
+      </div>
+      <ul class="help-list">
+        <li>
+          <strong>主页</strong>
+          <span>今日课文 · 练习下载 / 答案在线看</span>
+        </li>
+        <li>
+          <strong>路径</strong>
+          <span>按单元点课；每课同样两个入口</span>
+        </li>
+        <li>
+          <strong>记录</strong>
+          <span>错题、单元冲刺、摸底卷</span>
+        </li>
+        <li>
+          <strong>建议</strong>
+          <span>先打印做题，做完再看答案</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="./data.js?v=4"></script>
+  <script src="./progress.js?v=3"></script>
+  <script src="./app.js?v=5"></script>
   <script>
     document.getElementById("btnSettings").onclick = function () {
       document.getElementById("helpOverlay").classList.remove("hidden");
