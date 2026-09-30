@@ -1,82 +1,138 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>语文书桌 · Chinese Desk</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet" />
-  <style>
-    :root { --brand:#E85D04; --warm:#F4A261; --deep:#C2410C; --ink:#1C1917; --paper:#FFFBF5; --line:rgba(232,93,4,.22); }
-    * { box-sizing: border-box; }
-    body { margin:0; min-height:100vh; font-family:"Noto Sans SC",sans-serif; color:var(--ink);
-      background: radial-gradient(1200px 500px at 10% -10%, rgba(244,162,97,.35), transparent 60%),
-        radial-gradient(900px 400px at 100% 0%, rgba(232,93,4,.18), transparent 55%), var(--paper); }
-    main { width:min(920px,92vw); margin:0 auto; padding:2.5rem 0 4rem; }
-    .brand { font-family:"Noto Serif SC",serif; font-size:clamp(2rem,5vw,2.8rem); color:var(--brand); margin:0 0 .35rem; }
-    .sub { margin:0 0 1.25rem; color:var(--deep); font-size:.95rem; }
-    .note { border-left:4px solid var(--warm); padding:.75rem 1rem; background:rgba(255,255,255,.65); margin-bottom:1.5rem; font-size:.92rem; line-height:1.55; }
-    h2 { font-family:"Noto Serif SC",serif; font-size:1.15rem; color:var(--deep); margin:1.6rem 0 .7rem; }
-    .grid { display:grid; gap:.65rem; }
-    a.item { display:flex; justify-content:space-between; gap:1rem; align-items:baseline; text-decoration:none; color:var(--ink);
-      padding:.8rem 1rem; background:#fff; border:1px solid var(--line); }
-    a.item:hover { border-color:var(--brand); }
-    a.item strong { color:var(--brand); }
-    a.item span { color:#78716c; font-size:.85rem; white-space:nowrap; }
-    .meta { margin-top:2rem; font-size:.85rem; color:#78716c; }
-    .meta a { color:var(--deep); }
-  </style>
+  <link rel="stylesheet" href="./theme.css?v=1" />
 </head>
 <body>
-  <main>
-    <p class="brand">语文书桌</p>
-    <p class="sub">Chinese Desk · 先默写过关，再练考点 · 打印优先</p>
-    <div class="note">
-      结构对齐翻翻英语（按课 / 分场次）：<b>工作日①默写</b> → <b>工作日②考点</b> → <b>周末作文+课外阅读</b> → 测前整卷。
-      卷面 A4，少留白、填空加大。错题进 <a href="mistakes/错题档案.md">错题档案</a>。日程见 <a href="schedule.md">schedule.md</a>。
+  <!-- HOME -->
+  <div class="screen" id="screenHome">
+    <div class="top">
+      <div class="brand">语文书桌</div>
+      <button type="button" class="icon-btn" id="btnSettings" aria-label="说明" title="说明">?</button>
     </div>
-
-    <h2>工作日① 默写过关（每课）</h2>
-    <div class="grid" id="dictation">
-      <a class="item" href="printables/weekday/dictation/u1-l01-观潮-默写过关.pdf"><strong>1 观潮</strong><span>字词+背诵3–4段</span></a>
-      <a class="item" href="printables/weekday/dictation/u1-l02-走月亮-默写过关.pdf"><strong>2 走月亮</strong><span>字词+背诵第4段</span></a>
-      <a class="item" href="printables/weekday/dictation/u1-l04-繁星-默写过关.pdf"><strong>4 繁星</strong><span>积累词</span></a>
-      <a class="item" href="printables/weekday/dictation/u2-l05-一个豆荚里的五粒豆-默写过关.pdf"><strong>5 豆荚里的五粒豆</strong><span>字词</span></a>
-      <a class="item" href="printables/weekday/dictation/u2-l06-夜间飞行的秘密-默写过关.pdf"><strong>6 夜间飞行的秘密</strong><span>字词</span></a>
-      <a class="item" href="printables/weekday/dictation/u2-l07-呼风唤雨的世纪-默写过关.pdf"><strong>7 呼风唤雨的世纪</strong><span>字词</span></a>
-      <a class="item" href="printables/weekday/dictation/u3-l09-古诗三首-默写过关.pdf"><strong>9 古诗三首</strong><span>诗句默写</span></a>
-      <a class="item" href="printables/weekday/dictation/u3-l10-爬山虎的脚-默写过关.pdf"><strong>10 爬山虎的脚</strong><span>字词</span></a>
-      <a class="item" href="printables/weekday/dictation/u3-l11-蟋蟀的住宅-默写过关.pdf"><strong>11 蟋蟀的住宅</strong><span>字词</span></a>
+    <div class="home-main">
+      <div class="hero-mark" aria-hidden="true">语</div>
+      <p class="mascot-line">与教材同步 · 先默写过关，再练考点</p>
+      <p class="streak" id="streakLine">连续 <strong>0</strong> 天</p>
+      <div class="today-card">
+        <p class="eyebrow" id="sessionEyebrow">第二单元</p>
+        <h1 id="sessionTitle">第8课 · 蝴蝶的家</h1>
+        <p class="meta" id="sessionMeta">今日练习</p>
+        <div class="home-cta-row">
+          <button type="button" class="btn-start" id="btnStartToday">开始今日练习</button>
+          <button type="button" class="btn-secondary" id="btnPrintToday">打印默写纸</button>
+        </div>
+        <button type="button" class="btn-path" id="btnOpenPath">看学期路径</button>
+      </div>
+      <p class="unit-line" id="unitLine">第二单元</p>
+      <p class="path-summary" id="pathSummary">路径进度</p>
     </div>
+  </div>
 
-    <h2>工作日② 考点练习（默写过关后 · 8–15 分钟）</h2>
-    <div class="grid">
-      <a class="item" href="printables/weekday/practice/u1-考点练习-8至15分钟.pdf"><strong>U1 考点练习</strong><span>对齐单元测题型</span></a>
-      <a class="item" href="printables/weekday/practice/u2-考点练习-8至15分钟.pdf"><strong>U2 考点练习</strong><span>提问·园地·仿写</span></a>
-      <a class="item" href="printables/weekday/practice/u3-考点练习-8至15分钟.pdf"><strong>U3 考点练习</strong><span>观察·古诗</span></a>
-      <a class="item" href="printables/weekday/错题登记表.pdf"><strong>错题登记表</strong><span>PDF</span></a>
+  <!-- PATH -->
+  <div class="screen hidden" id="screenPath">
+    <div class="path-top">
+      <span style="width:42px"></span>
+      <h1>学期学习路径</h1>
+      <span style="width:42px"></span>
     </div>
+    <p class="path-meta" id="pathMeta">按单元 · 课文顺序</p>
+    <div class="path-scroll" id="pathList"></div>
+  </div>
 
-    <h2>周末 · 作文 + 课外阅读</h2>
-    <div class="grid">
-      <a class="item" href="printables/weekend/u01-周末-作文仿写与课外阅读.pdf"><strong>U1 周末</strong><span>推荐一个好地方</span></a>
-      <a class="item" href="printables/weekend/u02-周末-作文仿写与课外阅读.pdf"><strong>U2 周末</strong><span>人物特点+提问</span></a>
-      <a class="item" href="printables/weekend/u03-周末-作文仿写与课外阅读.pdf"><strong>U3 周末</strong><span>观察仿写</span></a>
+  <div class="overlay is-center hidden" id="pathLessonOverlay" aria-hidden="true">
+    <div class="sheet" role="dialog">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2 id="pathLessonTitle">这一课</h2>
+        <button type="button" class="icon-btn" id="pathLessonClose" aria-label="关闭">×</button>
+      </div>
+      <p class="meta" id="pathLessonMeta"></p>
+      <div class="mod-grid" id="pathModGrid"></div>
     </div>
+  </div>
 
-    <h2>大测摸底</h2>
-    <div class="grid">
-      <a class="item" href="printables/full/u01-四上第一单元练习.pdf"><strong>U1 整卷</strong><span>4 页</span></a>
-      <a class="item" href="printables/full/u02-四上第二单元练习.pdf"><strong>U2 整卷</strong><span>4 页</span></a>
-      <a class="item" href="printables/full/u03-四上第三单元练习-不完整.pdf"><strong>U3 整卷</strong><span>不完整</span></a>
+  <!-- RECORDS -->
+  <div class="screen hidden" id="screenRecords">
+    <div class="path-top records-top">
+      <span style="width:42px"></span>
+      <h1>记录</h1>
+      <span style="width:42px"></span>
     </div>
+    <div class="records-score" id="recordsScore"></div>
+    <p class="path-meta">单元冲刺 · 重难点</p>
+    <div class="records-actions" id="recordsActions"></div>
+    <p class="path-meta" id="recordsMeta">错题记录</p>
+    <div class="path-scroll" id="recordsList"></div>
+    <div class="path-footer" style="padding:12px 16px">
+      <button type="button" class="btn-start" id="btnRecordsToPath">去学期路径</button>
+    </div>
+  </div>
 
-    <p class="meta">
-      <a href="https://budotding1025.github.io/chinese-desk/">GitHub Pages</a>
-      · <a href="https://github.com/budotding1025/chinese-desk">仓库</a>
-      · 答案见 <a href="answers/weekday-dictation-practice-参考答案.md">answers/</a>
-    </p>
-  </main>
+  <!-- LESSON -->
+  <div class="screen hidden" id="screenLesson">
+    <div class="lesson-top">
+      <button type="button" class="icon-btn" id="btnCloseLesson" aria-label="回主页">←</button>
+      <div class="progress" aria-hidden="true"><i id="progressFill"></i></div>
+      <span style="width:42px"></span>
+    </div>
+    <div class="lesson-body">
+      <p class="card-type" id="cardType">练习</p>
+      <p class="lesson-unit" id="lessonUnitTitle" style="margin:0;color:var(--muted);font-size:.85rem"></p>
+      <p class="lesson-name" id="lessonNameTitle" style="margin:4px 0 12px;font-weight:800"></p>
+      <p class="card-prompt" id="cardPrompt">—</p>
+      <p class="card-sub" id="cardSub"></p>
+      <div id="cardExtra"></div>
+      <div class="feedback hidden" id="cardFeedback"></div>
+      <div class="lesson-actions" id="cardActions"></div>
+    </div>
+  </div>
+
+  <nav class="app-nav" id="appNav" aria-label="主导航">
+    <button type="button" class="nav-item is-on" data-nav="home" id="navHome">
+      <span class="nav-emoji" aria-hidden="true">⌂</span>
+      <span>主页</span>
+    </button>
+    <button type="button" class="nav-item" data-nav="path" id="navPath">
+      <span class="nav-emoji" aria-hidden="true">◎</span>
+      <span>路径</span>
+    </button>
+    <button type="button" class="nav-item" data-nav="records" id="navRecords">
+      <span class="nav-emoji" aria-hidden="true">≡</span>
+      <span>记录</span>
+    </button>
+  </nav>
+
+  <div class="overlay is-center hidden" id="helpOverlay">
+    <div class="sheet">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>怎么用</h2>
+        <button type="button" class="icon-btn" id="btnCloseHelp">×</button>
+      </div>
+      <p style="line-height:1.6;margin:0;color:var(--muted)">
+        <b>主页</b>：当日课文练习（现为第8课）。<br/>
+        <b>路径</b>：按单元→课文→语文园地；每课含字词默写、组词、多音、课文默写、大意等。<br/>
+        <b>记录</b>：错题、单元冲刺卷、重难点练习。<br/>
+        与统编四上教材同步。可打印纸见 printables/。
+      </p>
+    </div>
+  </div>
+
+  <script src="./data.js?v=1"></script>
+  <script src="./progress.js?v=1"></script>
+  <script src="./app.js?v=1"></script>
+  <script>
+    document.getElementById("btnSettings").onclick = function () {
+      document.getElementById("helpOverlay").classList.remove("hidden");
+    };
+    document.getElementById("btnCloseHelp").onclick = function () {
+      document.getElementById("helpOverlay").classList.add("hidden");
+    };
+  </script>
 </body>
 </html>
