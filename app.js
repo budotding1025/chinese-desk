@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=16")
+    return fetch("./print-index.json?v=19")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -33,7 +33,8 @@
 
   function openPdf(url) {
     if (!url) return;
-    window.open(encodeURI(url), "_blank");
+    var sep = url.indexOf("?") >= 0 ? "&" : "?";
+    window.open(encodeURI(url) + sep + "v=19", "_blank");
   }
 
   function showView(name) {

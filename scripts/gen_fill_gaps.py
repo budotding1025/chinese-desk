@@ -216,15 +216,20 @@ def build_garden_practice(unit_id: str, unit_name: str, garden: dict):
 
     if poem_lines:
         # 古诗：只出「给出句写下句」，不做关键词挖空（否则必能从上题抄）
-        section(doc, "一、补全诗句（给出句，写下句）")
+        section(doc, "一、写出下半句（只给出上半句）")
         if acc.get("author"):
             p(doc, (acc.get("title") or "") + "　" + acc.get("author", ""), size=11, after=4)
         odds = poem_lines[0::2]
         for i, a in enumerate(odds[:2], 1):
             p(doc, f"{i}. {a}____________________", size=13, after=8)
 
-        section(doc, "二、根据意思写原句（2题）")
-        tips_src = [x for x in (lines_detail or []) if (x.get("tip") or "").strip()]
+        section(doc, "二、根据含义写出原句（整句）")
+        # 只用偶数句的 tip，避免答案已印在「一」的出句里
+        tips_src = []
+        if lines_detail:
+            for idx, it in enumerate(lines_detail):
+                if idx % 2 == 1 and (it.get("tip") or "").strip():
+                    tips_src.append(it)
         for i, it in enumerate(tips_src[:2], 1):
             p(doc, f"{i}. 意思：{(it.get('tip') or '').strip()}", size=11, after=2)
             p(doc, "　　原句：________________________________________", size=12, after=6)
