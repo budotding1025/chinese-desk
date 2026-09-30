@@ -10,8 +10,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from docx.shared import Cm
 
 from docx_utils import (
+    add_choice_char_table,
+    add_emphasis_words,
+    add_inline_pinyin_line,
     add_page_break,
-    add_pinyin_sentence,
     docx_to_pdf,
     exam_body,
     exam_doc,
@@ -30,29 +32,21 @@ def build_u1():
     exam_header(doc, "语文·四上·第一单元练习")
 
     exam_section(doc, "一、看拼音，写词语。")
-    add_pinyin_sentence(
+    # 与原卷一致：方格嵌在句中，按原卷断行
+    add_inline_pinyin_line(
         doc,
         ["深蓝色的天空中，悬着", ("fán xīng", 2), "。它们是这样低，真是摇摇欲坠。"],
+        after=2,
     )
-    add_pinyin_sentence(
+    add_inline_pinyin_line(
         doc,
-        [
-            "渐渐地我的眼睛",
-            ("mó hu", 2),
-            "了，我好像看见无数萤火虫在我的周围",
-            ("fēi wǔ", 2),
-            "。",
-        ],
+        ["渐渐地我的眼睛", ("mó hu", 2), "了，我好像看见无数萤火虫在我的周围", ("fēi wǔ", 2), "。"],
+        after=2,
     )
-    add_pinyin_sentence(
+    add_inline_pinyin_line(
         doc,
-        [
-            "海上的夜是",
-            ("róu hé", 2),
-            "的，是静寂的，是",
-            ("mèng huàn", 2),
-            "的。",
-        ],
+        ["海上的夜是", ("róu hé", 2), "的，是静寂的，是", ("mèng huàn", 2), "的。"],
+        after=4,
     )
 
     exam_section(doc, "二、选出下列各组词语中读音有误的一项，将序号填在括号里。")
@@ -83,8 +77,8 @@ def build_u1():
     write_lines(doc, 2)
 
     exam_section(doc, "六、选一个事物，用一两个加点的词语描绘它，再写下来。")
-    exam_body(doc, "事物：雪　烟花　雨　小狗")
-    exam_body(doc, "加点词语：霎时　顿时　忽然　过了一会儿　一会儿工夫")
+    exam_body(doc, "事物：雪　烟花　雨　小狗", space_after=2)
+    add_emphasis_words(doc, "加点词语：", ["霎时", "顿时", "忽然", "过了一会儿", "一会儿工夫"])
     write_lines(doc, 2)
 
     exam_section(doc, "七、按要求将内容补充完整。")
@@ -189,7 +183,7 @@ def build_u2():
     exam_header(doc, "语文·四上·第二单元练习")
 
     exam_section(doc, "一、看拼音，写词语。")
-    add_pinyin_sentence(
+    add_inline_pinyin_line(
         doc,
         [
             "当",
@@ -197,12 +191,20 @@ def build_u2():
             ("jiē xiǎo", 2),
             "的那一刻，众人",
             ("zhù shì", 2),
-            "着他的双眼，过往的汗水",
+            "着他的双眼，",
+        ],
+        after=2,
+    )
+    add_inline_pinyin_line(
+        doc,
+        [
+            "过往的汗水",
             ("dí què", 2),
             "没有白费，他最终用实力",
             ("zhèng míng", 2),
             "了所有的坚持都终有回报。",
         ],
+        after=5,
     )
 
     exam_section(doc, "二、在加点字的正确读音下面画“√”。")
@@ -210,10 +212,15 @@ def build_u2():
     exam_body(doc, "荧 屏（yín　yíng）　　一溜 烟（liū　liù）　　嚷 嚷（rāng　rǎng）")
 
     exam_section(doc, "三、选字组词。")
-    exam_body(doc, "纲　冈　　提（　　）　　井（　　）山　　（　　）要")
-    exam_body(doc, "末　沫　　泡（　　）　　（　　）尾　　飞（　　）")
-    exam_body(doc, "即　既　　（　　）使　　（　　）然　　立（　　）")
-    exam_body(doc, "具　俱　　（　　）体　　（　　）乐部　　万事（　　）备")
+    add_choice_char_table(
+        doc,
+        [
+            ("纲　冈", ["提（　　）", "井（　　）山", "（　　）要"]),
+            ("末　沫", ["泡（　　）", "（　　）尾", "飞（　　）"]),
+            ("即　既", ["（　　）使", "（　　）然", "立（　　）"]),
+            ("具　俱", ["（　　）体", "（　　）乐部", "万事（　　）备"]),
+        ],
+    )
 
     exam_section(doc, "四、照样子，改写句子。")
     exam_body(doc, "1. 原句：那条狗高兴、紧张、发怒的时候都叫。", size=10)
@@ -333,7 +340,7 @@ def build_u3():
     exam_header(doc, "语文·四上·第三单元练习", incomplete=True)
 
     exam_section(doc, "一、看拼音，写词语。")
-    add_pinyin_sentence(
+    add_inline_pinyin_line(
         doc,
         [
             ("guāng huá", 2),
@@ -342,11 +349,13 @@ def build_u3():
             "的",
             ("pá shān hǔ", 3),
             "正悄悄生长，叶片之间毫不拥挤，还留着",
-            ("jūn yún", 2),
-            "的",
-            ("kòng xì", 2),
-            "，看着格外舒服。",
         ],
+        after=2,
+    )
+    add_inline_pinyin_line(
+        doc,
+        [("jūn yún", 2), "的", ("kòng xì", 2), "，看着格外舒服。"],
+        after=5,
     )
 
     exam_section(doc, "二、在加点字的正确读音下面画“√”。")

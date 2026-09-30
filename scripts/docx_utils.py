@@ -246,10 +246,10 @@ def exam_doc() -> Document:
     section = doc.sections[0]
     section.page_width = Cm(21.0)
     section.page_height = Cm(29.7)
-    section.left_margin = Cm(1.5)
-    section.right_margin = Cm(1.5)
-    section.top_margin = Cm(1.2)
-    section.bottom_margin = Cm(1.2)
+    section.left_margin = Cm(1.7)
+    section.right_margin = Cm(1.7)
+    section.top_margin = Cm(1.3)
+    section.bottom_margin = Cm(1.3)
     style = doc.styles["Normal"]
     style.font.name = "宋体"
     style.font.size = Pt(10.5)
@@ -262,10 +262,10 @@ def exam_header(doc, title: str, *, incomplete: bool = False):
     add_para(
         doc,
         title,
-        size=15,
+        size=16,
         bold=True,
         align=WD_ALIGN_PARAGRAPH.CENTER,
-        space_after=4,
+        space_after=6,
         space_before=0,
         color=INK,
         font="黑体",
@@ -273,8 +273,8 @@ def exam_header(doc, title: str, *, incomplete: bool = False):
     add_para(
         doc,
         "学校：____________　班级：________　姓名：____________　成绩：________",
-        size=10,
-        space_after=6 if not incomplete else 2,
+        size=10.5,
+        space_after=8 if not incomplete else 3,
         color=INK,
     )
     if incomplete:
@@ -289,10 +289,10 @@ def exam_header(doc, title: str, *, incomplete: bool = False):
 
 
 def exam_section(doc, text: str):
-    add_para(doc, text, size=11, bold=True, space_before=7, space_after=4, color=INK)
+    add_para(doc, text, size=11, bold=True, space_before=8, space_after=4, color=INK)
 
 
-def exam_body(doc, text: str, *, size=10.5, space_after=3, space_before=0, first_line=None, bold=False):
+def exam_body(doc, text: str, *, size=10.5, space_after=2, space_before=0, first_line=None, bold=False):
     return add_para(
         doc,
         text,
@@ -321,66 +321,193 @@ def write_lines(doc, n: int = 1, *, size=12, space_after=2):
         )
 
 
-def add_zi_boxes(doc, n: int, *, box_cm: float = 0.82, after: float = 2):
-    """田字风格写字格（实线方格），贴近原卷拼音写词留空。"""
-    from docx.enum.table import WD_TABLE_ALIGNMENT
+def _cell_v_center(cell):
+    from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
 
-    table = doc.add_table(rows=1, cols=n)
-    table.alignment = WD_TABLE_ALIGNMENT.LEFT
-    table.autofit = False
-    border = {"sz": "12", "val": "single", "color": "000000"}
+    cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+
+
+def _add_boxes_in_cell(cell, n: int, *, box_cm: float = 0.7):
+    """在单元格内画 n 个田字格（外框实线、内十字虚线），贴近原卷。"""
+    from docx.enum.text import WD_ALIGN_PARAGRAPH as ALG
+
+    outer = {"sz": "12", "val": "single", "color": "000000"}
+    dash = {"sz": "6", "val": "dashed", "color": "808080"}
+    host = cell.add_table(rows=1, cols=n)
+    host.autofit = False
     for i in range(n):
+        outer_cell = host.cell(0, i)
+        outer_cell.width = Cm(box_cm)
+        outer_cell.text = ""
+        # clear default paragraph height
+        op = outer_cell.paragraphs[0]
+        op.paragraph_format.space_before = Pt(0)
+        op.paragraph_format.space_after = Pt(0)
+        # 2x2 田字格
+        grid = outer_cell.add_table(rows=2, cols=2)
+        grid.autofit = False
+        half = box_cm / 2
+        for rr in range(2):
+            for cc in range(2):
+                gc = grid.cell(rr, cc)
+                gc.width = Cm(half)
+                gc.text = ""
+                gp = gc.paragraphs[0]
+                gp.paragraph_format.space_before = Pt(0)
+                gp.paragraph_format.space_after = Pt(0)
+                gr = gp.add_run(" ")
+                set_run_font(gr, size=6, color=INK)
+                # outer edges solid, inner edges dashed
+                top = outer if rr == 0 else dash
+                bottom = outer if rr == 1 else dash
+                left = outer if cc == 0 else dash
+                right = outer if cc == 1 else dash
+                _set_cell_border(gc, top=top, left=left, bottom=bottom, right=right)
+        # exact row heights for 田字格
+        for row in grid.rows:
+            tr = row._tr
+            trPr = tr.get_or_add_trPr()
+            trHeight = OxmlElement("w:trHeight")
+            trHeight.set(qn("w:val"), str(int(half * 567)))
+            trHeight.set(qn("w:hRule"), "exact")
+            trPr.append(trHeight)
+        _set_cell_border(outer_cell, top=None, left=None, bottom=None, right=None)
+    tr = host.rows[0]._tr
+    trPr = tr.get_or_add_trPr()
+    trHeight = OxmlElement("w:trHeight")
+    trHeight.set(qn("w:val"), str(int(box_cm * 567)))
+    trHeight.set(qn("w:hRule"), "exact")
+    trPr.append(trHeight)
+
+
+def add_inline_pinyin_line(doc, segments, *, size=10.5, box_cm: float = 0.7, after: float = 3):
+    """一行内嵌拼音方格（与 JPG 原卷一致：拼音在格上、格嵌在句中）。
+
+    segments: str 或 (pinyin, n_chars)
+    """
+    from docx.enum.table import WD_TABLE_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH as ALG
+
+    specs = []
+    for seg in segments:
+        if isinstance(seg, tuple):
+            specs.append(("blank", seg[0], int(seg[1])))
+        elif seg:
+            specs.append(("text", str(seg), 0))
+    if not specs:
+        return
+
+    table = doc.add_table(rows=1, cols=len(specs))
+    table.alignment = WD_TABLE_ALIGNMENT.LEFT
+    table.autofit = True
+    _clear_table_borders(table)
+
+    for i, spec in enumerate(specs):
         cell = table.cell(0, i)
-        cell.width = Cm(box_cm)
+        _cell_v_center(cell)
+        _set_cell_border(cell, top=None, left=None, bottom=None, right=None)
         cell.text = ""
-        # vertical padding so box looks square
-        p = cell.paragraphs[0]
-        p.paragraph_format.space_before = Pt(0)
-        p.paragraph_format.space_after = Pt(0)
-        run = p.add_run("　")
-        set_run_font(run, size=14, color=INK)
-        _set_cell_border(cell, top=border, left=border, bottom=border, right=border)
-    # row height ≈ box
+        p0 = cell.paragraphs[0]
+        p0.paragraph_format.space_before = Pt(0)
+        p0.paragraph_format.space_after = Pt(0)
+
+        if spec[0] == "text":
+            # 勿压窄：宁可略宽，避免汉字被裁切
+            text = spec[1]
+            cell.width = Cm(max(0.8, min(14.0, 0.52 * max(1, len(text)) + 0.3)))
+            p0.alignment = ALG.LEFT
+            run = p0.add_run(text)
+            set_run_font(run, size=size, color=INK)
+        else:
+            py, n = spec[1], spec[2]
+            cell.width = Cm(box_cm * n + 0.2)
+            p0.alignment = ALG.CENTER
+            p0.paragraph_format.space_after = Pt(0)
+            run = p0.add_run(py)
+            set_run_font(run, size=8.5, color=INK)
+            rPr = run._element.get_or_add_rPr()
+            rFonts = rPr.get_or_add_rFonts()
+            rFonts.set(qn("w:ascii"), "Times New Roman")
+            rFonts.set(qn("w:hAnsi"), "Times New Roman")
+            _add_boxes_in_cell(cell, n, box_cm=box_cm)
+
+    # row height: pinyin + box, 贴近原卷行高
     tr = table.rows[0]._tr
     trPr = tr.get_or_add_trPr()
     trHeight = OxmlElement("w:trHeight")
-    trHeight.set(qn("w:val"), str(int(box_cm * 567)))  # cm → twips approx
+    trHeight.set(qn("w:val"), str(int((box_cm + 0.38) * 567)))
     trHeight.set(qn("w:hRule"), "atLeast")
     trPr.append(trHeight)
+
     spacer = doc.add_paragraph()
     spacer.paragraph_format.space_before = Pt(0)
     spacer.paragraph_format.space_after = Pt(after)
 
 
-def add_pinyin_zi_blank(doc, py: str, n: int = 2, *, box_cm: float = 0.82):
-    """拼音在上、方格在下（一个词语）。"""
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(1)
-    p.paragraph_format.space_after = Pt(1)
-    p.paragraph_format.line_spacing = 1.0
-    run = p.add_run(py)
-    set_run_font(run, size=10, color=INK)
-    rPr = run._element.get_or_add_rPr()
-    rFonts = rPr.get_or_add_rFonts()
-    rFonts.set(qn("w:ascii"), "Times New Roman")
-    rFonts.set(qn("w:hAnsi"), "Times New Roman")
-    add_zi_boxes(doc, n, box_cm=box_cm, after=3)
-
-
 def add_pinyin_sentence(doc, segments, *, size=10.5):
-    """segments: str 或 (pinyin, n_chars)。按原卷：正文夹拼音方格。"""
-    buf = []
-    for seg in segments:
-        if isinstance(seg, tuple):
-            if buf:
-                exam_body(doc, "".join(buf), size=size, space_after=1)
-                buf = []
-            py, n = seg
-            add_pinyin_zi_blank(doc, py, n)
-        else:
-            buf.append(seg)
-    if buf:
-        exam_body(doc, "".join(buf), size=size, space_after=4)
+    """兼容旧调用：整段按一行内嵌格排（长句请在生成端拆成多行调用 add_inline_pinyin_line）。"""
+    add_inline_pinyin_line(doc, segments, size=size, box_cm=0.7, after=4)
+
+
+def add_choice_char_table(doc, pairs_and_blanks):
+    """选字组词：左侧字对竖栏 + 右侧三列填空（贴近 U2 原卷）。"""
+    from docx.enum.table import WD_TABLE_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH as ALG
+
+    rows = len(pairs_and_blanks)
+    table = doc.add_table(rows=rows, cols=4)
+    table.alignment = WD_TABLE_ALIGNMENT.LEFT
+    table.autofit = False
+    border = {"sz": "10", "val": "single", "color": "000000"}
+    # merge left column into one box
+    if rows > 1:
+        table.cell(0, 0).merge(table.cell(rows - 1, 0))
+    c0 = table.cell(0, 0)
+    c0.width = Cm(2.4)
+    c0.text = ""
+    for idx, (pair, _) in enumerate(pairs_and_blanks):
+        p = c0.paragraphs[0] if idx == 0 else c0.add_paragraph()
+        p.alignment = ALG.CENTER
+        p.paragraph_format.space_before = Pt(3)
+        p.paragraph_format.space_after = Pt(3)
+        run = p.add_run(pair)
+        set_run_font(run, size=10.5, color=INK)
+    _set_cell_border(c0, top=border, left=border, bottom=border, right=border)
+
+    for r, (_, blanks) in enumerate(pairs_and_blanks):
+        for j in range(3):
+            c = table.cell(r, j + 1)
+            c.width = Cm(4.7)
+            c.text = ""
+            p = c.paragraphs[0]
+            p.paragraph_format.space_before = Pt(3)
+            p.paragraph_format.space_after = Pt(3)
+            txt = blanks[j] if j < len(blanks) else ""
+            run = p.add_run(txt)
+            set_run_font(run, size=10.5, color=INK)
+            _set_cell_border(c, top=None, left=None, bottom=None, right=None)
+    spacer = doc.add_paragraph()
+    spacer.paragraph_format.space_before = Pt(0)
+    spacer.paragraph_format.space_after = Pt(6)
+
+
+def add_emphasis_words(doc, label: str, words: list[str], *, size=10.5):
+    """加点词语：Word 着重号。"""
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(3)
+    p.paragraph_format.line_spacing = 1.15
+    run = p.add_run(label)
+    set_run_font(run, size=size, color=INK)
+    for w in words:
+        run = p.add_run(w)
+        set_run_font(run, size=size, color=INK)
+        rPr = run._element.get_or_add_rPr()
+        em = OxmlElement("w:em")
+        em.set(qn("w:val"), "dot")
+        rPr.append(em)
+        run2 = p.add_run("　")
+        set_run_font(run2, size=size, color=INK)
 
 
 def add_page_break(doc):
