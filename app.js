@@ -196,28 +196,47 @@
     body.innerHTML = "<p class='meta'>加载中…</p>";
     box.classList.remove("hidden");
 
-    const mdUrl = pr.answerMd || "answers/lessons/L" + pad + ".md";
-    const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-answers.pdf";
+    const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-" + node.title + "-答案.pdf";
+    const mdUrl = pr.answerMd || "answers/lessons/L" + pad + "-" + node.title + "-答案.md";
+    const src = encodeURI(pdfUrl) + "?v=4";
 
     $("btnAnswerDownload").onclick = () => openPdf(pdfUrl);
 
-    // Prefer embedded HTML from print-index (no extra fetch / no Chinese path)
-    if (pr.answerHtml) {
-      body.innerHTML = pr.answerHtml;
+    // Online view = same A4 PDF as print/download
+    body.innerHTML =
+      '<iframe class="a4-iframe" title="A4答案预览" src="' +
+      src +
+      '"></iframe>';
+
+    // Fallback text if PDF embed blocked
+    const iframe = body.querySelector("iframe");
+    if (iframe) {
+      iframe.addEventListener("error", () => showAnswerFallback(body, pr, mdUrl));
+    }
+    // Some browsers don't fire iframe error; offer text toggle quietly via timeout check is noisy — keep HTML fallback button
+    const tip = document.createElement("button");
+    tip.type = "button";
+    tip.className = "btn-path";
+    tip.textContent = "PDF 打不开？看文字版";
+    tip.addEventListener("click", () => showAnswerFallback(body, pr, mdUrl));
+    body.appendChild(tip);
+  }
+
+  function showAnswerFallback(body, pr, mdUrl) {
+    if (pr && pr.answerHtml) {
+      body.innerHTML = '<div class="a4-paper">' + pr.answerHtml + "</div>";
       return;
     }
-
-    fetch(encodeURI(mdUrl) + "?v=3")
+    fetch(encodeURI(mdUrl) + "?v=4")
       .then((r) => {
         if (!r.ok) throw new Error("missing");
         return r.text();
       })
       .then((text) => {
-        body.innerHTML = renderMd(text);
+        body.innerHTML = '<div class="a4-paper">' + renderMd(text) + "</div>";
       })
       .catch(() => {
-        body.innerHTML =
-          "<p>在线答案暂未加载成功。</p><p class='meta'>可点下方按钮下载 A4 答案 PDF。</p>";
+        body.innerHTML = "<p>答案加载失败，请点下方下载 A4 PDF。</p>";
       });
   }
 
@@ -256,11 +275,13 @@
       if (g.background) html += "<p class='meta'>" + g.background + "</p>";
       if (node.garden && node.garden.extra) html += "<p class='meta'>" + node.garden.extra + "</p>";
     }
-    $("answerBody").innerHTML = html || "<p>暂无内容</p>";
+    $("answerBody").innerHTML =
+      '<div class="a4-paper">' + (html || "<p>暂无内容</p>") + "</div>";
     $("btnAnswerDownload").onclick = () => {
       const sp = state.printIndex && state.printIndex.sprint && state.printIndex.sprint[node.unitId];
       openPdf(sp);
     };
+    $("btnAnswerDownload").textContent = "下载单元冲刺（A4）";
     $("answerOverlay").classList.remove("hidden");
   }
 
