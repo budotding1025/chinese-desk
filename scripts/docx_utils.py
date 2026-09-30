@@ -240,6 +240,149 @@ def add_pinyin_write_grid(doc, items, *, cols=3, py_size=14, gap_after=10):
         spacer.paragraph_format.space_after = Pt(gap_after)
 
 
+def exam_doc() -> Document:
+    """A4 完整摸底卷：边距贴近小学单元测原卷。"""
+    doc = Document()
+    section = doc.sections[0]
+    section.page_width = Cm(21.0)
+    section.page_height = Cm(29.7)
+    section.left_margin = Cm(1.5)
+    section.right_margin = Cm(1.5)
+    section.top_margin = Cm(1.2)
+    section.bottom_margin = Cm(1.2)
+    style = doc.styles["Normal"]
+    style.font.name = "宋体"
+    style.font.size = Pt(10.5)
+    style._element.rPr.rFonts.set(qn("w:eastAsia"), "宋体")
+    return doc
+
+
+def exam_header(doc, title: str, *, incomplete: bool = False):
+    """原卷式页眉：标题 + 学校班级姓名成绩（少装饰、少占高）。"""
+    add_para(
+        doc,
+        title,
+        size=15,
+        bold=True,
+        align=WD_ALIGN_PARAGRAPH.CENTER,
+        space_after=4,
+        space_before=0,
+        color=INK,
+        font="黑体",
+    )
+    add_para(
+        doc,
+        "学校：____________　班级：________　姓名：____________　成绩：________",
+        size=10,
+        space_after=6 if not incomplete else 2,
+        color=INK,
+    )
+    if incomplete:
+        add_para(
+            doc,
+            "（扫描件仅有第 1–2 页 · 第 3–4 页待补）",
+            size=8,
+            space_after=6,
+            color=BRAND_DEEP,
+            align=WD_ALIGN_PARAGRAPH.CENTER,
+        )
+
+
+def exam_section(doc, text: str):
+    add_para(doc, text, size=11, bold=True, space_before=7, space_after=4, color=INK)
+
+
+def exam_body(doc, text: str, *, size=10.5, space_after=3, space_before=0, first_line=None, bold=False):
+    return add_para(
+        doc,
+        text,
+        size=size,
+        bold=bold,
+        space_after=space_after,
+        space_before=space_before,
+        first_line=first_line,
+        color=INK,
+    )
+
+
+def exam_footer(doc, text: str):
+    add_para(doc, text, size=8, align=WD_ALIGN_PARAGRAPH.CENTER, space_before=6, space_after=0, color=INK)
+
+
+def write_lines(doc, n: int = 1, *, size=12, space_after=2):
+    """作答横线：字号略大，方便手写。"""
+    for _ in range(n):
+        add_para(
+            doc,
+            "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿",
+            size=size,
+            space_after=space_after,
+            color=INK,
+        )
+
+
+def add_zi_boxes(doc, n: int, *, box_cm: float = 0.82, after: float = 2):
+    """田字风格写字格（实线方格），贴近原卷拼音写词留空。"""
+    from docx.enum.table import WD_TABLE_ALIGNMENT
+
+    table = doc.add_table(rows=1, cols=n)
+    table.alignment = WD_TABLE_ALIGNMENT.LEFT
+    table.autofit = False
+    border = {"sz": "12", "val": "single", "color": "000000"}
+    for i in range(n):
+        cell = table.cell(0, i)
+        cell.width = Cm(box_cm)
+        cell.text = ""
+        # vertical padding so box looks square
+        p = cell.paragraphs[0]
+        p.paragraph_format.space_before = Pt(0)
+        p.paragraph_format.space_after = Pt(0)
+        run = p.add_run("　")
+        set_run_font(run, size=14, color=INK)
+        _set_cell_border(cell, top=border, left=border, bottom=border, right=border)
+    # row height ≈ box
+    tr = table.rows[0]._tr
+    trPr = tr.get_or_add_trPr()
+    trHeight = OxmlElement("w:trHeight")
+    trHeight.set(qn("w:val"), str(int(box_cm * 567)))  # cm → twips approx
+    trHeight.set(qn("w:hRule"), "atLeast")
+    trPr.append(trHeight)
+    spacer = doc.add_paragraph()
+    spacer.paragraph_format.space_before = Pt(0)
+    spacer.paragraph_format.space_after = Pt(after)
+
+
+def add_pinyin_zi_blank(doc, py: str, n: int = 2, *, box_cm: float = 0.82):
+    """拼音在上、方格在下（一个词语）。"""
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(1)
+    p.paragraph_format.space_after = Pt(1)
+    p.paragraph_format.line_spacing = 1.0
+    run = p.add_run(py)
+    set_run_font(run, size=10, color=INK)
+    rPr = run._element.get_or_add_rPr()
+    rFonts = rPr.get_or_add_rFonts()
+    rFonts.set(qn("w:ascii"), "Times New Roman")
+    rFonts.set(qn("w:hAnsi"), "Times New Roman")
+    add_zi_boxes(doc, n, box_cm=box_cm, after=3)
+
+
+def add_pinyin_sentence(doc, segments, *, size=10.5):
+    """segments: str 或 (pinyin, n_chars)。按原卷：正文夹拼音方格。"""
+    buf = []
+    for seg in segments:
+        if isinstance(seg, tuple):
+            if buf:
+                exam_body(doc, "".join(buf), size=size, space_after=1)
+                buf = []
+            py, n = seg
+            add_pinyin_zi_blank(doc, py, n)
+        else:
+            buf.append(seg)
+    if buf:
+        exam_body(doc, "".join(buf), size=size, space_after=4)
+
+
 def add_page_break(doc):
     doc.add_page_break()
 
