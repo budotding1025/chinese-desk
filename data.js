@@ -377,5 +377,455 @@ window.CHINESE_DESK_DATA = {
         },
       },
     },
+    {
+      id: "u4",
+      name: "第四单元 · 神话故事",
+      lessons: [
+        {
+          id: "u4l12",
+          bookNo: 12,
+          title: "盘古开天地",
+          kind: "精读",
+          words: [
+            { zh: "宇宙", py: "yǔ zhòu" },
+            { zh: "混沌", py: "hùn dùn" },
+            { zh: "开天辟地", py: "kāi tiān pì dì" },
+          ],
+          compounds: [{ a: "辟", b: "僻", hint: "开辟 / 偏僻" }],
+          polyphones: [{ word: "混沌", opts: ["hùn", "hún"], ok: "hùn" }],
+          recite: null,
+          meaning: {
+            prompt: "盘古怎样开天辟地？身体变成了什么？",
+            sample: "用斧头劈开混沌；身体化作日月山川草木等。",
+          },
+        },
+        {
+          id: "u4l13",
+          bookNo: 13,
+          title: "精卫填海",
+          kind: "精读",
+          words: [
+            { zh: "精卫", py: "jīng wèi" },
+            { zh: "衔", py: "xián" },
+            { zh: "填海", py: "tián hǎi" },
+          ],
+          compounds: [{ a: "衔", b: "街", hint: "衔石 / 街道" }],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "精卫为什么要填海？表现了怎样的精神？",
+            sample: "被海水淹没后决心填平东海；坚韧不拔、不畏困难。",
+          },
+        },
+        {
+          id: "u4l14",
+          bookNo: 14,
+          title: "普罗米修斯",
+          kind: "精读",
+          words: [
+            { zh: "惩罚", py: "chéng fá" },
+            { zh: "造福", py: "zào fú" },
+            { zh: "火种", py: "huǒ zhǒng" },
+          ],
+          compounds: [{ a: "惩", b: "澄", hint: "惩罚 / 澄清" }],
+          polyphones: [{ word: "种", opts: ["zhǒng", "zhòng"], ok: "zhǒng" }],
+          recite: null,
+          meaning: {
+            prompt: "普罗米修斯为什么盗火？后来怎样了？",
+            sample: "为人类带来火种与文明；被钉在高加索山遭受惩罚，仍不屈服。",
+          },
+        },
+        {
+          id: "u4l15",
+          bookNo: 15,
+          title: "女娲补天",
+          kind: "略读",
+          words: [
+            { zh: "塌陷", py: "tā xiàn" },
+            { zh: "冶炼", py: "yě liàn" },
+            { zh: "窟窿", py: "kū long" },
+          ],
+          compounds: [{ a: "炼", b: "练", hint: "冶炼 / 练习" }],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "女娲怎样补天？说明她怎样？",
+            sample: "炼五色石补天、斩鳌足立四极等；勇敢、善良、造福人类。",
+          },
+        },
+      ],
+      garden: {
+        id: "u4g",
+        title: "语文园地四",
+        accumulate: {
+          title: "日积月累 ·《嫦娥》",
+          author: "唐 · 李商隐",
+          lines: [
+            "云母屏风烛影深，",
+            "长河渐落晓星沉。",
+            "嫦娥应悔偷灵药，",
+            "碧海青天夜夜心。",
+          ],
+          linesDetail: [
+            { text: "云母屏风烛影深，", tip: "云母装饰的屏风上，烛光的影子又深又暗。" },
+            { text: "长河渐落晓星沉。", tip: "银河渐渐西斜，晨星也沉落了。（长河＝银河）" },
+            { text: "嫦娥应悔偷灵药，", tip: "料想嫦娥该后悔偷吃了长生不老药。（应＝料想）" },
+            { text: "碧海青天夜夜心。", tip: "面对碧海般的青天，夜夜感到孤单寂寞。" },
+          ],
+          meaning:
+            "屏风上烛影深深，银河西斜、晨星沉落；嫦娥大概后悔偷了灵药，从此只能夜夜面对碧海青天，孤清寂寞。",
+          background:
+            "李商隐，晚唐诗人，与杜牧合称「小李杜」。借嫦娥奔月写孤寂。须会背、会默、懂每句意思。",
+        },
+      },
+    },
+    {
+      id: "u5",
+      name: "第五单元 · 习作单元",
+      lessons: [
+        {
+          id: "u5l16",
+          bookNo: 16,
+          title: "麻雀",
+          kind: "精读",
+          words: [
+            { zh: "嗅", py: "xiù" },
+            { zh: "愣", py: "lèng" },
+            { zh: "拯救", py: "zhěng jiù" },
+          ],
+          compounds: [{ a: "拯", b: "丞", hint: "拯救 / 丞相" }],
+          polyphones: [{ word: "嗅", opts: ["xiù", "chòu"], ok: "xiù" }],
+          recite: null,
+          meaning: {
+            prompt: "老麻雀为什么会扑下来？表现了什么？",
+            sample: "为了保护小麻雀，不顾自身安危；母爱的伟大。",
+          },
+        },
+        {
+          id: "u5l17",
+          bookNo: 17,
+          title: "爬天都峰",
+          kind: "精读",
+          words: [
+            { zh: "攀着", py: "pān zhe" },
+            { zh: "石级", py: "shí jí" },
+            { zh: "居然", py: "jū rán" },
+          ],
+          compounds: [{ a: "攀", b: "樊", hint: "攀登 / 姓樊" }],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "「我」和老爷爷是怎样爬上天都峰的？说明了什么？",
+            sample: "互相鼓励、一起爬上去；勇于挑战、善于从别人身上汲取力量。",
+          },
+        },
+      ],
+      garden: {
+        id: "u5g",
+        title: "语文园地五（习作）",
+        accumulate: {
+          title: "本单元为习作单元",
+          items: [
+            {
+              text: "本单元重点：写清楚事情的经过",
+              who: "习作要点",
+              tip: "第五单元是习作单元，教材没有「日积月累」古诗文；请把功夫放在把一件事写清楚（起因—经过—结果），学习例文《我家的杏熟了》《小木船》。",
+            },
+          ],
+          background: "统编四上第五单元为习作单元，无日积月累背诵篇目。",
+        },
+      },
+    },
+    {
+      id: "u6",
+      name: "第六单元 · 体会人物心情",
+      lessons: [
+        {
+          id: "u6l18",
+          bookNo: 18,
+          title: "牛和鹅",
+          kind: "精读",
+          words: [
+            { zh: "姑娘", py: "gū niang" },
+            { zh: "故意", py: "gù yì" },
+            { zh: "捶", py: "chuí" },
+          ],
+          compounds: [{ a: "鹅", b: "饿", hint: "鹅鸭 / 饥饿" }],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "「我」对牛和鹅的态度有什么变化？明白了什么？",
+            sample: "从怕鹅欺牛到敢赶鹅；对待强弱要平等，不能欺软怕硬。",
+          },
+        },
+        {
+          id: "u6l19",
+          bookNo: 19,
+          title: "一只窝囊的大老虎",
+          kind: "精读",
+          words: [
+            { zh: "窝囊", py: "wō nang" },
+            { zh: "殷切", py: "yīn qiè" },
+            { zh: "露馅", py: "lòu xiàn" },
+          ],
+          compounds: [{ a: "囊", b: "襄", hint: "窝囊 / 襄阳" }],
+          polyphones: [{ word: "露馅", opts: ["lòu", "lù"], ok: "lòu" }],
+          recite: null,
+          meaning: {
+            prompt: "「我」为什么觉得自己演老虎演得窝囊？",
+            sample: "不会豁虎跳却被选上；上台紧张、表演失败，心里委屈又难受。",
+          },
+        },
+        {
+          id: "u6l20",
+          bookNo: 20,
+          title: "陀螺",
+          kind: "精读",
+          words: [
+            { zh: "冰冻", py: "bīng dòng" },
+            { zh: "威风", py: "wēi fēng" },
+            { zh: "嘲笑", py: "cháo xiào" },
+          ],
+          compounds: [{ a: "嘲", b: "潮", hint: "嘲笑 / 潮水" }],
+          polyphones: [{ word: "嘲", opts: ["cháo", "zhāo"], ok: "cháo" }],
+          recite: null,
+          meaning: {
+            prompt: "「我」的陀螺后来怎样？明白了什么道理？",
+            sample: "其貌不扬却战胜了大陀螺；不要以貌取人，要看实力。",
+          },
+        },
+      ],
+      garden: {
+        id: "u6g",
+        title: "语文园地六",
+        accumulate: {
+          title: "日积月累 · 成语/俗语",
+          items: [
+            {
+              text: "尺有所短，寸有所长。",
+              who: "俗语",
+              tip: "每个人都有短处，也有长处；不要只看一面。",
+            },
+            {
+              text: "机不可失，时不再来。",
+              who: "俗语",
+              tip: "好机会不能放过，错过就很难再有。",
+            },
+            {
+              text: "差之毫厘，谬以千里。",
+              who: "俗语",
+              tip: "开头差一点点，结果可能错出很远。（谬读 miù）",
+            },
+            {
+              text: "病从口入，祸从口出。",
+              who: "俗语",
+              tip: "生病常因饮食不慎；惹祸常因说话不慎。",
+            },
+            {
+              text: "一言既出，驷马难追。",
+              who: "俗语",
+              tip: "话一说出口，四匹马拉的车也追不回；说话要算数。",
+            },
+            {
+              text: "比上不足，比下有余。",
+              who: "俗语",
+              tip: "跟更好的比还差些，跟更差的比还强些；常用来自我宽慰或客观看待。",
+            },
+          ],
+          background:
+            "六句多为相对工整的俗语。须会背、会默、懂每句意思，并能说说适用场合。",
+        },
+      },
+    },
+    {
+      id: "u7",
+      name: "第七单元 · 家国情怀",
+      lessons: [
+        {
+          id: "u7l21",
+          bookNo: 21,
+          title: "古诗三首",
+          kind: "精读",
+          words: [],
+          compounds: [],
+          polyphones: [],
+          recite: {
+            label: "默写《别董大》名句",
+            prompt: "莫愁前路无知己，____。",
+            answer: "天下谁人不识君",
+          },
+          meaning: {
+            prompt: "《出塞》《凉州词》《夏日绝句》各写了什么？",
+            sample: "边塞征战；边塞风光与征人；项羽不肯苟活的气概。",
+          },
+          poems: [
+            { title: "出塞", author: "唐·王昌龄", tip: "秦时明月汉时关…" },
+            { title: "凉州词", author: "唐·王翰", tip: "葡萄美酒夜光杯…" },
+            { title: "夏日绝句", author: "宋·李清照", tip: "生当作人杰…" },
+          ],
+        },
+        {
+          id: "u7l22",
+          bookNo: 22,
+          title: "为中华之崛起而读书",
+          kind: "精读",
+          words: [
+            { zh: "租界", py: "zū jiè" },
+            { zh: "耀武扬威", py: "yào wǔ yáng wēi" },
+            { zh: "胸膛", py: "xiōng táng" },
+          ],
+          compounds: [{ a: "耀", b: "曜", hint: "耀武 / 日曜" }],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "周恩来为什么立下「为中华之崛起而读书」的志向？",
+            sample: "在租界看到中国人受欺凌，立志振兴中华。",
+          },
+        },
+        {
+          id: "u7l23",
+          bookNo: 23,
+          title: "梅兰芳蓄须",
+          kind: "略读",
+          words: [
+            { zh: "蓄须", py: "xù xū" },
+            { zh: "迫害", py: "pò hài" },
+            { zh: "拒绝", py: "jù jué" },
+          ],
+          compounds: [{ a: "蓄", b: "畜", hint: "蓄须 / 牲畜" }],
+          polyphones: [{ word: "畜", opts: ["xù", "chù"], ok: "xù" }],
+          recite: null,
+          meaning: {
+            prompt: "梅兰芳为什么蓄须？表现了什么？",
+            sample: "不愿为侵略者演出；爱国气节。",
+          },
+        },
+        {
+          id: "u7l24",
+          bookNo: 24,
+          title: "延安，我把你追寻",
+          kind: "略读",
+          words: [
+            { zh: "崭新", py: "zhǎn xīn" },
+            { zh: "火炕", py: "huǒ kàng" },
+            { zh: "照耀", py: "zhào yào" },
+          ],
+          compounds: [],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "「追寻延安」追寻的是什么？",
+            sample: "延安精神：艰苦奋斗、无私奉献等，不是追寻旧物本身。",
+          },
+        },
+      ],
+      garden: {
+        id: "u7g",
+        title: "语文园地七",
+        accumulate: {
+          title: "日积月累 ·《别董大》",
+          author: "唐 · 高适",
+          lines: [
+            "千里黄云白日曛，",
+            "北风吹雁雪纷纷。",
+            "莫愁前路无知己，",
+            "天下谁人不识君？",
+          ],
+          linesDetail: [
+            { text: "千里黄云白日曛，", tip: "千里黄云弥漫，连太阳也变得昏暗。（曛＝昏暗）" },
+            { text: "北风吹雁雪纷纷。", tip: "北风吹着大雁，雪花纷纷扬扬。" },
+            { text: "莫愁前路无知己，", tip: "不要担心前面的路上没有知心朋友。" },
+            { text: "天下谁人不识君？", tip: "天下有谁不认识您呢？（鼓励、赞扬友人）" },
+          ],
+          meaning:
+            "黄云千里、日色昏暗，北风吹雁、大雪纷飞；不要担心前途没有知己，天下谁人不认识您呢？后两句是劝慰与鼓励。",
+          background:
+            "高适，唐代边塞诗人。董大即董庭兰，著名琴师。须会背、会默、懂每句意思。注意「曛」字。",
+        },
+      },
+    },
+    {
+      id: "u8",
+      name: "第八单元 · 历史传说故事",
+      lessons: [
+        {
+          id: "u8l25",
+          bookNo: 25,
+          title: "王戎不取道旁李",
+          kind: "精读",
+          words: [
+            { zh: "道路", py: "dào lù" },
+            { zh: "李子", py: "lǐ zi" },
+            { zh: "缘故", py: "yuán gù" },
+          ],
+          compounds: [{ a: "缘", b: "绿", hint: "缘故 / 绿色" }],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "王戎为什么不取道旁李？说明他怎样？",
+            sample: "路边李子若好吃早被人摘光；善于观察、推理。",
+          },
+        },
+        {
+          id: "u8l26",
+          bookNo: 26,
+          title: "西门豹治邺",
+          kind: "精读",
+          words: [
+            { zh: "巫婆", py: "wū pó" },
+            { zh: "渠道", py: "qú dào" },
+            { zh: "开凿", py: "kāi záo" },
+          ],
+          compounds: [{ a: "凿", b: "槽", hint: "开凿 / 水槽" }],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "西门豹怎样破除迷信？还做了什么？",
+            sample: "将巫婆等投入河中揭穿骗局；开凿渠道治理水患。",
+          },
+        },
+        {
+          id: "u8l27",
+          bookNo: 27,
+          title: "故事二则",
+          kind: "略读",
+          words: [
+            { zh: "拜见", py: "bài jiàn" },
+            { zh: "理睬", py: "lǐ cǎi" },
+            { zh: "聚精会神", py: "jù jīng huì shén" },
+          ],
+          compounds: [],
+          polyphones: [],
+          recite: null,
+          meaning: {
+            prompt: "《扁鹊治病》《纪昌学射》各说明什么？",
+            sample: "防微杜渐、及时治病；要练好基本功、持之以恒。",
+          },
+        },
+      ],
+      garden: {
+        id: "u8g",
+        title: "语文园地八",
+        accumulate: {
+          title: "日积月累 · 描写外貌的词语",
+          items: [
+            { text: "眉清目秀", who: "词语", tip: "形容相貌清秀俊美。" },
+            { text: "亭亭玉立", who: "词语", tip: "形容女子身材修长美丽，也可形容花木。 " },
+            { text: "明眸皓齿", who: "词语", tip: "明亮的眼睛、洁白的牙齿；形容容貌美丽。" },
+            { text: "文质彬彬", who: "词语", tip: "既文雅又朴实，形容人举止斯文、有修养。" },
+            { text: "相貌堂堂", who: "词语", tip: "形容人仪表端正、气宇不凡。" },
+            { text: "威风凛凛", who: "词语", tip: "形容气势威严，令人敬畏。" },
+            { text: "膀大腰圆", who: "词语", tip: "形容人身体粗壮结实。" },
+            { text: "短小精悍", who: "词语", tip: "身材矮小却精明强干；也可指文章短而有力。" },
+            { text: "容光焕发", who: "词语", tip: "脸上有光彩，精神饱满。" },
+            { text: "鹤发童颜", who: "词语", tip: "白发却脸色红润，形容老年人气色好、有精神。" },
+            { text: "慈眉善目", who: "词语", tip: "形容仁慈和善的样子。" },
+            { text: "老态龙钟", who: "词语", tip: "形容年老体衰、行动不便。" },
+          ],
+          background:
+            "十二个词语，多写人的外貌或神态。须会读、会写、懂意思，并能用来描写人物。",
+        },
+      },
+    },
   ],
 };
