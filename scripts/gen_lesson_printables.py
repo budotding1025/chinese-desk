@@ -14,7 +14,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
-from docx_utils import docx_to_pdf, set_run_font
+from docx_utils import add_pinyin_write_grid, docx_to_pdf, set_run_font
 from theme import BRAND_DEEP, BRAND_ORANGE_RED, BRAND_ORANGE_YELLOW, INK
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -267,36 +267,36 @@ def tight_doc():
     sec = doc.sections[0]
     sec.page_width = Cm(21.0)
     sec.page_height = Cm(29.7)
-    sec.left_margin = Cm(1.2)
-    sec.right_margin = Cm(1.2)
-    sec.top_margin = Cm(1.0)
-    sec.bottom_margin = Cm(1.0)
+    sec.left_margin = Cm(1.8)
+    sec.right_margin = Cm(1.8)
+    sec.top_margin = Cm(1.5)
+    sec.bottom_margin = Cm(1.5)
     st = doc.styles["Normal"]
     st.font.name = "宋体"
-    st.font.size = Pt(10.5)
+    st.font.size = Pt(12)
     st._element.rPr.rFonts.set(qn("w:eastAsia"), "宋体")
     return doc
 
 
-def p(doc, text, *, size=10.5, bold=False, color=None, center=False, after=2, before=0):
+def p(doc, text, *, size=12, bold=False, color=None, center=False, after=3, before=0):
     para = doc.add_paragraph()
     if center:
         para.alignment = WD_ALIGN_PARAGRAPH.CENTER
     para.paragraph_format.space_before = Pt(before)
     para.paragraph_format.space_after = Pt(after)
-    para.paragraph_format.line_spacing = 1.05
+    para.paragraph_format.line_spacing = 1.2
     run = para.add_run(text)
     set_run_font(run, size=size, bold=bold, color=color or INK)
     return para
 
 
 def section(doc, t):
-    p(doc, t, size=11, bold=True, color=BRAND_ORANGE_RED, before=5, after=3)
+    p(doc, t, size=12, bold=True, color=BRAND_ORANGE_RED, before=8, after=8)
 
 
 def blank(doc, n=1):
     for _ in range(n):
-        p(doc, "____________________________________________________________", size=12, after=5)
+        p(doc, "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿", size=14, after=10)
 
 
 def save_pair(doc, folder: Path, stem: str):
@@ -320,70 +320,66 @@ def save_pair(doc, folder: Path, stem: str):
 
 def build_lesson(les: dict) -> Document:
     doc = tight_doc()
-    p(doc, "语文书桌 · Chinese Desk", size=9, bold=True, color=BRAND_ORANGE_YELLOW, center=True, after=1)
+    p(doc, "语文书桌 · Chinese Desk", size=10, bold=True, color=BRAND_ORANGE_YELLOW, center=True, after=2)
     p(
         doc,
         f"第{les['bookNo']}课《{les['title']}》· 每日练习（约10分钟）",
-        size=14,
+        size=16,
         bold=True,
         color=BRAND_ORANGE_RED,
         center=True,
-        after=1,
+        after=2,
     )
-    p(doc, f"{les['unitName']}　|　A4　|　姓名：________　日期：________　用时：____分钟", size=9, center=True, after=4)
+    p(doc, f"{les['unitName']}　|　A4　|　姓名：________　日期：________　用时：____分钟", size=11, center=True, after=8)
 
-    # 1 dictation
+    # 1 dictation — 拼音与填空一一对应（三列，接近单元测卷留白）
     section(doc, "一、字词听写（看拼音写字词）")
-    row = []
-    for zh, py in les["words"]:
-        row.append(py)
-        if len(row) == 3:
-            p(doc, "　　".join(row), size=10, after=1)
-            p(doc, "　　".join(["________"] * len(row)), size=12, after=5)
-            row = []
-    if row:
-        p(doc, "　　".join(row), size=10, after=1)
-        p(doc, "　　".join(["________"] * len(row)), size=12, after=5)
+    add_pinyin_write_grid(doc, les["words"], cols=3, py_size=14, gap_after=12)
 
     # 2 compounds / idioms
     if les.get("idioms"):
         section(doc, "二、成语练习（看拼音写 + 选词填空）")
-        for zh, py in les["idioms"]:
-            p(doc, f"{py}　____________________", size=10.5, after=4)
-        # fill one usage
-        p(doc, "选一个成语造句：________________________________________________", size=10.5, after=5)
+        add_pinyin_write_grid(doc, les["idioms"], cols=2, py_size=14, gap_after=12)
+        p(doc, "选一个成语造句：", size=12, after=4)
+        blank(doc, 1)
     else:
         section(doc, "二、组词练习（形近字）")
         for a, b in les["compounds"]:
-            p(doc, f"{a}（　　　　）　　{b}（　　　　）", size=11, after=5)
+            p(doc, f"{a}（　　　　）　　{b}（　　　　）", size=14, after=10)
 
     if les.get("idioms") and les.get("compounds"):
-        p(doc, "形近组词：" + "　".join(f"{a}（　　）{b}（　　）" for a, b in les["compounds"][:3]), size=10.5, after=5)
+        p(
+            doc,
+            "形近组词：" + "　".join(f"{a}（　　）{b}（　　）" for a, b in les["compounds"][:3]),
+            size=12,
+            after=8,
+        )
 
-    # 3 polyphones JPG-like
+    # 3 polyphones
     section(doc, "三、多音字辨认（参考单元测题型）")
     if les.get("poly"):
-        p(doc, "在正确读音下面画“√”。", size=9, color=BRAND_DEEP, after=3)
+        p(doc, "在正确读音下面画“√”。", size=11, color=BRAND_DEEP, after=6)
         for word, opts, _ in les["poly"]:
-            p(doc, f"{word}　（{'　'.join(opts)}）", size=11, after=4)
+            p(doc, f"{word}　（{'　'.join(opts)}）", size=14, after=8)
     if les.get("poly_wrong"):
-        p(doc, "选出读音有误的一项，把错的字音改正：", size=9, color=BRAND_DEEP, after=3)
+        p(doc, "选出读音有误的一项，把错的字音改正：", size=11, color=BRAND_DEEP, after=6)
         bits = []
         for i, (w, py, ok) in enumerate(les["poly_wrong"], 1):
             bits.append(f"{i}.{w}（{py}）")
-        p(doc, "　".join(bits) + "　　有误：第____项，应读________", size=10.5, after=5)
+        p(doc, "　".join(bits), size=12, after=6)
+        p(doc, "有误：第____项，应读________", size=12, after=8)
     if not les.get("poly") and not les.get("poly_wrong"):
-        p(doc, "（本课多音较少）给加点字注音：曲折____　慎重____", size=10.5, after=5)
+        p(doc, "（本课多音较少）给加点字注音：曲折____　慎重____", size=12, after=8)
 
     # 4 pattern
     section(doc, "四、句型仿写")
     pat = les["pattern"]
-    p(doc, pat["label"], size=10.5, after=2)
-    p(doc, pat["example"], size=9, color=BRAND_DEEP, after=3)
+    p(doc, pat["label"], size=12, after=4)
+    p(doc, pat["example"], size=11, color=BRAND_DEEP, after=6)
     blank(doc, 2)
 
-    p(doc, "□错题记入错题档案　　□已订正", size=8, color=BRAND_DEEP, before=4)
-    p(doc, f"第{les['bookNo']}课每日练习 · 约10分钟 · 有背诵另做默写单", size=8, color=BRAND_ORANGE_YELLOW, center=True, before=4)
+    p(doc, "□错题记入错题档案　　□已订正", size=10, color=BRAND_DEEP, before=6)
+    p(doc, f"第{les['bookNo']}课每日练习 · 约10分钟 · 有背诵另做默写单", size=9, color=BRAND_ORANGE_YELLOW, center=True, before=6)
     return doc
 
 
