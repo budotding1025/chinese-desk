@@ -61,9 +61,9 @@ def main():
     md_root = ROOT / "answers" / "lessons"
     md_root.mkdir(parents=True, exist_ok=True)
     index = {"lessons": {}, "sprint": {
-        "u1": "printables/sprint/U1-第一单元冲刺.pdf",
-        "u2": "printables/sprint/U2-第二单元冲刺.pdf",
-        "u3": "printables/sprint/U3-第三单元冲刺.pdf",
+        "u1": "printables/sprint/U1-sprint.pdf",
+        "u2": "printables/sprint/U2-sprint.pdf",
+        "u3": "printables/sprint/U3-sprint.pdf",
     }}
     for les in LESSONS:
         n = les["bookNo"]

@@ -1,3 +1,3 @@
-# 单元冲刺（A4）
+﻿# 单元冲刺（A4）
 
-测前打印；完整摸底卷仍见 `../full/`。
+ASCII 文件名：`U1-sprint.pdf` … `U3-sprint.pdf`

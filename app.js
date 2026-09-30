@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=19")
+    return fetch("./print-index.json?v=21")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -33,8 +33,9 @@
 
   function openPdf(url) {
     if (!url) return;
+    url = String(url).replace(/\\/g, "/");
     var sep = url.indexOf("?") >= 0 ? "&" : "?";
-    window.open(encodeURI(url) + sep + "v=19", "_blank");
+    window.open(encodeURI(url) + sep + "v=21", "_blank");
   }
 
   function showView(name) {
@@ -854,10 +855,17 @@
     actions.innerHTML = "";
     DATA.units.forEach((u) => {
       const short = u.name.split("·")[0].trim();
+      const sp = state.printIndex && state.printIndex.sprint && state.printIndex.sprint[u.id];
+      const spAns =
+        state.printIndex && state.printIndex.sprintAnswers && state.printIndex.sprintAnswers[u.id];
+      const full =
+        state.printIndex && state.printIndex.full && state.printIndex.full[u.id];
+      const fullAns =
+        state.printIndex && state.printIndex.fullAnswers && state.printIndex.fullAnswers[u.id];
+
       const sprintBtn = document.createElement("button");
       sprintBtn.type = "button";
       sprintBtn.className = "rec-card";
-      const sp = state.printIndex && state.printIndex.sprint && state.printIndex.sprint[u.id];
       sprintBtn.innerHTML =
         "<strong>" +
         short +
@@ -870,22 +878,50 @@
       });
       actions.appendChild(sprintBtn);
 
+      const sprintAnsBtn = document.createElement("button");
+      sprintAnsBtn.type = "button";
+      sprintAnsBtn.className = "rec-card";
+      sprintAnsBtn.innerHTML =
+        "<strong>" +
+        short +
+        " · 冲刺答案</strong><div class='meta' style='margin:4px 0 0'>" +
+        (spAns ? "单独答案页 · 可打印 A4" : "冲刺答案准备中") +
+        "</div>";
+      sprintAnsBtn.addEventListener("click", () => {
+        if (spAns) openPdf(spAns);
+        else alert("本单元冲刺答案尚未上传");
+      });
+      actions.appendChild(sprintAnsBtn);
+
       const fullBtn = document.createElement("button");
       fullBtn.type = "button";
-      fullBtn.className = "rec-card";
-      const full =
-        state.printIndex && state.printIndex.full && state.printIndex.full[u.id];
+      fullBtn.className = "rec-card" + (full ? "" : " is-empty");
       fullBtn.innerHTML =
         "<strong>" +
         short +
         " · 完整摸底卷</strong><div class='meta' style='margin:4px 0 0'>" +
-        (full ? "下载摸底卷 A4（附答案另见同目录）" : "本单元摸底卷准备中") +
+        (full ? "下载摸底卷 A4" : "暂无 · 上传原卷 JPG 后补充") +
         "</div>";
       fullBtn.addEventListener("click", () => {
         if (full) openPdf(full);
-        else alert("本单元摸底卷尚未上传");
+        else alert("本单元暂无完整摸底卷，等上传原卷 JPG 后再补充");
       });
       actions.appendChild(fullBtn);
+
+      const fullAnsBtn = document.createElement("button");
+      fullAnsBtn.type = "button";
+      fullAnsBtn.className = "rec-card" + (fullAns ? "" : " is-empty");
+      fullAnsBtn.innerHTML =
+        "<strong>" +
+        short +
+        " · 摸底答案</strong><div class='meta' style='margin:4px 0 0'>" +
+        (fullAns ? "单独答案页 · 可打印 A4" : "暂无 · 随摸底卷一并补充") +
+        "</div>";
+      fullAnsBtn.addEventListener("click", () => {
+        if (fullAns) openPdf(fullAns);
+        else alert("本单元暂无摸底答案");
+      });
+      actions.appendChild(fullAnsBtn);
     });
 
     const list = $("recordsList");

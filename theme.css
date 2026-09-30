@@ -830,3 +830,8 @@ button { cursor: pointer; border: none; background: none; }
   gap: 8px;
   margin-top: 8px;
 }
+
+.rec-card.is-empty {
+  opacity: 0.62;
+  border-style: dashed;
+}

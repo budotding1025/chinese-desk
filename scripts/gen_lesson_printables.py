@@ -453,10 +453,19 @@ def patch_data_js_print_paths():
     idx = {
         "lessons": {},
         "sprint": {
-            "u1": "printables/sprint/U1-第一单元冲刺.pdf",
-            "u2": "printables/sprint/U2-第二单元冲刺.pdf",
-            "u3": "printables/sprint/U3-第三单元冲刺.pdf",
+            "u1": "printables/sprint/U1-sprint.pdf",
+            "u2": "printables/sprint/U2-sprint.pdf",
+            "u3": "printables/sprint/U3-sprint.pdf",
         },
+        # full / answers only for units that have JPG 原卷; others stay empty
+        "full": existing.get("full") or {
+            "u1": "printables/full/u01-full.pdf",
+            "u2": "printables/full/u02-full.pdf",
+            "u3": "printables/full/u03-full.pdf",
+        },
+        "sprintAnswers": existing.get("sprintAnswers") or {},
+        "fullAnswers": existing.get("fullAnswers") or {},
+        "gardens": existing.get("gardens") or {},
     }
     for les in LESSONS:
         n = les["bookNo"]

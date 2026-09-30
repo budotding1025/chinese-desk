@@ -23,7 +23,7 @@ from docx_utils import (
 )
 from theme import BRAND_DEEP, BRAND_ORANGE_RED, INK
 
-PRINT = ROOT / "printables"
+PRINT = ROOT / "printables" / "full"
 ANS = ROOT / "answers"
 UNITS = ROOT / "units"
 
@@ -385,9 +385,9 @@ def save_pair(doc, stem: str):
 
 
 def main():
-    save_pair(build_u1(), "u01-四上第一单元练习")
-    save_pair(build_u2(), "u02-四上第二单元练习")
-    save_pair(build_u3(), "u03-四上第三单元练习-不完整")
+    save_pair(build_u1(), "u01-full")
+    save_pair(build_u2(), "u02-full")
+    save_pair(build_u3(), "u03-full")
     print("done")
 
 
