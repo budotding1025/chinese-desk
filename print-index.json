@@ -1,92 +1,220 @@
 {
   "lessons": {
     "1": {
-      "daily": "printables/lessons/L01-观潮-每日10分钟.pdf",
-      "recite": "printables/lessons/L01-观潮-背诵默写10分钟.pdf",
-      "title": "观潮",
-      "answerPdf": "printables/answers/L01-观潮-答案.pdf",
+      "daily": "printables\\lessons\\L01-观潮-每日10分钟.pdf",
+      "recite": "printables\\lessons\\L01-观潮-背诵默写10分钟.pdf",
+      "answerPdf": "printables\\answers\\L01-观潮-答案.pdf",
       "answerMd": "answers/lessons/L01-观潮-答案.md",
-      "answerHtml": "<h2>第1课《观潮》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>潮汐、据说、大堤、盼望、逐渐、霎时</p><h3>组词</h3><p>潮/朝；堤/提；盼/扮</p><h3>多音字</h3><p>观潮→cháo；朝阳→zhāo；闷雷→mèn；霎时→shà</p><h3>理解 / 仿写</h3><p>例：远处出现一条白线，霎时拉长变粗；过了一会儿，浪潮齐头并进。</p><h3>课文默写</h3><p>齐头并进；浩浩荡荡；山崩地裂</p>"
+      "answerHtml": "<h2>第1课《观潮》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>潮汐、据说、大堤、盼望、逐渐、霎时</p><h3>组词</h3><p>潮/朝；堤/提；盼/扮</p><h3>多音字</h3><p>观潮→cháo；朝阳→zhāo；闷雷→mèn；霎时→shà</p><h3>理解 / 仿写</h3><p>例：远处出现一条白线，霎时拉长变粗；过了一会儿，浪潮齐头并进。</p><h3>课文默写</h3><p>齐头并进；浩浩荡荡；山崩地裂</p>",
+      "title": "观潮"
     },
     "2": {
-      "daily": "printables/lessons/L02-走月亮-每日10分钟.pdf",
-      "recite": "printables/lessons/L02-走月亮-背诵默写10分钟.pdf",
-      "title": "走月亮",
-      "answerPdf": "printables/answers/L02-走月亮-答案.pdf",
+      "daily": "printables\\lessons\\L02-走月亮-每日10分钟.pdf",
+      "recite": "printables\\lessons\\L02-走月亮-背诵默写10分钟.pdf",
+      "answerPdf": "printables\\answers\\L02-走月亮-答案.pdf",
       "answerMd": "answers/lessons/L02-走月亮-答案.md",
-      "answerHtml": "<h2>第2课《走月亮》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>鹅卵石、坑坑洼洼、稻穗、成熟、葡萄、闪烁</p><h3>组词</h3><p>卵/卯；稻/蹈；填/慎</p><h3>多音字</h3><p>成熟→shú</p><h3>理解 / 仿写</h3><p>例：每扇窗户都盛着一轮月亮。</p><h3>课文默写</h3><p>月亮；低垂着头；银毯</p>"
+      "answerHtml": "<h2>第2课《走月亮》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>鹅卵石、坑坑洼洼、稻穗、成熟、葡萄、闪烁</p><h3>组词</h3><p>卵/卯；稻/蹈；填/慎</p><h3>多音字</h3><p>成熟→shú</p><h3>理解 / 仿写</h3><p>例：每扇窗户都盛着一轮月亮。</p><h3>课文默写</h3><p>月亮；低垂着头；银毯</p>",
+      "title": "走月亮"
     },
     "3": {
-      "daily": "printables/lessons/L03-现代诗二首-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L03-现代诗二首-每日10分钟.pdf",
       "recite": null,
-      "title": "现代诗二首",
-      "answerPdf": "printables/answers/L03-现代诗二首-答案.pdf",
+      "answerPdf": "printables\\answers\\L03-现代诗二首-答案.pdf",
       "answerMd": "answers/lessons/L03-现代诗二首-答案.md",
-      "answerHtml": "<h2>第3课《现代诗二首》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>秋晚、归巢、花牛、草地</p><h3>组词</h3><p>巢/剿</p><h3>理解 / 仿写</h3><p>例：晚霞像一匹散开的红绸，轻轻盖在河面上。</p>"
+      "answerHtml": "<h2>第3课《现代诗二首》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>秋晚、归巢、花牛、草地</p><h3>组词</h3><p>巢/剿</p><h3>理解 / 仿写</h3><p>例：晚霞像一匹散开的红绸，轻轻盖在河面上。</p>",
+      "title": "现代诗二首"
     },
     "4": {
-      "daily": "printables/lessons/L04-繁星-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L04-繁星-每日10分钟.pdf",
       "recite": null,
-      "title": "繁星",
-      "answerPdf": "printables/answers/L04-繁星-答案.pdf",
+      "answerPdf": "printables\\answers\\L04-繁星-答案.pdf",
       "answerMd": "answers/lessons/L04-繁星-答案.md",
-      "answerHtml": "<h2>第4课《繁星》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>繁星、模糊、飞舞、柔和、梦幻</p><h3>组词</h3><p>昧/妹；坠/堕</p><h3>多音字</h3><p>模糊→mó</p><h3>理解 / 仿写</h3><p>例：渐渐地我的眼睛模糊了，我好像看见无数萤火虫在飞舞。</p>"
+      "answerHtml": "<h2>第4课《繁星》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>繁星、模糊、飞舞、柔和、梦幻</p><h3>组词</h3><p>昧/妹；坠/堕</p><h3>多音字</h3><p>模糊→mó</p><h3>理解 / 仿写</h3><p>例：渐渐地我的眼睛模糊了，我好像看见无数萤火虫在飞舞。</p>",
+      "title": "繁星"
     },
     "5": {
-      "daily": "printables/lessons/L05-一个豆荚里的五粒豆-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L05-一个豆荚里的五粒豆-每日10分钟.pdf",
       "recite": null,
-      "title": "一个豆荚里的五粒豆",
-      "answerPdf": "printables/answers/L05-一个豆荚里的五粒豆-答案.pdf",
+      "answerPdf": "printables\\answers\\L05-一个豆荚里的五粒豆-答案.pdf",
       "answerMd": "answers/lessons/L05-一个豆荚里的五粒豆-答案.md",
-      "answerHtml": "<h2>第5课《一个豆荚里的五粒豆》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>豌豆、舒适、僵硬、囚犯、揭晓、青苔</p><h3>组词</h3><p>豌/碗；僵/疆；溢/隘</p><h3>多音字</h3><p>囚犯→qiú</p><h3>理解 / 仿写</h3><p>例：内容——小女孩为什么慢慢好起来？写法——为什么把豌豆比作囚犯？</p>"
+      "answerHtml": "<h2>第5课《一个豆荚里的五粒豆》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>豌豆、舒适、僵硬、囚犯、揭晓、青苔</p><h3>组词</h3><p>豌/碗；僵/疆；溢/隘</p><h3>多音字</h3><p>囚犯→qiú</p><h3>理解 / 仿写</h3><p>例：内容——小女孩为什么慢慢好起来？写法——为什么把豌豆比作囚犯？</p>",
+      "title": "一个豆荚里的五粒豆"
     },
     "6": {
-      "daily": "printables/lessons/L06-夜间飞行的秘密-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L06-夜间飞行的秘密-每日10分钟.pdf",
       "recite": null,
-      "title": "夜间飞行的秘密",
-      "answerPdf": "printables/answers/L06-夜间飞行的秘密-答案.pdf",
+      "answerPdf": "printables\\answers\\L06-夜间飞行的秘密-答案.pdf",
       "answerMd": "answers/lessons/L06-夜间飞行的秘密-答案.md",
-      "answerHtml": "<h2>第6课《夜间飞行的秘密》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>蝙蝠、超声波、障碍、敏锐、绳子</p><h3>组词</h3><p>蝠/福；绳/蝇</p><h3>多音字</h3><p>蝙蝠→biān；一溜烟→liù；避开→bì</p><h3>理解 / 仿写</h3><p>原句：雷达白天、夜晚、雾天都能工作。改写：________________</p>"
+      "answerHtml": "<h2>第6课《夜间飞行的秘密》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>蝙蝠、超声波、障碍、敏锐、绳子</p><h3>组词</h3><p>蝠/福；绳/蝇</p><h3>多音字</h3><p>蝙蝠→biān；一溜烟→liù；避开→bì</p><h3>理解 / 仿写</h3><p>原句：雷达白天、夜晚、雾天都能工作。改写：________________</p>",
+      "title": "夜间飞行的秘密"
     },
     "7": {
-      "daily": "printables/lessons/L07-呼风唤雨的世纪-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L07-呼风唤雨的世纪-每日10分钟.pdf",
       "recite": null,
-      "title": "呼风唤雨的世纪",
-      "answerPdf": "printables/answers/L07-呼风唤雨的世纪-答案.pdf",
+      "answerPdf": "printables\\answers\\L07-呼风唤雨的世纪-答案.pdf",
       "answerMd": "answers/lessons/L07-呼风唤雨的世纪-答案.md",
-      "answerHtml": "<h2>第7课《呼风唤雨的世纪》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>世纪、奥秘、技术、改变</p><h3>组词</h3><p>唤/换；纪/记</p><h3>理解 / 仿写</h3><p>原句：科学家揭开了自然的奥秘。改写：________________</p>"
+      "answerHtml": "<h2>第7课《呼风唤雨的世纪》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>世纪、奥秘、技术、改变</p><h3>组词</h3><p>唤/换；纪/记</p><h3>理解 / 仿写</h3><p>原句：科学家揭开了自然的奥秘。改写：________________</p>",
+      "title": "呼风唤雨的世纪"
     },
     "8": {
-      "daily": "printables/lessons/L08-蝴蝶的家-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L08-蝴蝶的家-每日10分钟.pdf",
       "recite": null,
-      "title": "蝴蝶的家",
-      "answerPdf": "printables/answers/L08-蝴蝶的家-答案.pdf",
+      "answerPdf": "printables\\answers\\L08-蝴蝶的家-答案.pdf",
       "answerMd": "answers/lessons/L08-蝴蝶的家-答案.md",
-      "answerHtml": "<h2>第8课《蝴蝶的家》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>蝴蝶、避雨、珍惜、安然、忧愁</p><h3>组词</h3><p>蝶/碟；忧/优</p><h3>多音字</h3><p>避开→bì</p><h3>理解 / 仿写</h3><p>例：下这么大的雨，蚂蚁的家怎么会不被冲走呢？</p>"
+      "answerHtml": "<h2>第8课《蝴蝶的家》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>蝴蝶、避雨、珍惜、安然、忧愁</p><h3>组词</h3><p>蝶/碟；忧/优</p><h3>多音字</h3><p>避开→bì</p><h3>理解 / 仿写</h3><p>例：下这么大的雨，蚂蚁的家怎么会不被冲走呢？</p>",
+      "title": "蝴蝶的家"
     },
     "9": {
-      "daily": "printables/lessons/L09-古诗三首-每日10分钟.pdf",
-      "recite": "printables/lessons/L09-古诗三首-背诵默写10分钟.pdf",
-      "title": "古诗三首",
-      "answerPdf": "printables/answers/L09-古诗三首-答案.pdf",
+      "daily": "printables\\lessons\\L09-古诗三首-每日10分钟.pdf",
+      "recite": "printables\\lessons\\L09-古诗三首-背诵默写10分钟.pdf",
+      "answerPdf": "printables\\answers\\L09-古诗三首-答案.pdf",
       "answerMd": "answers/lessons/L09-古诗三首-答案.md",
-      "answerHtml": "<h2>第9课《古诗三首》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>庐山、真珠、逊色</p><h3>组词</h3><p>逊/孙</p><h3>理解 / 仿写</h3><p>例：因为就在事情中间，所以看不清全部。</p><h3>课文默写</h3><p>远近高低各不同；只缘身在此山中</p>"
+      "answerHtml": "<h2>第9课《古诗三首》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>庐山、真珠、逊色</p><h3>组词</h3><p>逊/孙</p><h3>理解 / 仿写</h3><p>例：因为就在事情中间，所以看不清全部。</p><h3>课文默写</h3><p>远近高低各不同；只缘身在此山中</p>",
+      "title": "古诗三首"
     },
     "10": {
-      "daily": "printables/lessons/L10-爬山虎的脚-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L10-爬山虎的脚-每日10分钟.pdf",
       "recite": null,
-      "title": "爬山虎的脚",
-      "answerPdf": "printables/answers/L10-爬山虎的脚-答案.pdf",
+      "answerPdf": "printables\\answers\\L10-爬山虎的脚-答案.pdf",
       "answerMd": "answers/lessons/L10-爬山虎的脚-答案.md",
-      "answerHtml": "<h2>第10课《爬山虎的脚》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>光滑、嫩绿、爬山虎、均匀、空隙、叶柄</p><h3>组词</h3><p>均/钧；隙/狭</p><h3>多音字</h3><p>曲折→qū；空隙→kòng；投降→xiáng；降低→jiàng</p><h3>理解 / 仿写</h3><p>例：新长的叶子像一把把撑开的小绿伞。</p>"
+      "answerHtml": "<h2>第10课《爬山虎的脚》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>光滑、嫩绿、爬山虎、均匀、空隙、叶柄</p><h3>组词</h3><p>均/钧；隙/狭</p><h3>多音字</h3><p>曲折→qū；空隙→kòng；投降→xiáng；降低→jiàng</p><h3>理解 / 仿写</h3><p>例：新长的叶子像一把把撑开的小绿伞。</p>",
+      "title": "爬山虎的脚"
     },
     "11": {
-      "daily": "printables/lessons/L11-蟋蟀的住宅-每日10分钟.pdf",
+      "daily": "printables\\lessons\\L11-蟋蟀的住宅-每日10分钟.pdf",
       "recite": null,
-      "title": "蟋蟀的住宅",
-      "answerPdf": "printables/answers/L11-蟋蟀的住宅-答案.pdf",
+      "answerPdf": "printables\\answers\\L11-蟋蟀的住宅-答案.pdf",
       "answerMd": "answers/lessons/L11-蟋蟀的住宅-答案.md",
-      "answerHtml": "<h2>第11课《蟋蟀的住宅》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>住宅、洞穴、慎重、柔弱、搜索</p><h3>组词</h3><p>宅/诧；慎/填</p><h3>多音字</h3><p>慎重→shèn</p><h3>理解 / 仿写</h3><p>例：它的洞穴朝阳，出口不积水；它用柔弱的腿一下一下扒土。</p>"
+      "answerHtml": "<h2>第11课《蟋蟀的住宅》参考答案</h2><p class='meta'>做完练习再看。开放题意思对即可。</p><h3>字词听写</h3><p>住宅、洞穴、慎重、柔弱、搜索</p><h3>组词</h3><p>宅/诧；慎/填</p><h3>多音字</h3><p>慎重→shèn</p><h3>理解 / 仿写</h3><p>例：它的洞穴朝阳，出口不积水；它用柔弱的腿一下一下扒土。</p>",
+      "title": "蟋蟀的住宅"
+    },
+    "12": {
+      "daily": "printables\\lessons\\L12-盘古开天地-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L12-盘古开天地-答案.pdf",
+      "answerMd": "answers/lessons/L12-盘古开天地-答案.md",
+      "answerHtml": null,
+      "title": "盘古开天地"
+    },
+    "13": {
+      "daily": "printables\\lessons\\L13-精卫填海-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L13-精卫填海-答案.pdf",
+      "answerMd": "answers/lessons/L13-精卫填海-答案.md",
+      "answerHtml": null,
+      "title": "精卫填海"
+    },
+    "14": {
+      "daily": "printables\\lessons\\L14-普罗米修斯-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L14-普罗米修斯-答案.pdf",
+      "answerMd": "answers/lessons/L14-普罗米修斯-答案.md",
+      "answerHtml": null,
+      "title": "普罗米修斯"
+    },
+    "15": {
+      "daily": "printables\\lessons\\L15-女娲补天-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L15-女娲补天-答案.pdf",
+      "answerMd": "answers/lessons/L15-女娲补天-答案.md",
+      "answerHtml": null,
+      "title": "女娲补天"
+    },
+    "16": {
+      "daily": "printables\\lessons\\L16-麻雀-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L16-麻雀-答案.pdf",
+      "answerMd": "answers/lessons/L16-麻雀-答案.md",
+      "answerHtml": null,
+      "title": "麻雀"
+    },
+    "17": {
+      "daily": "printables\\lessons\\L17-爬天都峰-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L17-爬天都峰-答案.pdf",
+      "answerMd": "answers/lessons/L17-爬天都峰-答案.md",
+      "answerHtml": null,
+      "title": "爬天都峰"
+    },
+    "18": {
+      "daily": "printables\\lessons\\L18-牛和鹅-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L18-牛和鹅-答案.pdf",
+      "answerMd": "answers/lessons/L18-牛和鹅-答案.md",
+      "answerHtml": null,
+      "title": "牛和鹅"
+    },
+    "19": {
+      "daily": "printables\\lessons\\L19-一只窝囊的大老虎-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L19-一只窝囊的大老虎-答案.pdf",
+      "answerMd": "answers/lessons/L19-一只窝囊的大老虎-答案.md",
+      "answerHtml": null,
+      "title": "一只窝囊的大老虎"
+    },
+    "20": {
+      "daily": "printables\\lessons\\L20-陀螺-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L20-陀螺-答案.pdf",
+      "answerMd": "answers/lessons/L20-陀螺-答案.md",
+      "answerHtml": null,
+      "title": "陀螺"
+    },
+    "21": {
+      "daily": "printables\\lessons\\L21-古诗三首-每日10分钟.pdf",
+      "recite": "printables\\lessons\\L21-古诗三首-背诵默写10分钟.pdf",
+      "answerPdf": "printables\\answers\\L21-古诗三首-答案.pdf",
+      "answerMd": "answers/lessons/L21-古诗三首-答案.md",
+      "answerHtml": null,
+      "title": "古诗三首"
+    },
+    "22": {
+      "daily": "printables\\lessons\\L22-为中华之崛起而读书-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L22-为中华之崛起而读书-答案.pdf",
+      "answerMd": "answers/lessons/L22-为中华之崛起而读书-答案.md",
+      "answerHtml": null,
+      "title": "为中华之崛起而读书"
+    },
+    "23": {
+      "daily": "printables\\lessons\\L23-梅兰芳蓄须-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L23-梅兰芳蓄须-答案.pdf",
+      "answerMd": "answers/lessons/L23-梅兰芳蓄须-答案.md",
+      "answerHtml": null,
+      "title": "梅兰芳蓄须"
+    },
+    "24": {
+      "daily": "printables\\lessons\\L24-延安，我把你追寻-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L24-延安，我把你追寻-答案.pdf",
+      "answerMd": "answers/lessons/L24-延安，我把你追寻-答案.md",
+      "answerHtml": null,
+      "title": "延安，我把你追寻"
+    },
+    "25": {
+      "daily": "printables\\lessons\\L25-王戎不取道旁李-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L25-王戎不取道旁李-答案.pdf",
+      "answerMd": "answers/lessons/L25-王戎不取道旁李-答案.md",
+      "answerHtml": null,
+      "title": "王戎不取道旁李"
+    },
+    "26": {
+      "daily": "printables\\lessons\\L26-西门豹治邺-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L26-西门豹治邺-答案.pdf",
+      "answerMd": "answers/lessons/L26-西门豹治邺-答案.md",
+      "answerHtml": null,
+      "title": "西门豹治邺"
+    },
+    "27": {
+      "daily": "printables\\lessons\\L27-故事二则-每日10分钟.pdf",
+      "recite": null,
+      "answerPdf": "printables\\answers\\L27-故事二则-答案.pdf",
+      "answerMd": "answers/lessons/L27-故事二则-答案.md",
+      "answerHtml": null,
+      "title": "故事二则"
     }
   },
   "sprint": {
