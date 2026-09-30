@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./theme.css?v=2" />
+  <link rel="stylesheet" href="./theme.css?v=3" />
 </head>
 <body>
   <!-- HOME -->
@@ -109,13 +109,18 @@
   </nav>
 
   <div class="overlay is-center hidden" id="answerOverlay">
-    <div class="sheet" role="dialog" aria-labelledby="answerTitle">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div class="sheet sheet-a4" role="dialog" aria-labelledby="answerTitle">
+      <div class="sheet-a4-top">
         <h2 id="answerTitle">答案</h2>
         <button type="button" class="icon-btn" id="btnCloseAnswer" aria-label="关闭">×</button>
       </div>
-      <div id="answerBody" style="max-height:55vh;overflow:auto;margin:14px 0 18px"></div>
-      <button type="button" class="btn-start" id="btnAnswerDownload">下载答案（A4）</button>
+      <p class="meta sheet-a4-note">与打印版同一份 A4，可直接对照</p>
+      <div class="a4-frame" id="answerBody">
+        <p class="meta">加载中…</p>
+      </div>
+      <div class="sheet-a4-actions">
+        <button type="button" class="btn-start" id="btnAnswerDownload">下载 / 打印答案（A4）</button>
+      </div>
     </div>
   </div>
 
@@ -148,7 +153,7 @@
 
   <script src="./data.js?v=5"></script>
   <script src="./progress.js?v=3"></script>
-  <script src="./app.js?v=9"></script>
+  <script src="./app.js?v=10"></script>
   <script>
     document.getElementById("btnSettings").onclick = function () {
       document.getElementById("helpOverlay").classList.remove("hidden");
