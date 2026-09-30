@@ -327,56 +327,65 @@ def _cell_v_center(cell):
     cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
 
 
+def _tianzige_png(size_px: int = 140) -> Path:
+    """生成可嵌入的田字格 PNG（外框实线 + 十字虚线）。嵌套表格转 PDF 会压扁，改用图片。"""
+    assets = ROOT / "assets"
+    assets.mkdir(parents=True, exist_ok=True)
+    path = assets / f"tianzige-{size_px}.png"
+    # 始终按当前样式重画，避免旧淡色缓存
+    try:
+        from PIL import Image, ImageDraw
+    except ImportError as e:
+        raise RuntimeError("需要 Pillow 才能生成田字格图片：pip install pillow") from e
+
+    img = Image.new("RGB", (size_px, size_px), "white")
+    d = ImageDraw.Draw(img)
+    # 外框：纯黑加粗，打印/屏幕都能看清
+    d.rectangle([2, 2, size_px - 3, size_px - 3], outline=(0, 0, 0), width=3)
+    mid = size_px // 2
+    gray = (90, 90, 90)
+    step = max(4, size_px // 22)
+    dash = max(2, step - 1)
+    y = 6
+    while y < size_px - 6:
+        d.line([(mid, y), (mid, min(y + dash, size_px - 7))], fill=gray, width=2)
+        y += step + 1
+    x = 6
+    while x < size_px - 6:
+        d.line([(x, mid), (min(x + dash, size_px - 7), mid)], fill=gray, width=2)
+        x += step + 1
+    img.save(path, format="PNG")
+    return path
+
+
 def _add_boxes_in_cell(cell, n: int, *, box_cm: float = 0.7):
-    """在单元格内画 n 个田字格（外框实线、内十字虚线），贴近原卷。"""
+    """在单元格内嵌 n 个田字格图片（并排，Word→PDF 稳定可见）。"""
+    from docx.enum.table import WD_TABLE_ALIGNMENT
     from docx.enum.text import WD_ALIGN_PARAGRAPH as ALG
 
-    outer = {"sz": "12", "val": "single", "color": "000000"}
-    dash = {"sz": "6", "val": "dashed", "color": "808080"}
+    png = _tianzige_png(140)
+    # 用单行表格并排，避免段落折行把两格变成竖排
     host = cell.add_table(rows=1, cols=n)
+    host.alignment = WD_TABLE_ALIGNMENT.CENTER
     host.autofit = False
+    _clear_table_borders(host)
     for i in range(n):
-        outer_cell = host.cell(0, i)
-        outer_cell.width = Cm(box_cm)
-        outer_cell.text = ""
-        # clear default paragraph height
-        op = outer_cell.paragraphs[0]
-        op.paragraph_format.space_before = Pt(0)
-        op.paragraph_format.space_after = Pt(0)
-        # 2x2 田字格
-        grid = outer_cell.add_table(rows=2, cols=2)
-        grid.autofit = False
-        half = box_cm / 2
-        for rr in range(2):
-            for cc in range(2):
-                gc = grid.cell(rr, cc)
-                gc.width = Cm(half)
-                gc.text = ""
-                gp = gc.paragraphs[0]
-                gp.paragraph_format.space_before = Pt(0)
-                gp.paragraph_format.space_after = Pt(0)
-                gr = gp.add_run(" ")
-                set_run_font(gr, size=6, color=INK)
-                # outer edges solid, inner edges dashed
-                top = outer if rr == 0 else dash
-                bottom = outer if rr == 1 else dash
-                left = outer if cc == 0 else dash
-                right = outer if cc == 1 else dash
-                _set_cell_border(gc, top=top, left=left, bottom=bottom, right=right)
-        # exact row heights for 田字格
-        for row in grid.rows:
-            tr = row._tr
-            trPr = tr.get_or_add_trPr()
-            trHeight = OxmlElement("w:trHeight")
-            trHeight.set(qn("w:val"), str(int(half * 567)))
-            trHeight.set(qn("w:hRule"), "exact")
-            trPr.append(trHeight)
-        _set_cell_border(outer_cell, top=None, left=None, bottom=None, right=None)
+        c = host.cell(0, i)
+        c.width = Cm(box_cm + 0.05)
+        _set_cell_border(c, top=None, left=None, bottom=None, right=None)
+        c.text = ""
+        p = c.paragraphs[0]
+        p.alignment = ALG.CENTER
+        p.paragraph_format.space_before = Pt(0)
+        p.paragraph_format.space_after = Pt(0)
+        p.paragraph_format.line_spacing = 1.0
+        run = p.add_run()
+        run.add_picture(str(png), width=Cm(box_cm))
     tr = host.rows[0]._tr
     trPr = tr.get_or_add_trPr()
     trHeight = OxmlElement("w:trHeight")
-    trHeight.set(qn("w:val"), str(int(box_cm * 567)))
-    trHeight.set(qn("w:hRule"), "exact")
+    trHeight.set(qn("w:val"), str(int((box_cm + 0.08) * 567)))
+    trHeight.set(qn("w:hRule"), "atLeast")
     trPr.append(trHeight)
 
 
@@ -420,9 +429,9 @@ def add_inline_pinyin_line(doc, segments, *, size=10.5, box_cm: float = 0.7, aft
             set_run_font(run, size=size, color=INK)
         else:
             py, n = spec[1], spec[2]
-            cell.width = Cm(box_cm * n + 0.2)
+            cell.width = Cm(box_cm * n + 0.45)
             p0.alignment = ALG.CENTER
-            p0.paragraph_format.space_after = Pt(0)
+            p0.paragraph_format.space_after = Pt(1)
             run = p0.add_run(py)
             set_run_font(run, size=8.5, color=INK)
             rPr = run._element.get_or_add_rPr()
@@ -431,11 +440,11 @@ def add_inline_pinyin_line(doc, segments, *, size=10.5, box_cm: float = 0.7, aft
             rFonts.set(qn("w:hAnsi"), "Times New Roman")
             _add_boxes_in_cell(cell, n, box_cm=box_cm)
 
-    # row height: pinyin + box, 贴近原卷行高
+    # row height: 拼音 + 田字格图片，用 atLeast 避免被压扁
     tr = table.rows[0]._tr
     trPr = tr.get_or_add_trPr()
     trHeight = OxmlElement("w:trHeight")
-    trHeight.set(qn("w:val"), str(int((box_cm + 0.38) * 567)))
+    trHeight.set(qn("w:val"), str(int((box_cm + 0.55) * 567)))
     trHeight.set(qn("w:hRule"), "atLeast")
     trPr.append(trHeight)
 
