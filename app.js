@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=2")
+    return fetch("./print-index.json?v=3")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -33,7 +33,7 @@
 
   function openPdf(url) {
     if (!url) return;
-    window.open(url, "_blank");
+    window.open(encodeURI(url), "_blank");
   }
 
   function showView(name) {
@@ -185,25 +185,29 @@
   }
 
   function openAnswers(node) {
-    const pr = lessonPrint(node);
+    const pr = lessonPrint(node) || {};
     $("pathLessonOverlay").classList.add("hidden");
     const box = $("answerOverlay");
     const body = $("answerBody");
     const title = $("answerTitle");
-    title.textContent = "第" + node.bookNo + "课《" + node.title + "》答案";
+    const n = node.bookNo;
+    const pad = String(n).padStart(2, "0");
+    title.textContent = "第" + n + "课《" + node.title + "》答案";
     body.innerHTML = "<p class='meta'>加载中…</p>";
     box.classList.remove("hidden");
-    const mdUrl = pr && pr.answerMd;
-    const pdfUrl = pr && pr.answerPdf;
-    $("btnAnswerDownload").onclick = () => {
-      if (pdfUrl) openPdf(pdfUrl);
-      else if (mdUrl) openPdf(mdUrl);
-    };
-    if (!mdUrl) {
-      body.innerHTML = "<p>暂无答案文件。</p>";
+
+    const mdUrl = pr.answerMd || "answers/lessons/L" + pad + ".md";
+    const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-answers.pdf";
+
+    $("btnAnswerDownload").onclick = () => openPdf(pdfUrl);
+
+    // Prefer embedded HTML from print-index (no extra fetch / no Chinese path)
+    if (pr.answerHtml) {
+      body.innerHTML = pr.answerHtml;
       return;
     }
-    fetch(mdUrl + "?v=2")
+
+    fetch(encodeURI(mdUrl) + "?v=3")
       .then((r) => {
         if (!r.ok) throw new Error("missing");
         return r.text();
@@ -212,11 +216,8 @@
         body.innerHTML = renderMd(text);
       })
       .catch(() => {
-        if (pr && pr.answerHtml) {
-          body.innerHTML = "<div>" + pr.answerHtml + "</div>";
-        } else {
-          body.innerHTML = "<p>答案加载失败，请直接下载 PDF。</p>";
-        }
+        body.innerHTML =
+          "<p>在线答案暂未加载成功。</p><p class='meta'>可点下方按钮下载 A4 答案 PDF。</p>";
       });
   }
 
