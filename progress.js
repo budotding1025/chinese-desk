@@ -20,7 +20,13 @@
     if (!s.completed) s.completed = {};
     if (!s.mistakes) s.mistakes = [];
     if (!s.streak) s.streak = { count: 0, last: "" };
-    if (!s.currentBookLesson) s.currentBookLesson = DATA.currentBookLesson || 8;
+    const ver = (DATA && DATA.bookVersion) || (DATA && DATA.book) || "";
+    if (s.bookVersion !== ver) {
+      s.bookVersion = ver;
+      s.currentBookLesson = (DATA && DATA.currentBookLesson) || 1;
+      save(s);
+    }
+    if (!s.currentBookLesson) s.currentBookLesson = (DATA && DATA.currentBookLesson) || 1;
     return s;
   }
 

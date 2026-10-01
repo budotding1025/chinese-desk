@@ -2,6 +2,7 @@
 window.CHINESE_DESK_DATA = {
   "title": "语文书桌",
   "book": "统编版四年级上册（2024）",
+  "bookVersion": "2024-autumn",
   "currentBookLesson": 1,
   "brandNote": "先默写过关，再练考点。与 2024 教材课次同步。",
   "units": [

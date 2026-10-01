@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=24")
+    return fetch("./print-index.json?v=25")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -86,7 +86,7 @@
     $("sessionMeta").textContent =
       (node.kind || "课文") + " · 打印后自己做 · 做完再看答案";
     const unitEl = $("unitLine");
-    if (unitEl) unitEl.textContent = node.unitTitle || DATA.book;
+    if (unitEl) unitEl.textContent = (DATA.book || "") + (node.unitTitle ? " · " + node.unitTitle : "");
     const sumEl = $("pathSummary");
     if (sumEl) {
       const path = P.semesterPath();
@@ -1189,6 +1189,6 @@
   }
 
   // init current lesson 8
-  P.setCurrentBookLesson(DATA.currentBookLesson || 8);
+  P.ensure();
   loadPrintIndex().finally(() => showView("home"));
 })();
