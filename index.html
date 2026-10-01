@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./theme.css?v=12" />
+  <link rel="stylesheet" href="./theme.css?v=23" />
 </head>
 <body>
   <!-- HOME -->
@@ -61,14 +61,26 @@
   <div class="screen hidden" id="screenRecords">
     <div class="path-top records-top">
       <span style="width:48px"></span>
-      <h1>记录</h1>
+      <h1>记录 · 错题库</h1>
       <span style="width:48px"></span>
     </div>
     <div class="records-score" id="recordsScore"></div>
-    <div class="records-toolbar" id="recordsToolbar"></div>
-    <p class="path-meta" id="recordsPackMeta">单元冲刺 · 完整摸底卷（附答案）</p>
-    <div class="records-actions" id="recordsActions"></div>
-    <p class="path-meta" id="recordsMeta">错题本（拍照存证 · 勾选题号）</p>
+    <p class="path-meta">红笔批改后，在原卷上用红笔圈出错题 → 考前重练原题 / 同类练习</p>
+
+    <div class="mark-cta-wrap">
+      <button type="button" class="btn-mark-cta" id="btnOpenMark">
+        卷面对照
+        <small>打开原卷，用红笔直接圈出错题</small>
+      </button>
+    </div>
+
+    <details class="mistake-advanced">
+      <summary>更多录入方式（拍照 / 勾选题号）</summary>
+      <div class="records-toolbar" id="recordsToolbar"></div>
+    </details>
+
+    <div class="records-actions hidden" id="recordsActions"></div>
+    <p class="path-meta" id="recordsMeta">我的错题</p>
     <div class="path-scroll" id="recordsList"></div>
     <div class="path-footer">
       <button type="button" class="btn-start" id="btnRecordsToPath">去学期路径</button>
@@ -100,7 +112,7 @@
       <span class="nav-label">主页</span>
     </button>
     <button type="button" class="nav-item" data-nav="path" id="navPath">
-      <span class="nav-emoji" aria-hidden="true">◎</span>
+      <span class="nav-emoji" aria-hidden="true">◈</span>
       <span class="nav-label">路径</span>
     </button>
     <button type="button" class="nav-item" data-nav="records" id="navRecords">
@@ -120,14 +132,13 @@
     </div>
   </div>
 
-
   <div class="overlay is-center hidden" id="mistakeOverlay">
     <div class="sheet sheet-mistake" role="dialog" aria-labelledby="mistakeTitle">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
         <h2 id="mistakeTitle">录入错题</h2>
         <button type="button" class="icon-btn" id="btnCloseMistake" aria-label="关闭">×</button>
       </div>
-      <p class="meta">勾选题号即可入库；卷面照片可选，也可稍后补拍（不依赖识别红笔）</p>
+      <p class="meta">勾选题号即可入库；卷面照片可选，也可稍后补拍</p>
       <label class="mist-label">卷面照片（可选，可后补）
         <input type="file" id="mistakePhoto" accept="image/*" capture="environment" />
       </label>
@@ -142,6 +153,7 @@
           <option value="daily3">日常③</option>
           <option value="sprint">考前 · 单元冲刺</option>
           <option value="full">考前 · 摸底卷</option>
+          <option value="garden">语文园地</option>
         </select>
       </label>
       <div class="mist-label">错题题号（可多选）</div>
@@ -151,6 +163,55 @@
       </label>
       <div class="lesson-actions" style="margin-top:14px">
         <button type="button" class="btn-start" id="btnSaveMistake">存入错题本</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 卷面对照 · 红笔圈错题 -->
+  <div class="overlay is-center hidden" id="markOverlay">
+    <div class="sheet mark-sheet" role="dialog" aria-labelledby="markTitle">
+      <div class="mark-head">
+        <div>
+          <h2 id="markTitle">卷面对照</h2>
+          <p class="meta" id="markMeta">在原卷上用红笔画圈，圈完点「记上了」</p>
+        </div>
+        <button type="button" class="icon-btn" id="markClose" aria-label="关闭">×</button>
+      </div>
+
+      <div class="mark-filters">
+        <label>单元
+          <select id="markUnit"></select>
+        </label>
+        <label>来源
+          <select id="markSource">
+            <option value="sprint">单元冲刺</option>
+            <option value="full">完整摸底卷</option>
+            <option value="garden">语文园地</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="mark-paper-tools">
+        <button type="button" class="btn" id="markPrevPage" hidden>上一页</button>
+        <span class="mark-page-label" id="markPageLabel"></span>
+        <button type="button" class="btn" id="markNextPage" hidden>下一页</button>
+        <label class="photo-btn-inline mark-photo-btn">用照片当卷面
+          <input type="file" id="markPhoto" accept="image/*" capture="environment" hidden />
+        </label>
+      </div>
+
+      <div class="mark-stage-wrap" id="markStageWrap">
+        <div class="mark-stage" id="markStage">
+          <canvas id="markBase" aria-hidden="true"></canvas>
+          <canvas id="markInk" aria-label="红笔层"></canvas>
+        </div>
+        <p class="mark-paper-hint" id="markPaperHint">正在打开卷面…</p>
+      </div>
+
+      <div class="mark-actions">
+        <button type="button" class="btn" id="markUndo">撤销一笔</button>
+        <button type="button" class="btn" id="markClear">清空红笔</button>
+        <button type="button" class="btn primary" id="markSave">记上了</button>
       </div>
     </div>
   </div>
@@ -168,28 +229,26 @@
         </li>
         <li>
           <strong>路径</strong>
-          <span>按单元点课；每课同样两个入口</span>
-        </li>
-        <li>
-          <strong>路径</strong>
-          <span>课文练习 + 语文园地（日积月累默写 / 含义 / 仿写）</span>
+          <span>课文练习 + 园地 + 单元冲刺 / 完整摸底卷（含答案）</span>
         </li>
         <li>
           <strong>记录</strong>
-          <span>错题本（拍照勾题）· 单元冲刺/摸底卷及单独答案页；本机 IndexedDB，可导出备份</span>
+          <span>卷面对照红笔圈错题入库；本机 IndexedDB，可导出备份</span>
         </li>
         <li>
           <strong>建议</strong>
-          <span>勾选题号入库（照片可后补）→ 考前调原题或同类练习</span>
+          <span>做完红笔批改 → 卷面对照圈错题 → 考前调原题或同类练习</span>
         </li>
       </ul>
     </div>
   </div>
 
-  <script src="./data.js?v=14"></script>
-  <script src="./progress.js?v=12"></script>
-  <script src="./mistakes-db.js?v=12"></script>
-  <script src="./app.js?v=22"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="./data.js?v=23"></script>
+  <script src="./progress.js?v=23"></script>
+  <script src="./mistakes-db.js?v=23"></script>
+  <script src="./mark-sheet.js?v=23"></script>
+  <script src="./app.js?v=23"></script>
   <script>
     document.getElementById("btnSettings").onclick = function () {
       document.getElementById("helpOverlay").classList.remove("hidden");

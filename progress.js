@@ -51,6 +51,24 @@
           garden: u.garden,
         });
       }
+      nodes.push({
+        type: "sprint",
+        id: u.id + "-sprint",
+        unitId: u.id,
+        unitTitle: u.name,
+        bookNo: null,
+        title: "单元冲刺",
+        kind: "考前",
+      });
+      nodes.push({
+        type: "full",
+        id: u.id + "-full",
+        unitId: u.id,
+        unitTitle: u.name,
+        bookNo: null,
+        title: "完整摸底卷",
+        kind: "考前",
+      });
     });
     return nodes;
   }

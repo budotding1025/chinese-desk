@@ -835,3 +835,185 @@ button { cursor: pointer; border: none; background: none; }
   opacity: 0.62;
   border-style: dashed;
 }
+
+/* —— 卷面对照 / 红笔圈题 —— */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--brand-dark);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.btn.primary {
+  background: var(--brand);
+  border-color: var(--brand-dark);
+  color: #fff;
+}
+.photo-btn-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--brand-dark);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.photo-btn-inline:active {
+  transform: translateY(1px);
+}
+.mark-cta-wrap {
+  margin: 0 auto 14px;
+  max-width: 520px;
+  width: calc(100% - 36px);
+}
+.btn-mark-cta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 18px 18px 16px;
+  border: 2px solid var(--line);
+  border-bottom-width: 5px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fff 0%, var(--soft) 100%);
+  color: var(--brand-dark);
+  font-weight: 800;
+  font-size: 1.2rem;
+  text-align: left;
+  box-shadow: var(--shadow);
+}
+.btn-mark-cta small {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.btn-mark-cta:active {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+  box-shadow: none;
+}
+.mistake-advanced {
+  margin: 0 auto 16px;
+  max-width: 520px;
+  width: calc(100% - 36px);
+}
+.mistake-advanced > summary {
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--muted);
+  padding: 8px 4px;
+  list-style: none;
+}
+.mistake-advanced > summary::-webkit-details-marker { display: none; }
+.mistake-advanced[open] > summary {
+  color: var(--brand-dark);
+  margin-bottom: 8px;
+}
+.mark-sheet {
+  width: min(760px, 100%);
+  max-height: min(94vh, 960px);
+  overflow: auto;
+}
+.mark-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.mark-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 12px 0 8px;
+}
+.mark-filters label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--brand-dark);
+}
+.mark-filters select {
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 1rem;
+}
+.mark-paper-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.mark-page-label {
+  font-weight: 800;
+  color: var(--muted);
+  font-size: 0.95rem;
+  min-width: 4.5rem;
+  text-align: center;
+}
+.mark-photo-btn { padding: 10px 14px; font-size: 0.95rem; }
+.mark-stage-wrap {
+  position: relative;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: #dbeaf4;
+  overflow: auto;
+  max-height: min(58vh, 560px);
+  -webkit-overflow-scrolling: touch;
+}
+.mark-stage {
+  position: relative;
+  margin: 0 auto;
+  width: max-content;
+  max-width: 100%;
+  touch-action: none;
+  user-select: none;
+}
+.mark-stage canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.mark-stage #markInk {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+.mark-paper-hint {
+  margin: 0;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.mark-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+@media (max-width: 520px) {
+  .mark-filters { grid-template-columns: 1fr; }
+  .mark-stage-wrap { max-height: min(52vh, 480px); }
+}
+

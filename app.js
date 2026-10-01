@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=22")
+    return fetch("./print-index.json?v=23")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -98,7 +98,7 @@
   function renderPath() {
     const store = P.ensure();
     const path = P.semesterPath();
-    $("pathMeta").textContent = "共 " + path.length + " 站 · 已练 " + P.completedCount() + " 站（含园地）";
+    $("pathMeta").textContent = "共 " + path.length + " 站 · 已练 " + P.completedCount() + " 站（含园地 / 冲刺 / 摸底）";
     const host = $("pathList");
     host.innerHTML = "";
     let lastUnit = "";
@@ -115,7 +115,14 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "path-node" + (done ? " is-done" : "") + (current ? " is-current" : "");
-      const badge = node.type === "garden" ? "园" : String(node.bookNo);
+      const badge =
+        node.type === "garden"
+          ? "园"
+          : node.type === "sprint"
+            ? "冲"
+            : node.type === "full"
+              ? "摸"
+              : String(node.bookNo);
       btn.innerHTML =
         '<span class="path-badge">' +
         badge +
@@ -134,10 +141,11 @@
   function openNodePicker(node) {
     state.node = node;
     $("pathLessonTitle").textContent =
-      node.type === "garden" ? node.title : "第" + node.bookNo + "课 · " + node.title;
+      node.type === "lesson" ? "第" + node.bookNo + "课 · " + node.title : node.title;
     $("pathLessonMeta").textContent = node.unitTitle + " · " + (node.kind || "");
     const grid = $("pathModGrid");
     grid.innerHTML = "";
+    const pi = state.printIndex || {};
 
     if (node.type === "lesson") {
       const pr = lessonPrint(node);
@@ -169,8 +177,7 @@
       });
       grid.appendChild(setCur);
     } else if (node.type === "garden") {
-      const gPrint =
-        state.printIndex && state.printIndex.gardens && state.printIndex.gardens[node.unitId];
+      const gPrint = pi.gardens && pi.gardens[node.unitId];
       const daily = gPrint && gPrint.daily;
       const dl = document.createElement("button");
       dl.type = "button";
@@ -187,6 +194,116 @@
       ans.innerHTML = "答案在线看<small>与打印版同一份 A4</small>";
       ans.addEventListener("click", () => openGardenAnswers(node));
       grid.appendChild(ans);
+      const markG = document.createElement("button");
+      markG.type = "button";
+      markG.className = "mod-btn";
+      markG.innerHTML = "卷面对照<small>红笔圈出错题入库</small>";
+      markG.addEventListener("click", () => {
+        $("pathLessonOverlay").classList.add("hidden");
+        if (window.ChineseMarkSheet) {
+          ChineseMarkSheet.open({
+            unitId: node.unitId,
+            source: "garden",
+            node: node,
+            getPrintIndex: () => state.printIndex,
+          });
+        }
+      });
+      grid.appendChild(markG);
+    } else if (node.type === "sprint") {
+      const sp = pi.sprint && pi.sprint[node.unitId];
+      const spAns = pi.sprintAnswers && pi.sprintAnswers[node.unitId];
+      const dl = document.createElement("button");
+      dl.type = "button";
+      dl.className = "mod-btn is-primary";
+      dl.innerHTML = "下载冲刺卷<small>考前 · 可打印 A4</small>";
+      dl.addEventListener("click", () => {
+        if (sp) openPdf(sp);
+        else alert("本单元冲刺卷尚未上传");
+      });
+      grid.appendChild(dl);
+      const ans = document.createElement("button");
+      ans.type = "button";
+      ans.className = "mod-btn is-answer";
+      ans.innerHTML = "冲刺答案<small>单独答案页 · 可打印</small>";
+      ans.addEventListener("click", () => {
+        if (spAns) openPdf(spAns);
+        else alert("本单元冲刺答案尚未上传");
+      });
+      grid.appendChild(ans);
+      const mark = document.createElement("button");
+      mark.type = "button";
+      mark.className = "mod-btn";
+      mark.innerHTML = "卷面对照<small>红笔圈出错题入库</small>";
+      mark.addEventListener("click", () => {
+        $("pathLessonOverlay").classList.add("hidden");
+        if (window.ChineseMarkSheet) {
+          ChineseMarkSheet.open({
+            unitId: node.unitId,
+            source: "sprint",
+            node: node,
+            getPrintIndex: () => state.printIndex,
+          });
+        }
+      });
+      grid.appendChild(mark);
+      const done = document.createElement("button");
+      done.type = "button";
+      done.className = "mod-btn";
+      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.addEventListener("click", () => {
+        P.markDone(node.id, "sprint");
+        $("pathLessonOverlay").classList.add("hidden");
+        renderPath();
+      });
+      grid.appendChild(done);
+    } else if (node.type === "full") {
+      const full = pi.full && pi.full[node.unitId];
+      const fullAns = pi.fullAnswers && pi.fullAnswers[node.unitId];
+      const dl = document.createElement("button");
+      dl.type = "button";
+      dl.className = "mod-btn is-primary";
+      dl.innerHTML = "下载摸底卷<small>完整卷 · 可打印 A4</small>";
+      dl.addEventListener("click", () => {
+        if (full) openPdf(full);
+        else alert("本单元暂无完整摸底卷");
+      });
+      grid.appendChild(dl);
+      const ans = document.createElement("button");
+      ans.type = "button";
+      ans.className = "mod-btn is-answer";
+      ans.innerHTML = "摸底答案<small>单独答案页 · 可打印</small>";
+      ans.addEventListener("click", () => {
+        if (fullAns) openPdf(fullAns);
+        else alert("本单元暂无摸底答案");
+      });
+      grid.appendChild(ans);
+      const mark = document.createElement("button");
+      mark.type = "button";
+      mark.className = "mod-btn";
+      mark.innerHTML = "卷面对照<small>红笔圈出错题入库</small>";
+      mark.addEventListener("click", () => {
+        $("pathLessonOverlay").classList.add("hidden");
+        if (window.ChineseMarkSheet) {
+          ChineseMarkSheet.open({
+            unitId: node.unitId,
+            source: "full",
+            node: node,
+            getPrintIndex: () => state.printIndex,
+          });
+        }
+      });
+      grid.appendChild(mark);
+      const done = document.createElement("button");
+      done.type = "button";
+      done.className = "mod-btn";
+      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.addEventListener("click", () => {
+        P.markDone(node.id, "full");
+        $("pathLessonOverlay").classList.add("hidden");
+        renderPath();
+      });
+      grid.appendChild(done);
     }
     $("pathLessonOverlay").classList.remove("hidden");
   }
@@ -675,6 +792,7 @@
     daily3: "日常③",
     sprint: "单元冲刺",
     full: "摸底卷",
+    garden: "语文园地",
   };
 
   let mistDraft = { photoBlob: null, photoName: "", qNos: [] };
@@ -688,6 +806,10 @@
     const pi = state.printIndex || {};
     if (source === "sprint") return (pi.sprint && pi.sprint[unitId]) || null;
     if (source === "full") return (pi.full && pi.full[unitId]) || null;
+    if (source === "garden") {
+      const g = pi.gardens && pi.gardens[unitId];
+      return (g && g.daily) || null;
+    }
     const lessons = unitLessons(unitId);
     const idx = source === "daily2" ? 1 : source === "daily3" ? 2 : 0;
     const les = lessons[idx];
@@ -813,12 +935,11 @@
     }
     const openCount = bank.filter((m) => m.status !== "已掌握").length;
     $("recordsScore").innerHTML =
-      "<strong>错题本 " +
+      "连续 <b>" +
+      (store.streak.count || 0) +
+      "</b> 天 · 错题 <b>" +
       openCount +
-      "</strong> 条待复习 · 路径进度 " +
-      P.completedCount() +
-      "/" +
-      P.semesterPath().length;
+      "</b> 条<br/><span style='color:var(--muted);font-size:.88rem'>原卷上红笔圈题即可入库</span>";
 
     const toolbar = $("recordsToolbar");
     if (toolbar) {
@@ -852,83 +973,16 @@
     }
 
     const actions = $("recordsActions");
-    actions.innerHTML = "";
-    DATA.units.forEach((u) => {
-      const short = u.name.split("·")[0].trim();
-      const sp = state.printIndex && state.printIndex.sprint && state.printIndex.sprint[u.id];
-      const spAns =
-        state.printIndex && state.printIndex.sprintAnswers && state.printIndex.sprintAnswers[u.id];
-      const full =
-        state.printIndex && state.printIndex.full && state.printIndex.full[u.id];
-      const fullAns =
-        state.printIndex && state.printIndex.fullAnswers && state.printIndex.fullAnswers[u.id];
-
-      const sprintBtn = document.createElement("button");
-      sprintBtn.type = "button";
-      sprintBtn.className = "rec-card";
-      sprintBtn.innerHTML =
-        "<strong>" +
-        short +
-        " · 单元冲刺</strong><div class='meta' style='margin:4px 0 0'>" +
-        (sp ? "下载冲刺卷 A4（考前）" : "本单元冲刺卷准备中") +
-        "</div>";
-      sprintBtn.addEventListener("click", () => {
-        if (sp) openPdf(sp);
-        else alert("本单元冲刺卷尚未上传");
-      });
-      actions.appendChild(sprintBtn);
-
-      const sprintAnsBtn = document.createElement("button");
-      sprintAnsBtn.type = "button";
-      sprintAnsBtn.className = "rec-card";
-      sprintAnsBtn.innerHTML =
-        "<strong>" +
-        short +
-        " · 冲刺答案</strong><div class='meta' style='margin:4px 0 0'>" +
-        (spAns ? "单独答案页 · 可打印 A4" : "冲刺答案准备中") +
-        "</div>";
-      sprintAnsBtn.addEventListener("click", () => {
-        if (spAns) openPdf(spAns);
-        else alert("本单元冲刺答案尚未上传");
-      });
-      actions.appendChild(sprintAnsBtn);
-
-      const fullBtn = document.createElement("button");
-      fullBtn.type = "button";
-      fullBtn.className = "rec-card" + (full ? "" : " is-empty");
-      fullBtn.innerHTML =
-        "<strong>" +
-        short +
-        " · 完整摸底卷</strong><div class='meta' style='margin:4px 0 0'>" +
-        (full ? "下载摸底卷 A4" : "暂无 · 上传原卷 JPG 后补充") +
-        "</div>";
-      fullBtn.addEventListener("click", () => {
-        if (full) openPdf(full);
-        else alert("本单元暂无完整摸底卷，等上传原卷 JPG 后再补充");
-      });
-      actions.appendChild(fullBtn);
-
-      const fullAnsBtn = document.createElement("button");
-      fullAnsBtn.type = "button";
-      fullAnsBtn.className = "rec-card" + (fullAns ? "" : " is-empty");
-      fullAnsBtn.innerHTML =
-        "<strong>" +
-        short +
-        " · 摸底答案</strong><div class='meta' style='margin:4px 0 0'>" +
-        (fullAns ? "单独答案页 · 可打印 A4" : "暂无 · 随摸底卷一并补充") +
-        "</div>";
-      fullAnsBtn.addEventListener("click", () => {
-        if (fullAns) openPdf(fullAns);
-        else alert("本单元暂无摸底答案");
-      });
-      actions.appendChild(fullAnsBtn);
-    });
+    if (actions) actions.innerHTML = "";
 
     const list = $("recordsList");
+    if ($("recordsMeta")) $("recordsMeta").textContent = "我的错题（" + bank.length + "）";
     list.innerHTML = "";
     if (!bank.length) {
       list.innerHTML =
-        "<p class='path-meta'>还没有错题。勾选题号即可入库；卷面照片可稍后补拍。</p>";
+        "<p class='path-meta'>还没有错题。点上方「卷面对照」，在原卷上用红笔圈出错题即可入库。</p>";
+      store.mistakes = [];
+      P.save(store);
       return;
     }
 
@@ -998,52 +1052,47 @@
       sim.addEventListener("click", () => {
         const url = similarPdf(m.unitId, m.source);
         if (url) openPdf(url);
-        else alert("暂无同类练习卷");
+        else alert("暂无同类练习");
       });
       actionsRow.appendChild(sim);
 
-      if (!m.photoBlob) {
-        const addPhoto = document.createElement("button");
-        addPhoto.type = "button";
-        addPhoto.className = "btn-path";
-        addPhoto.textContent = "补照片";
-        addPhoto.addEventListener("click", () => {
-          const inp = document.createElement("input");
-          inp.type = "file";
-          inp.accept = "image/*";
-          inp.capture = "environment";
-          inp.onchange = async () => {
-            const f = inp.files && inp.files[0];
-            if (!f || !DB) return;
-            m.photoBlob = f;
-            m.photoName = f.name || "photo.jpg";
-            await DB.putEntry(m);
-            renderRecords();
-          };
-          inp.click();
-        });
-        actionsRow.appendChild(addPhoto);
-      }
-
       const mastered = document.createElement("button");
       mastered.type = "button";
-      mastered.className = "btn-start";
-      mastered.textContent = m.status === "已掌握" ? "已掌握" : "标为已掌握";
+      mastered.className = "btn";
+      mastered.textContent = m.status === "已掌握" ? "标未掌握" : "标已掌握";
       mastered.addEventListener("click", async () => {
-        if (!DB) return;
-        m.status = "已掌握";
+        m.status = m.status === "已掌握" ? "未掌握" : "已掌握";
         await DB.putEntry(m);
         renderRecords();
       });
       actionsRow.appendChild(mastered);
 
+      const photoBtn = document.createElement("button");
+      photoBtn.type = "button";
+      photoBtn.className = "btn";
+      photoBtn.textContent = m.photoBlob ? "换照片" : "补照片";
+      photoBtn.addEventListener("click", () => {
+        const inp = document.createElement("input");
+        inp.type = "file";
+        inp.accept = "image/*";
+        inp.onchange = async () => {
+          const f = inp.files && inp.files[0];
+          if (!f) return;
+          m.photoBlob = f;
+          m.photoName = f.name || "photo.jpg";
+          await DB.putEntry(m);
+          renderRecords();
+        };
+        inp.click();
+      });
+      actionsRow.appendChild(photoBtn);
+
       const del = document.createElement("button");
       del.type = "button";
-      del.className = "btn-path";
+      del.className = "btn";
       del.textContent = "删除";
       del.addEventListener("click", async () => {
-        if (!DB) return;
-        if (!confirm("删除这条错题记录？")) return;
+        if (!confirm("删除这条错题？")) return;
         await DB.deleteEntry(m.id);
         renderRecords();
       });
@@ -1053,7 +1102,6 @@
       list.appendChild(div);
     });
 
-    // also mirror lightweight index into localStorage for streak-style stats
     store.mistakes = bank.map((m) => ({
       id: m.id,
       unitId: m.unitId,
@@ -1131,6 +1179,14 @@
   }
 
 
+
+
+  if (window.ChineseMarkSheet) {
+    ChineseMarkSheet.bindUi(
+      () => state.printIndex,
+      () => showView("records")
+    );
+  }
 
   // init current lesson 8
   P.setCurrentBookLesson(DATA.currentBookLesson || 8);
