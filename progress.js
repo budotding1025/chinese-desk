@@ -58,6 +58,15 @@
         });
       }
       nodes.push({
+        type: "weak",
+        id: u.id + "-weak",
+        unitId: u.id,
+        unitTitle: u.name,
+        bookNo: null,
+        title: "薄弱加练",
+        kind: "读音 · 形近 · 成语 · 的地得 · 抓大意",
+      });
+      nodes.push({
         type: "sprint",
         id: u.id + "-sprint",
         unitId: u.id,

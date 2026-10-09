@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=29")
+    return fetch("./print-index.json?v=30")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -98,7 +98,7 @@
   function renderPath() {
     const store = P.ensure();
     const path = P.semesterPath();
-    $("pathMeta").textContent = "共 " + path.length + " 站 · 已练 " + P.completedCount() + " 站（含园地 / 冲刺 / 摸底）";
+    $("pathMeta").textContent = "共 " + path.length + " 站 · 已练 " + P.completedCount() + " 站（含园地 / 加练 / 冲刺 / 摸底）";
     const host = $("pathList");
     host.innerHTML = "";
     let lastUnit = "";
@@ -118,7 +118,9 @@
       const badge =
         node.type === "garden"
           ? "园"
-          : node.type === "sprint"
+          : node.type === "weak"
+            ? "练"
+            : node.type === "sprint"
             ? "冲"
             : node.type === "full"
               ? "摸"
@@ -210,6 +212,38 @@
         }
       });
       grid.appendChild(markG);
+    } else if (node.type === "weak") {
+      const sk = (pi.skills && pi.skills.byUnit && pi.skills.byUnit[node.unitId]) || {};
+      const daily = sk.daily || (pi.skills && pi.skills.weak);
+      const ansPdf = sk.answers || (pi.skills && pi.skills.weakAnswers);
+      const dl = document.createElement("button");
+      dl.type = "button";
+      dl.className = "mod-btn is-primary";
+      dl.innerHTML = "下载加练<small>读音 · 形近 · 成语 · 的地得 · 抓大意</small>";
+      dl.addEventListener("click", () => {
+        if (daily) openPdf(daily);
+        else alert("本单元加练正在准备");
+      });
+      grid.appendChild(dl);
+      const ans = document.createElement("button");
+      ans.type = "button";
+      ans.className = "mod-btn is-answer";
+      ans.innerHTML = "加练答案<small>做完再看</small>";
+      ans.addEventListener("click", () => {
+        if (ansPdf) openPdf(ansPdf);
+        else alert("答案页尚未上传");
+      });
+      grid.appendChild(ans);
+      const done = document.createElement("button");
+      done.type = "button";
+      done.className = "mod-btn";
+      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.addEventListener("click", () => {
+        P.markDone(node.id, "weak");
+        $("pathLessonOverlay").classList.add("hidden");
+        renderPath();
+      });
+      grid.appendChild(done);
     } else if (node.type === "sprint") {
       const sp = pi.sprint && pi.sprint[node.unitId];
       const spAns = pi.sprintAnswers && pi.sprintAnswers[node.unitId];
@@ -295,24 +329,6 @@
         }
       });
       grid.appendChild(mark);
-      const weak = pi.skills && pi.skills.weak;
-      const weakAns = pi.skills && pi.skills.weakAnswers;
-      if (weak) {
-        const wbtn = document.createElement("button");
-        wbtn.type = "button";
-        wbtn.className = "mod-btn is-primary";
-        wbtn.innerHTML = "薄弱加练<small>读音 · 形近 · 成语 · 的地得 · 抓大意</small>";
-        wbtn.addEventListener("click", () => openPdf(weak));
-        grid.appendChild(wbtn);
-        if (weakAns) {
-          const wa = document.createElement("button");
-          wa.type = "button";
-          wa.className = "mod-btn is-answer";
-          wa.innerHTML = "加练答案<small>做完再看</small>";
-          wa.addEventListener("click", () => openPdf(weakAns));
-          grid.appendChild(wa);
-        }
-      }
       if (school) {
         const sch = document.createElement("button");
         sch.type = "button";

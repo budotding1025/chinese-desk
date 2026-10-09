@@ -282,6 +282,7 @@
   "book": "统编版四年级上册（2024）",
   "skills": {
     "weak": "printables/skills/weak-focus.pdf",
-    "weakAnswers": "printables/skill-answers/weak-focus-answers.pdf"
+    "weakAnswers": "printables/skill-answers/weak-focus-answers.pdf",
+    "byUnit": {}
   }
 }
