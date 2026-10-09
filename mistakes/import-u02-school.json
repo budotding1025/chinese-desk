@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "exportedAt": "2026-10-09T00:00:00.000Z",
+  "entries": [
+    {
+      "id": "u2-school-202610-poly",
+      "unitId": "u2",
+      "source": "school",
+      "qNos": [2],
+      "note": "校内卷·二：囚犯读成 qíu，应为 qiú（声调）",
+      "status": "未掌握",
+      "at": "2026-10-09",
+      "photoName": ""
+    },
+    {
+      "id": "u2-school-202610-gang",
+      "unitId": "u2",
+      "source": "school",
+      "qNos": [3],
+      "note": "校内卷·三：纲要写成冈要。纲≠冈（提纲/纲要用纲，井冈山用冈）",
+      "status": "未掌握",
+      "at": "2026-10-09",
+      "photoName": ""
+    },
+    {
+      "id": "u2-school-202610-words",
+      "unitId": "u2",
+      "source": "school",
+      "qNos": [6],
+      "note": "校内卷·阅读找词：口若悬河漏「口」；无计可施写成无计我施",
+      "status": "未掌握",
+      "at": "2026-10-09",
+      "photoName": ""
+    },
+    {
+      "id": "u2-school-202610-zhao",
+      "unitId": "u2",
+      "source": "school",
+      "qNos": [6],
+      "note": "校内卷·赵括印象：理由太空。要用课文具体情节，不能只说纸上谈兵",
+      "status": "未掌握",
+      "at": "2026-10-09",
+      "photoName": ""
+    },
+    {
+      "id": "u2-school-202610-ask",
+      "unitId": "u2",
+      "source": "school",
+      "qNos": [6],
+      "note": "校内卷·提问：写法题问成词义；觉得写成觉的；对流雨成因句宜画原文",
+      "status": "未掌握",
+      "at": "2026-10-09",
+      "photoName": ""
+    }
+  ]
+}

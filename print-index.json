@@ -261,6 +261,9 @@
       "sprint": null
     }
   },
+  "school": {
+    "u2": "printables/real/u02-school.pdf"
+  },
   "full": {
     "u1": "printables/full/u01-full.pdf",
     "u2": "printables/full/u02-full.pdf",

@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=27")
+    return fetch("./print-index.json?v=28")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -260,6 +260,7 @@
     } else if (node.type === "full") {
       const full = pi.full && pi.full[node.unitId];
       const fullAns = pi.fullAnswers && pi.fullAnswers[node.unitId];
+      const school = pi.school && pi.school[node.unitId];
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
@@ -294,6 +295,30 @@
         }
       });
       grid.appendChild(mark);
+      if (school) {
+        const sch = document.createElement("button");
+        sch.type = "button";
+        sch.className = "mod-btn is-primary";
+        sch.innerHTML = "校内真实卷<small>孩子做过的原卷</small>";
+        sch.addEventListener("click", () => openPdf(school));
+        grid.appendChild(sch);
+        const schMark = document.createElement("button");
+        schMark.type = "button";
+        schMark.className = "mod-btn";
+        schMark.innerHTML = "对照校内卷<small>红笔圈本题错题</small>";
+        schMark.addEventListener("click", () => {
+          $("pathLessonOverlay").classList.add("hidden");
+          if (window.ChineseMarkSheet) {
+            ChineseMarkSheet.open({
+              unitId: node.unitId,
+              source: "school",
+              node: node,
+              getPrintIndex: () => state.printIndex,
+            });
+          }
+        });
+        grid.appendChild(schMark);
+      }
       const done = document.createElement("button");
       done.type = "button";
       done.className = "mod-btn";
@@ -792,6 +817,7 @@
     daily3: "日常③",
     sprint: "单元冲刺",
     full: "摸底卷",
+    school: "校内真实卷",
     garden: "语文园地",
   };
 
@@ -806,6 +832,7 @@
     const pi = state.printIndex || {};
     if (source === "sprint") return (pi.sprint && pi.sprint[unitId]) || null;
     if (source === "full") return (pi.full && pi.full[unitId]) || null;
+    if (source === "school") return (pi.school && pi.school[unitId]) || null;
     if (source === "garden") {
       const g = pi.gardens && pi.gardens[unitId];
       return (g && g.daily) || null;
@@ -823,7 +850,7 @@
 
   function similarPdf(unitId, source) {
     const pi = state.printIndex || {};
-    if (source === "sprint" || source === "full") {
+    if (source === "sprint" || source === "full" || source === "school") {
       const g = pi.gardens && pi.gardens[unitId];
       return (g && g.daily) || sourcePdf(unitId, "daily1");
     }

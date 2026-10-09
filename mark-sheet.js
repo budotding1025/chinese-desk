@@ -193,6 +193,7 @@
     const pi = printIndex || {};
     if (source === "sprint") return (pi.sprint && pi.sprint[unitId]) || "";
     if (source === "full") return (pi.full && pi.full[unitId]) || "";
+    if (source === "school") return (pi.school && pi.school[unitId]) || "";
     if (source === "garden") {
       const gg = pi.gardens && pi.gardens[unitId];
       return (gg && gg.daily) || "";
