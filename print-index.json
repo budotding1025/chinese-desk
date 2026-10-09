@@ -279,5 +279,9 @@
     "u2": "printables/full-answers/u02-full-answers.pdf",
     "u3": "printables/full-answers/u03-full-answers.pdf"
   },
-  "book": "统编版四年级上册（2024）"
+  "book": "统编版四年级上册（2024）",
+  "skills": {
+    "weak": "printables/skills/weak-focus.pdf",
+    "weakAnswers": "printables/skill-answers/weak-focus-answers.pdf"
+  }
 }

@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=28")
+    return fetch("./print-index.json?v=29")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -295,6 +295,24 @@
         }
       });
       grid.appendChild(mark);
+      const weak = pi.skills && pi.skills.weak;
+      const weakAns = pi.skills && pi.skills.weakAnswers;
+      if (weak) {
+        const wbtn = document.createElement("button");
+        wbtn.type = "button";
+        wbtn.className = "mod-btn is-primary";
+        wbtn.innerHTML = "薄弱加练<small>读音 · 形近 · 成语 · 的地得 · 抓大意</small>";
+        wbtn.addEventListener("click", () => openPdf(weak));
+        grid.appendChild(wbtn);
+        if (weakAns) {
+          const wa = document.createElement("button");
+          wa.type = "button";
+          wa.className = "mod-btn is-answer";
+          wa.innerHTML = "加练答案<small>做完再看</small>";
+          wa.addEventListener("click", () => openPdf(weakAns));
+          grid.appendChild(wa);
+        }
+      }
       if (school) {
         const sch = document.createElement("button");
         sch.type = "button";
@@ -851,6 +869,8 @@
   function similarPdf(unitId, source) {
     const pi = state.printIndex || {};
     if (source === "sprint" || source === "full" || source === "school") {
+      const sk = pi.skills && pi.skills.weak;
+      if (sk) return sk;
       const g = pi.gardens && pi.gardens[unitId];
       return (g && g.daily) || sourcePdf(unitId, "daily1");
     }
