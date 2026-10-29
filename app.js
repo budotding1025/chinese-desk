@@ -1,4 +1,4 @@
-/* 语文书桌 · 主页 / 路径 / 记录 */
+﻿/* 璇枃涔︽ 路 涓婚〉 / 璺緞 / 璁板綍 */
 (function () {
   const DATA = window.CHINESE_DESK_DATA;
   const P = window.ChineseProgress;
@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=30")
+    return fetch("./print-index.json?v=39")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -58,18 +58,18 @@
     if (!node) return [];
     if (node.type === "garden") {
       return [
-        { id: "garden_write", label: "日积月累过关", blurb: "约10–15分钟 · 补全/填空" },
-        { id: "garden_meaning", label: "据意写句", blurb: "给出意思，写出原句" },
-        { id: "garden_bg", label: "作者与背景", blurb: "了解是谁、为什么重要" },
+        { id: "garden_write", label: "鏃ョН鏈堢疮杩囧叧", blurb: "绾?0鈥?5鍒嗛挓 路 琛ュ叏/濉┖" },
+        { id: "garden_meaning", label: "鎹剰鍐欏彞", blurb: "缁欏嚭鎰忔€濓紝鍐欏嚭鍘熷彞" },
+        { id: "garden_bg", label: "浣滆€呬笌鑳屾櫙", blurb: "浜嗚В鏄皝銆佷负浠€涔堥噸瑕? },
       ];
     }
     const les = node.lesson;
     const mods = [];
-    if (les.words && les.words.length) mods.push({ id: "words", label: "字词默写", blurb: "看拼音写词语" });
-    if (les.compounds && les.compounds.length) mods.push({ id: "compounds", label: "形近组词", blurb: "区分形近字" });
-    if (les.polyphones && les.polyphones.length) mods.push({ id: "poly", label: "多音字", blurb: "选正确读音" });
-    if (les.recite) mods.push({ id: "recite", label: "课文默写", blurb: les.recite.label || "背诵片段" });
-    if (les.meaning) mods.push({ id: "meaning", label: "课文大意", blurb: "理解与表达" });
+    if (les.words && les.words.length) mods.push({ id: "words", label: "瀛楄瘝榛樺啓", blurb: "鐪嬫嫾闊冲啓璇嶈" });
+    if (les.compounds && les.compounds.length) mods.push({ id: "compounds", label: "褰㈣繎缁勮瘝", blurb: "鍖哄垎褰㈣繎瀛? });
+    if (les.polyphones && les.polyphones.length) mods.push({ id: "poly", label: "澶氶煶瀛?, blurb: "閫夋纭闊? });
+    if (les.recite) mods.push({ id: "recite", label: "璇炬枃榛樺啓", blurb: les.recite.label || "鑳岃鐗囨" });
+    if (les.meaning) mods.push({ id: "meaning", label: "璇炬枃澶ф剰", blurb: "鐞嗚В涓庤〃杈? });
     return mods;
   }
 
@@ -77,28 +77,28 @@
     const store = P.ensure();
     const node = P.currentNode();
     state.node = node;
-    $("streakLine").innerHTML = "连续 <strong>" + (store.streak.count || 0) + "</strong> 天";
+    $("streakLine").innerHTML = "杩炵画 <strong>" + (store.streak.count || 0) + "</strong> 澶?;
     $("sessionEyebrow").textContent = node.unitTitle || DATA.book;
     $("sessionTitle").textContent =
-      node.type === "garden" ? node.title : "第" + node.bookNo + "课 · " + node.title;
+      node.type === "garden" ? node.title : "绗? + node.bookNo + "璇?路 " + node.title;
     const printBtn = $("btnPrintToday");
-    if (printBtn) printBtn.textContent = "练习下载";
+    if (printBtn) printBtn.textContent = "缁冧範涓嬭浇";
     $("sessionMeta").textContent =
-      (node.kind || "课文") + " · 打印后自己做 · 做完再看答案";
+      (node.kind || "璇炬枃") + " 路 鎵撳嵃鍚庤嚜宸卞仛 路 鍋氬畬鍐嶇湅绛旀";
     const unitEl = $("unitLine");
-    if (unitEl) unitEl.textContent = (DATA.book || "") + (node.unitTitle ? " · " + node.unitTitle : "");
+    if (unitEl) unitEl.textContent = (DATA.book || "") + (node.unitTitle ? " 路 " + node.unitTitle : "");
     const sumEl = $("pathSummary");
     if (sumEl) {
       const path = P.semesterPath();
       sumEl.textContent =
-        "本学期 " + P.completedCount() + " / " + path.length + " 站已练";
+        "鏈鏈?" + P.completedCount() + " / " + path.length + " 绔欏凡缁?;
     }
   }
 
   function renderPath() {
     const store = P.ensure();
     const path = P.semesterPath();
-    $("pathMeta").textContent = "共 " + path.length + " 站 · 已练 " + P.completedCount() + " 站（含园地 / 加练 / 冲刺 / 摸底）";
+    $("pathMeta").textContent = "鍏?" + path.length + " 绔?路 宸茬粌 " + P.completedCount() + " 绔欙紙鍚洯鍦?/ 鍔犵粌 / 鍐插埡 / 鎽稿簳锛?;
     const host = $("pathList");
     host.innerHTML = "";
     let lastUnit = "";
@@ -117,13 +117,13 @@
       btn.className = "path-node" + (done ? " is-done" : "") + (current ? " is-current" : "");
       const badge =
         node.type === "garden"
-          ? "园"
+          ? "鍥?
           : node.type === "weak"
-            ? "练"
+            ? "缁?
             : node.type === "sprint"
-            ? "冲"
+            ? "鍐?
             : node.type === "full"
-              ? "摸"
+              ? "鎽?
               : String(node.bookNo);
       btn.innerHTML =
         '<span class="path-badge">' +
@@ -132,8 +132,8 @@
         node.title +
         "</strong><small>" +
         (node.kind || "") +
-        (done ? " · 已练" + store.completed[node.id].count + "项" : "") +
-        (current ? " · 今日" : "") +
+        (done ? " 路 宸茬粌" + store.completed[node.id].count + "椤? : "") +
+        (current ? " 路 浠婃棩" : "") +
         "</small></span>";
       btn.addEventListener("click", () => openNodePicker(node));
       host.appendChild(btn);
@@ -143,8 +143,8 @@
   function openNodePicker(node) {
     state.node = node;
     $("pathLessonTitle").textContent =
-      node.type === "lesson" ? "第" + node.bookNo + "课 · " + node.title : node.title;
-    $("pathLessonMeta").textContent = node.unitTitle + " · " + (node.kind || "");
+      node.type === "lesson" ? "绗? + node.bookNo + "璇?路 " + node.title : node.title;
+    $("pathLessonMeta").textContent = node.unitTitle + " 路 " + (node.kind || "");
     const grid = $("pathModGrid");
     grid.innerHTML = "";
     const pi = state.printIndex || {};
@@ -154,7 +154,7 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "练习下载<small>约10–15分钟 · 可打印 A4</small>";
+      dl.innerHTML = "缁冧範涓嬭浇<small>绾?0鈥?5鍒嗛挓 路 鍙墦鍗?A4</small>";
       dl.addEventListener("click", () => {
         if (pr && pr.daily) openPdf(pr.daily);
         if (pr && pr.recite) setTimeout(() => openPdf(pr.recite), 400);
@@ -164,14 +164,14 @@
       const ans = document.createElement("button");
       ans.type = "button";
       ans.className = "mod-btn is-answer";
-      ans.innerHTML = "答案在线看<small>做完再看 · 也可下载</small>";
+      ans.innerHTML = "绛旀鍦ㄧ嚎鐪?small>鍋氬畬鍐嶇湅 路 涔熷彲涓嬭浇</small>";
       ans.addEventListener("click", () => openAnswers(node));
       grid.appendChild(ans);
 
       const setCur = document.createElement("button");
       setCur.type = "button";
       setCur.className = "mod-btn";
-      setCur.innerHTML = "设为今日课文<small>主页将显示这一课</small>";
+      setCur.innerHTML = "璁句负浠婃棩璇炬枃<small>涓婚〉灏嗘樉绀鸿繖涓€璇?/small>";
       setCur.addEventListener("click", () => {
         P.setCurrentBookLesson(node.bookNo);
         $("pathLessonOverlay").classList.add("hidden");
@@ -184,22 +184,22 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "练习下载<small>约10–15分钟 · 日积月累过关 · A4</small>";
+      dl.innerHTML = "缁冧範涓嬭浇<small>绾?0鈥?5鍒嗛挓 路 鏃ョН鏈堢疮杩囧叧 路 A4</small>";
       dl.addEventListener("click", () => {
         if (daily) openPdf(daily);
-        else alert("本园地练习正在准备，请稍后再试。");
+        else alert("鏈洯鍦扮粌涔犳鍦ㄥ噯澶囷紝璇风◢鍚庡啀璇曘€?);
       });
       grid.appendChild(dl);
       const ans = document.createElement("button");
       ans.type = "button";
       ans.className = "mod-btn is-answer";
-      ans.innerHTML = "答案在线看<small>与打印版同一份 A4</small>";
+      ans.innerHTML = "绛旀鍦ㄧ嚎鐪?small>涓庢墦鍗扮増鍚屼竴浠?A4</small>";
       ans.addEventListener("click", () => openGardenAnswers(node));
       grid.appendChild(ans);
       const markG = document.createElement("button");
       markG.type = "button";
       markG.className = "mod-btn";
-      markG.innerHTML = "卷面对照<small>红笔圈出错题入库</small>";
+      markG.innerHTML = "鍗烽潰瀵圭収<small>绾㈢瑪鍦堝嚭閿欓鍏ュ簱</small>";
       markG.addEventListener("click", () => {
         $("pathLessonOverlay").classList.add("hidden");
         if (window.ChineseMarkSheet) {
@@ -219,25 +219,25 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "下载加练<small>读音 · 形近 · 成语 · 的地得 · 抓大意</small>";
+      dl.innerHTML = "涓嬭浇鍔犵粌<small>璇婚煶 路 褰㈣繎 路 鎴愯 路 鐨勫湴寰?路 鎶撳ぇ鎰?/small>";
       dl.addEventListener("click", () => {
         if (daily) openPdf(daily);
-        else alert("本单元加练正在准备");
+        else alert("鏈崟鍏冨姞缁冩鍦ㄥ噯澶?);
       });
       grid.appendChild(dl);
       const ans = document.createElement("button");
       ans.type = "button";
       ans.className = "mod-btn is-answer";
-      ans.innerHTML = "加练答案<small>做完再看</small>";
+      ans.innerHTML = "鍔犵粌绛旀<small>鍋氬畬鍐嶇湅</small>";
       ans.addEventListener("click", () => {
         if (ansPdf) openPdf(ansPdf);
-        else alert("答案页尚未上传");
+        else alert("绛旀椤靛皻鏈笂浼?);
       });
       grid.appendChild(ans);
       const done = document.createElement("button");
       done.type = "button";
       done.className = "mod-btn";
-      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.innerHTML = "鏍囪宸茬粌<small>璁板叆璺緞杩涘害</small>";
       done.addEventListener("click", () => {
         P.markDone(node.id, "weak");
         $("pathLessonOverlay").classList.add("hidden");
@@ -250,25 +250,25 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "下载冲刺卷<small>考前 · 可打印 A4</small>";
+      dl.innerHTML = "涓嬭浇鍐插埡鍗?small>鑰冨墠 路 鍙墦鍗?A4</small>";
       dl.addEventListener("click", () => {
         if (sp) openPdf(sp);
-        else alert("本单元冲刺卷尚未上传");
+        else alert("鏈崟鍏冨啿鍒哄嵎灏氭湭涓婁紶");
       });
       grid.appendChild(dl);
       const ans = document.createElement("button");
       ans.type = "button";
       ans.className = "mod-btn is-answer";
-      ans.innerHTML = "冲刺答案<small>单独答案页 · 可打印</small>";
+      ans.innerHTML = "鍐插埡绛旀<small>鍗曠嫭绛旀椤?路 鍙墦鍗?/small>";
       ans.addEventListener("click", () => {
         if (spAns) openPdf(spAns);
-        else alert("本单元冲刺答案尚未上传");
+        else alert("鏈崟鍏冨啿鍒虹瓟妗堝皻鏈笂浼?);
       });
       grid.appendChild(ans);
       const mark = document.createElement("button");
       mark.type = "button";
       mark.className = "mod-btn";
-      mark.innerHTML = "卷面对照<small>红笔圈出错题入库</small>";
+      mark.innerHTML = "鍗烽潰瀵圭収<small>绾㈢瑪鍦堝嚭閿欓鍏ュ簱</small>";
       mark.addEventListener("click", () => {
         $("pathLessonOverlay").classList.add("hidden");
         if (window.ChineseMarkSheet) {
@@ -284,7 +284,7 @@
       const done = document.createElement("button");
       done.type = "button";
       done.className = "mod-btn";
-      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.innerHTML = "鏍囪宸茬粌<small>璁板叆璺緞杩涘害</small>";
       done.addEventListener("click", () => {
         P.markDone(node.id, "sprint");
         $("pathLessonOverlay").classList.add("hidden");
@@ -298,25 +298,25 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "下载摸底卷<small>完整卷 · 可打印 A4</small>";
+      dl.innerHTML = "涓嬭浇鎽稿簳鍗?small>瀹屾暣鍗?路 鍙墦鍗?A4</small>";
       dl.addEventListener("click", () => {
         if (full) openPdf(full);
-        else alert("本单元暂无完整摸底卷");
+        else alert("鏈崟鍏冩殏鏃犲畬鏁存懜搴曞嵎");
       });
       grid.appendChild(dl);
       const ans = document.createElement("button");
       ans.type = "button";
       ans.className = "mod-btn is-answer";
-      ans.innerHTML = "摸底答案<small>单独答案页 · 可打印</small>";
+      ans.innerHTML = "鎽稿簳绛旀<small>鍗曠嫭绛旀椤?路 鍙墦鍗?/small>";
       ans.addEventListener("click", () => {
         if (fullAns) openPdf(fullAns);
-        else alert("本单元暂无摸底答案");
+        else alert("鏈崟鍏冩殏鏃犳懜搴曠瓟妗?);
       });
       grid.appendChild(ans);
       const mark = document.createElement("button");
       mark.type = "button";
       mark.className = "mod-btn";
-      mark.innerHTML = "卷面对照<small>红笔圈出错题入库</small>";
+      mark.innerHTML = "鍗烽潰瀵圭収<small>绾㈢瑪鍦堝嚭閿欓鍏ュ簱</small>";
       mark.addEventListener("click", () => {
         $("pathLessonOverlay").classList.add("hidden");
         if (window.ChineseMarkSheet) {
@@ -333,13 +333,13 @@
         const sch = document.createElement("button");
         sch.type = "button";
         sch.className = "mod-btn is-primary";
-        sch.innerHTML = "校内真实卷<small>孩子做过的原卷</small>";
+        sch.innerHTML = "鏍″唴鐪熷疄鍗?small>瀛╁瓙鍋氳繃鐨勫師鍗?/small>";
         sch.addEventListener("click", () => openPdf(school));
         grid.appendChild(sch);
         const schMark = document.createElement("button");
         schMark.type = "button";
         schMark.className = "mod-btn";
-        schMark.innerHTML = "对照校内卷<small>红笔圈本题错题</small>";
+        schMark.innerHTML = "瀵圭収鏍″唴鍗?small>绾㈢瑪鍦堟湰棰橀敊棰?/small>";
         schMark.addEventListener("click", () => {
           $("pathLessonOverlay").classList.add("hidden");
           if (window.ChineseMarkSheet) {
@@ -356,7 +356,7 @@
       const done = document.createElement("button");
       done.type = "button";
       done.className = "mod-btn";
-      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.innerHTML = "鏍囪宸茬粌<small>璁板叆璺緞杩涘害</small>";
       done.addEventListener("click", () => {
         P.markDone(node.id, "full");
         $("pathLessonOverlay").classList.add("hidden");
@@ -375,19 +375,19 @@
     const title = $("answerTitle");
     const n = node.bookNo;
     const pad = String(n).padStart(2, "0");
-    title.textContent = "第" + n + "课《" + node.title + "》答案";
-    body.innerHTML = "<p class='meta'>加载中…</p>";
+    title.textContent = "绗? + n + "璇俱€? + node.title + "銆嬬瓟妗?;
+    body.innerHTML = "<p class='meta'>鍔犺浇涓€?/p>";
     box.classList.remove("hidden");
 
-    const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-" + node.title + "-答案.pdf";
-    const mdUrl = pr.answerMd || "answers/lessons/L" + pad + "-" + node.title + "-答案.md";
-    const src = encodeURI(pdfUrl) + "?v=6";
+    const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-" + node.title + "-绛旀.pdf";
+    const mdUrl = pr.answerMd || "answers/lessons/L" + pad + "-" + node.title + "-绛旀.md";
+    const src = encodeURI(pdfUrl) + "?v=39";
 
     $("btnAnswerDownload").onclick = () => openPdf(pdfUrl);
 
     // Online view = same A4 PDF as print/download
     body.innerHTML =
-      '<iframe class="a4-iframe" title="A4答案预览" src="' +
+      '<iframe class="a4-iframe" title="A4绛旀棰勮" src="' +
       src +
       '"></iframe>';
 
@@ -396,11 +396,11 @@
     if (iframe) {
       iframe.addEventListener("error", () => showAnswerFallback(body, pr, mdUrl));
     }
-    // Some browsers don't fire iframe error; offer text toggle quietly via timeout check is noisy — keep HTML fallback button
+    // Some browsers don't fire iframe error; offer text toggle quietly via timeout check is noisy 鈥?keep HTML fallback button
     const tip = document.createElement("button");
     tip.type = "button";
     tip.className = "btn-path";
-    tip.textContent = "PDF 打不开？看文字版";
+    tip.textContent = "PDF 鎵撲笉寮€锛熺湅鏂囧瓧鐗?;
     tip.addEventListener("click", () => showAnswerFallback(body, pr, mdUrl));
     body.appendChild(tip);
   }
@@ -410,7 +410,7 @@
       body.innerHTML = '<div class="a4-paper">' + pr.answerHtml + "</div>";
       return;
     }
-    fetch(encodeURI(mdUrl) + "?v=6")
+    fetch(encodeURI(mdUrl) + "?v=39")
       .then((r) => {
         if (!r.ok) throw new Error("missing");
         return r.text();
@@ -419,7 +419,7 @@
         body.innerHTML = '<div class="a4-paper">' + renderMd(text) + "</div>";
       })
       .catch(() => {
-        body.innerHTML = "<p>答案加载失败，请点下方下载 A4 PDF。</p>";
+        body.innerHTML = "<p>绛旀鍔犺浇澶辫触锛岃鐐逛笅鏂逛笅杞?A4 PDF銆?/p>";
       });
   }
 
@@ -429,8 +429,8 @@
       (state.printIndex && state.printIndex.gardens && state.printIndex.gardens[node.unitId]) || {};
     $("pathLessonOverlay").classList.add("hidden");
     const body = $("answerBody");
-    $("answerTitle").textContent = (node.title || "语文园地") + " · 答案";
-    body.innerHTML = "<p class='meta'>加载中…</p>";
+    $("answerTitle").textContent = (node.title || "璇枃鍥湴") + " 路 绛旀";
+    body.innerHTML = "<p class='meta'>鍔犺浇涓€?/p>";
     $("answerOverlay").classList.remove("hidden");
 
     const pdfUrl =
@@ -439,19 +439,19 @@
     const mdUrl = gPrint.answerMd || "answers/gardens/" + (node.unitId || "") + ".md";
     const dlBtn = $("btnAnswerDownload");
     if (dlBtn) {
-      dlBtn.textContent = "下载 / 打印答案（A4）";
+      dlBtn.textContent = "涓嬭浇 / 鎵撳嵃绛旀锛圓4锛?;
       dlBtn.onclick = () => openPdf(pdfUrl);
     }
 
     if (true) {  /* prefer A4 PDF; text fallback below */
       body.innerHTML =
-        '<iframe class="a4-iframe" title="园地A4答案" src="' +
+        '<iframe class="a4-iframe" title="鍥湴A4绛旀" src="' +
         encodeURI(pdfUrl) +
-        '?v=6"></iframe>';
+        '?v=39"></iframe>';
       const tip = document.createElement("button");
       tip.type = "button";
       tip.className = "btn-path";
-      tip.textContent = "PDF 打不开？看文字版";
+      tip.textContent = "PDF 鎵撲笉寮€锛熺湅鏂囧瓧鐗?;
       tip.addEventListener("click", () => {
         if (gPrint.answerHtml) showAnswerFallback(body, gPrint, mdUrl);
         else openGardenTips(node);
@@ -465,10 +465,10 @@
   function openGardenTips(node) {
     $("pathLessonOverlay").classList.add("hidden");
     const g = node.garden && node.garden.accumulate;
-    $("answerTitle").textContent = (node.title || "语文园地") + " · 日积月累";
+    $("answerTitle").textContent = (node.title || "璇枃鍥湴") + " 路 鏃ョН鏈堢疮";
     let html = "";
     if (g) {
-      html += "<p><b>" + (g.title || "日积月累") + "</b></p>";
+      html += "<p><b>" + (g.title || "鏃ョН鏈堢疮") + "</b></p>";
       if (g.author) html += "<p class='meta'>" + g.author + "</p>";
       if (g.linesDetail && g.linesDetail.length) {
         g.linesDetail.forEach((ln) => {
@@ -489,23 +489,23 @@
             (it.text || "") +
             "</b><br><span class='meta'>" +
             (it.who || "") +
-            (it.tip ? " · " + it.tip : "") +
+            (it.tip ? " 路 " + it.tip : "") +
             "</span></p>";
         });
       }
-      if (g.meaning) html += "<p><b>大意</b><br>" + g.meaning + "</p>";
+      if (g.meaning) html += "<p><b>澶ф剰</b><br>" + g.meaning + "</p>";
       if (g.background) html += "<p class='meta'>" + g.background + "</p>";
       if (node.garden && node.garden.extra) html += "<p class='meta'>" + node.garden.extra + "</p>";
     }
     $("answerBody").innerHTML =
-      '<div class="a4-paper">' + (html || "<p>暂无内容</p>") + "</div>";
+      '<div class="a4-paper">' + (html || "<p>鏆傛棤鍐呭</p>") + "</div>";
     const gPrintTips =
       state.printIndex && state.printIndex.gardens && state.printIndex.gardens[node.unitId];
     $("btnAnswerDownload").onclick = () => {
       if (gPrintTips && gPrintTips.answerPdf) openPdf(gPrintTips.answerPdf);
       else if (gPrintTips && gPrintTips.daily) openPdf(gPrintTips.daily);
     };
-    $("btnAnswerDownload").textContent = "下载 / 打印答案（A4）";
+    $("btnAnswerDownload").textContent = "涓嬭浇 / 鎵撳嵃绛旀锛圓4锛?;
     $("answerOverlay").classList.remove("hidden");
   }
 
@@ -536,14 +536,14 @@
               : []);
         items.forEach((it) => {
           const full = it.text || "";
-          const cut = Math.max(4, Math.floor(full.replace(/[，。？！、]/g, "").length / 2));
+          const cut = Math.max(4, Math.floor(full.replace(/[锛屻€傦紵锛併€乚/g, "").length / 2));
           cards.push({
             type: "write",
-            title: "日积月累默写",
-            prompt: "补全：" + full.slice(0, cut) + "________",
+            title: "鏃ョН鏈堢疮榛樺啓",
+            prompt: "琛ュ叏锛? + full.slice(0, cut) + "________",
             answer: full,
             tip: it.who || g.author || "",
-            meta: { moduleId, nodeId: node.id, kind: "园地默写" },
+            meta: { moduleId, nodeId: node.id, kind: "鍥湴榛樺啓" },
           });
         });
       } else if (moduleId === "garden_meaning") {
@@ -557,21 +557,21 @@
           if (!tip || !full) return;
           cards.push({
             type: "write",
-            title: "据意写句",
-            prompt: "根据意思写出原句：\n" + tip,
+            title: "鎹剰鍐欏彞",
+            prompt: "鏍规嵁鎰忔€濆啓鍑哄師鍙ワ細\n" + tip,
             answer: full,
-            tip: (it.who || g.author || "") ? ("出处：" + (it.who || g.author)) : "",
-            meta: { moduleId, nodeId: node.id, kind: "据意写句" },
+            tip: (it.who || g.author || "") ? ("鍑哄锛? + (it.who || g.author)) : "",
+            meta: { moduleId, nodeId: node.id, kind: "鎹剰鍐欏彞" },
           });
         });
       } else if (moduleId === "garden_bg") {
         cards.push({
           type: "read",
-          title: "作者与背景",
-          prompt: g.background || node.garden.accumulate.background || "本单元园地背景",
+          title: "浣滆€呬笌鑳屾櫙",
+          prompt: g.background || node.garden.accumulate.background || "鏈崟鍏冨洯鍦拌儗鏅?,
           answer: "",
           soft: true,
-          meta: { moduleId, nodeId: node.id, kind: "背景" },
+          meta: { moduleId, nodeId: node.id, kind: "鑳屾櫙" },
         });
       }
       return cards;
@@ -582,53 +582,53 @@
       (les.words || []).forEach((w) => {
         cards.push({
           type: "write",
-          title: "字词默写",
-          prompt: "看拼音写词语：\n" + w.py,
+          title: "瀛楄瘝榛樺啓",
+          prompt: "鐪嬫嫾闊冲啓璇嶈锛歕n" + w.py,
           answer: w.zh,
-          meta: { moduleId, nodeId: node.id, kind: "字词默写", q: w.py },
+          meta: { moduleId, nodeId: node.id, kind: "瀛楄瘝榛樺啓", q: w.py },
         });
       });
     } else if (moduleId === "compounds") {
       (les.compounds || []).forEach((c) => {
         cards.push({
           type: "write",
-          title: "形近组词",
-          prompt: "分别组词：" + c.a + "（　　）　" + c.b + "（　　）",
+          title: "褰㈣繎缁勮瘝",
+          prompt: "鍒嗗埆缁勮瘝锛? + c.a + "锛堛€€銆€锛夈€€" + c.b + "锛堛€€銆€锛?,
           answer: c.hint,
-          tip: "参考：" + c.hint,
+          tip: "鍙傝€冿細" + c.hint,
           soft: true,
-          meta: { moduleId, nodeId: node.id, kind: "组词", q: c.a + "/" + c.b },
+          meta: { moduleId, nodeId: node.id, kind: "缁勮瘝", q: c.a + "/" + c.b },
         });
       });
     } else if (moduleId === "poly") {
       (les.polyphones || []).forEach((p) => {
         cards.push({
           type: "choice",
-          title: "多音字",
-          prompt: "给「" + p.word + "」选正确读音",
+          title: "澶氶煶瀛?,
+          prompt: "缁欍€? + p.word + "銆嶉€夋纭闊?,
           opts: p.opts,
           answer: p.ok,
-          meta: { moduleId, nodeId: node.id, kind: "多音字", q: p.word },
+          meta: { moduleId, nodeId: node.id, kind: "澶氶煶瀛?, q: p.word },
         });
       });
     } else if (moduleId === "recite" && les.recite) {
       cards.push({
         type: "write",
-        title: "课文默写",
-        prompt: (les.recite.label || "课文默写") + "\n" + les.recite.prompt,
+        title: "璇炬枃榛樺啓",
+        prompt: (les.recite.label || "璇炬枃榛樺啓") + "\n" + les.recite.prompt,
         answer: les.recite.answer,
-        tip: "答案：" + les.recite.answer,
-        meta: { moduleId, nodeId: node.id, kind: "课文默写" },
+        tip: "绛旀锛? + les.recite.answer,
+        meta: { moduleId, nodeId: node.id, kind: "璇炬枃榛樺啓" },
       });
     } else if (moduleId === "meaning" && les.meaning) {
       cards.push({
         type: "write",
-        title: "课文大意",
+        title: "璇炬枃澶ф剰",
         prompt: les.meaning.prompt,
         answer: les.meaning.sample,
-        tip: "参考：" + les.meaning.sample,
+        tip: "鍙傝€冿細" + les.meaning.sample,
         soft: true,
-        meta: { moduleId, nodeId: node.id, kind: "课文大意" },
+        meta: { moduleId, nodeId: node.id, kind: "璇炬枃澶ф剰" },
       });
     }
     return cards;
@@ -641,7 +641,7 @@
     state.idx = 0;
     state.wrong = [];
     if (!state.cards.length) {
-      alert("这一项还在准备内容。");
+      alert("杩欎竴椤硅繕鍦ㄥ噯澶囧唴瀹广€?);
       return;
     }
     showView("lesson");
@@ -667,8 +667,8 @@
     $("lessonNameTitle").textContent =
       state.node.type === "garden"
         ? state.node.title
-        : "第" + state.node.bookNo + "课 · " + state.node.title;
-    $("cardType").textContent = card.title + " · " + (state.idx + 1) + "/" + total;
+        : "绗? + state.node.bookNo + "璇?路 " + state.node.title;
+    $("cardType").textContent = card.title + " 路 " + (state.idx + 1) + "/" + total;
     $("cardPrompt").textContent = card.prompt;
     $("cardSub").textContent = card.tip && card.type === "read" ? "" : "";
     const extra = $("cardExtra");
@@ -693,12 +693,12 @@
       const ta = document.createElement("textarea");
       ta.className = "write-box";
       ta.id = "answerInput";
-      ta.placeholder = "写在这里…";
+      ta.placeholder = "鍐欏湪杩欓噷鈥?;
       extra.appendChild(ta);
       const ok = document.createElement("button");
       ok.type = "button";
       ok.className = "btn-start";
-      ok.textContent = "对照答案";
+      ok.textContent = "瀵圭収绛旀";
       ok.addEventListener("click", () => gradeWrite(card, ta.value));
       actions.appendChild(ok);
     } else if (card.type === "read") {
@@ -711,7 +711,7 @@
       const ok = document.createElement("button");
       ok.type = "button";
       ok.className = "btn-start";
-      ok.textContent = "我知道了";
+      ok.textContent = "鎴戠煡閬撲簡";
       ok.addEventListener("click", () => nextCard(true));
       actions.appendChild(ok);
     }
@@ -737,9 +737,9 @@
         right: card.answer,
       });
       state.wrong.push(card);
-      showFb("不对。正确：【" + card.answer + "】已计入错题。", true);
+      showFb("涓嶅銆傛纭細銆? + card.answer + "銆戝凡璁″叆閿欓銆?, true);
     } else {
-      showFb("正确！", false);
+      showFb("姝ｇ‘锛?, false);
     }
     setTimeout(() => nextCard(good), good ? 450 : 900);
   }
@@ -747,30 +747,30 @@
   function normalize(s) {
     return String(s || "")
       .replace(/\s+/g, "")
-      .replace(/[，,。．.、；;：:]/g, "");
+      .replace(/[锛?銆傦紟.銆侊紱;锛?]/g, "");
   }
 
   function gradeWrite(card, val) {
     if (card.soft) {
-      showFb((card.tip || card.answer) + "\n（开放题：意思对即可。若完全不会可点「记错题」）", false);
+      showFb((card.tip || card.answer) + "\n锛堝紑鏀鹃锛氭剰鎬濆鍗冲彲銆傝嫢瀹屽叏涓嶄細鍙偣銆岃閿欓銆嶏級", false);
       const row = document.createElement("div");
       row.className = "lesson-actions";
       const pass = document.createElement("button");
       pass.type = "button";
       pass.className = "btn-start";
-      pass.textContent = "过关，下一题";
+      pass.textContent = "杩囧叧锛屼笅涓€棰?;
       pass.addEventListener("click", () => nextCard(true));
       const miss = document.createElement("button");
       miss.type = "button";
       miss.className = "btn-secondary";
-      miss.textContent = "不会，记入错题";
+      miss.textContent = "涓嶄細锛岃鍏ラ敊棰?;
       miss.addEventListener("click", () => {
         P.addMistake({
           unit: state.node.unitTitle,
           lesson: state.node.title,
           kind: card.meta.kind,
           q: card.prompt.slice(0, 40),
-          wrong: val || "（空）",
+          wrong: val || "锛堢┖锛?,
           right: card.answer,
         });
         state.wrong.push(card);
@@ -783,10 +783,10 @@
     }
     const good = normalize(val).includes(normalize(card.answer)) || normalize(val) === normalize(card.answer);
     // also accept if each part of answer appears
-    const parts = String(card.answer).split(/[；;、]/);
+    const parts = String(card.answer).split(/[锛?銆乚/);
     const almost = parts.length > 1 && parts.every((p) => normalize(val).includes(normalize(p)));
     if (good || almost) {
-      showFb("很好！参考：" + card.answer, false);
+      showFb("寰堝ソ锛佸弬鑰冿細" + card.answer, false);
       setTimeout(() => nextCard(true), 500);
     } else {
       P.addMistake({
@@ -794,15 +794,15 @@
         lesson: state.node.title,
         kind: card.meta.kind,
         q: card.meta.q || card.prompt.slice(0, 40),
-        wrong: val || "（空）",
+        wrong: val || "锛堢┖锛?,
         right: card.answer,
       });
       state.wrong.push(card);
-      showFb("再看看。正确参考：【" + card.answer + "】已计入错题。", true);
+      showFb("鍐嶇湅鐪嬨€傛纭弬鑰冿細銆? + card.answer + "銆戝凡璁″叆閿欓銆?, true);
       const next = document.createElement("button");
       next.type = "button";
       next.className = "btn-start";
-      next.textContent = "下一题";
+      next.textContent = "涓嬩竴棰?;
       next.addEventListener("click", () => nextCard(false));
       $("cardActions").innerHTML = "";
       $("cardActions").appendChild(next);
@@ -821,38 +821,38 @@
   function finishModule() {
     P.markDone(state.node.id, state.module);
     $("progressFill").style.width = "100%";
-    $("cardType").textContent = "完成";
-    $("cardPrompt").textContent = "本组练习完成";
+    $("cardType").textContent = "瀹屾垚";
+    $("cardPrompt").textContent = "鏈粍缁冧範瀹屾垚";
     $("cardExtra").innerHTML = "";
     $("cardFeedback").className = "feedback";
     $("cardFeedback").textContent =
       state.wrong.length === 0
-        ? "全对！错题墙暂时清清爽爽。"
-        : "有 " + state.wrong.length + " 处已进错题记录，可去「记录」复习。";
+        ? "鍏ㄥ锛侀敊棰樺鏆傛椂娓呮竻鐖界埥銆?
+        : "鏈?" + state.wrong.length + " 澶勫凡杩涢敊棰樿褰曪紝鍙幓銆岃褰曘€嶅涔犮€?;
     const actions = $("cardActions");
     actions.innerHTML = "";
     const home = document.createElement("button");
     home.type = "button";
     home.className = "btn-start";
-    home.textContent = "回主页";
+    home.textContent = "鍥炰富椤?;
     home.addEventListener("click", () => showView("home"));
     const more = document.createElement("button");
     more.type = "button";
     more.className = "btn-secondary";
-    more.textContent = "继续本课其他练习";
+    more.textContent = "缁х画鏈鍏朵粬缁冧範";
     more.addEventListener("click", () => openNodePicker(state.node));
     actions.appendChild(home);
     actions.appendChild(more);
   }
 
   const SOURCE_LABEL = {
-    daily1: "日常①",
-    daily2: "日常②",
-    daily3: "日常③",
-    sprint: "单元冲刺",
-    full: "摸底卷",
-    school: "校内真实卷",
-    garden: "语文园地",
+    daily1: "鏃ュ父鈶?,
+    daily2: "鏃ュ父鈶?,
+    daily3: "鏃ュ父鈶?,
+    sprint: "鍗曞厓鍐插埡",
+    full: "鎽稿簳鍗?,
+    school: "鏍″唴鐪熷疄鍗?,
+    garden: "璇枃鍥湴",
   };
 
   let mistDraft = { photoBlob: null, photoName: "", qNos: [] };
@@ -902,7 +902,7 @@
     (DATA.units || []).forEach((u) => {
       const opt = document.createElement("option");
       opt.value = u.id;
-      opt.textContent = u.name.split("·")[0].trim();
+      opt.textContent = u.name.split("路")[0].trim();
       sel.appendChild(opt);
     });
     const host = $("mistakeQnos");
@@ -939,11 +939,11 @@
   async function saveMistakeEntry() {
     const DB = window.ChineseMistakesDB;
     if (!DB) {
-      alert("错题库未加载");
+      alert("閿欓搴撴湭鍔犺浇");
       return;
     }
     if (!mistDraft.qNos.length) {
-      alert("请勾选至少一道错题题号（照片可稍后补）");
+      alert("璇峰嬀閫夎嚦灏戜竴閬撻敊棰橀鍙凤紙鐓х墖鍙◢鍚庤ˉ锛?);
       return;
     }
     const unitId = $("mistakeUnit").value;
@@ -955,7 +955,7 @@
       source,
       qNos: mistDraft.qNos.slice(),
       note,
-      status: "未掌握",
+      status: "鏈帉鎻?,
       at: new Date().toISOString().slice(0, 10),
       photoName: mistDraft.photoName || "",
       photoBlob: mistDraft.photoBlob,
@@ -983,7 +983,7 @@
     const text = await file.text();
     const data = JSON.parse(text);
     const n = await DB.importBackup(data);
-    alert("已导入 " + n + " 条错题");
+    alert("宸插鍏?" + n + " 鏉￠敊棰?);
     renderRecords();
   }
 
@@ -996,13 +996,13 @@
     } catch (e) {
       bank = [];
     }
-    const openCount = bank.filter((m) => m.status !== "已掌握").length;
+    const openCount = bank.filter((m) => m.status !== "宸叉帉鎻?).length;
     $("recordsScore").innerHTML =
-      "连续 <b>" +
+      "杩炵画 <b>" +
       (store.streak.count || 0) +
-      "</b> 天 · 错题 <b>" +
+      "</b> 澶?路 閿欓 <b>" +
       openCount +
-      "</b> 条<br/><span style='color:var(--muted);font-size:.88rem'>原卷上红笔圈题即可入库</span>";
+      "</b> 鏉?br/><span style='color:var(--muted);font-size:.88rem'>鍘熷嵎涓婄孩绗斿湀棰樺嵆鍙叆搴?/span>";
 
     const toolbar = $("recordsToolbar");
     if (toolbar) {
@@ -1010,19 +1010,19 @@
       const add = document.createElement("button");
       add.type = "button";
       add.className = "btn-start";
-      add.textContent = "录入错题";
+      add.textContent = "褰曞叆閿欓";
       add.addEventListener("click", openMistakeEntry);
       toolbar.appendChild(add);
       const exp = document.createElement("button");
       exp.type = "button";
       exp.className = "btn-path";
-      exp.textContent = "导出备份";
+      exp.textContent = "瀵煎嚭澶囦唤";
       exp.addEventListener("click", () => exportMistakes());
       toolbar.appendChild(exp);
       const imp = document.createElement("button");
       imp.type = "button";
       imp.className = "btn-warm";
-      imp.textContent = "导入备份";
+      imp.textContent = "瀵煎叆澶囦唤";
       imp.addEventListener("click", () => {
         const inp = document.createElement("input");
         inp.type = "file";
@@ -1039,11 +1039,11 @@
     if (actions) actions.innerHTML = "";
 
     const list = $("recordsList");
-    if ($("recordsMeta")) $("recordsMeta").textContent = "我的错题（" + bank.length + "）";
+    if ($("recordsMeta")) $("recordsMeta").textContent = "鎴戠殑閿欓锛? + bank.length + "锛?;
     list.innerHTML = "";
     if (!bank.length) {
       list.innerHTML =
-        "<p class='path-meta'>还没有错题。点上方「卷面对照」，在原卷上用红笔圈出错题即可入库。</p>";
+        "<p class='path-meta'>杩樻病鏈夐敊棰樸€傜偣涓婃柟銆屽嵎闈㈠鐓с€嶏紝鍦ㄥ師鍗蜂笂鐢ㄧ孩绗斿湀鍑洪敊棰樺嵆鍙叆搴撱€?/p>";
       store.mistakes = [];
       P.save(store);
       return;
@@ -1053,21 +1053,21 @@
       const div = document.createElement("div");
       div.className = "mistake-item";
       const unit = (DATA.units || []).find((u) => u.id === m.unitId);
-      const unitName = unit ? unit.name.split("·")[0].trim() : m.unitId;
-      const qtxt = (m.qNos || []).join("、") || "—";
+      const unitName = unit ? unit.name.split("路")[0].trim() : m.unitId;
+      const qtxt = (m.qNos || []).join("銆?) || "鈥?;
       const head =
         "<div class='row'><strong>" +
         unitName +
-        " · " +
+        " 路 " +
         (SOURCE_LABEL[m.source] || m.source) +
         "</strong><small>" +
         (m.at || "") +
-        " · " +
+        " 路 " +
         (m.status || "") +
         "</small></div>" +
-        "<div style='margin:6px 0;font-size:.95rem'>题号 " +
+        "<div style='margin:6px 0;font-size:.95rem'>棰樺彿 " +
         qtxt +
-        (m.note ? " · " + m.note : "") +
+        (m.note ? " 路 " + m.note : "") +
         "</div>";
       div.innerHTML = head;
 
@@ -1078,19 +1078,19 @@
         row.style.alignItems = "flex-start";
         const img = document.createElement("img");
         img.className = "mist-thumb";
-        img.alt = "错题卷面";
+        img.alt = "閿欓鍗烽潰";
         img.src = URL.createObjectURL(m.photoBlob);
         img.addEventListener("click", () => window.open(img.src, "_blank"));
         row.appendChild(img);
         const meta = document.createElement("div");
         meta.className = "meta";
-        meta.textContent = "点缩略图查看原图存证";
+        meta.textContent = "鐐圭缉鐣ュ浘鏌ョ湅鍘熷浘瀛樿瘉";
         row.appendChild(meta);
         div.appendChild(row);
       } else {
         const miss = document.createElement("p");
         miss.className = "meta";
-        miss.textContent = "暂无卷面照片（可点「补照片」稍后添加）";
+        miss.textContent = "鏆傛棤鍗烽潰鐓х墖锛堝彲鐐广€岃ˉ鐓х墖銆嶇◢鍚庢坊鍔狅級";
         div.appendChild(miss);
       }
 
@@ -1100,31 +1100,31 @@
       const orig = document.createElement("button");
       orig.type = "button";
       orig.className = "btn-path";
-      orig.textContent = "调原题";
+      orig.textContent = "璋冨師棰?;
       orig.addEventListener("click", () => {
         const url = sourcePdf(m.unitId, m.source);
         if (url) openPdf(url);
-        else alert("未找到对应练习 PDF");
+        else alert("鏈壘鍒板搴旂粌涔?PDF");
       });
       actionsRow.appendChild(orig);
 
       const sim = document.createElement("button");
       sim.type = "button";
       sim.className = "btn-warm";
-      sim.textContent = "同类练习";
+      sim.textContent = "鍚岀被缁冧範";
       sim.addEventListener("click", () => {
         const url = similarPdf(m.unitId, m.source);
         if (url) openPdf(url);
-        else alert("暂无同类练习");
+        else alert("鏆傛棤鍚岀被缁冧範");
       });
       actionsRow.appendChild(sim);
 
       const mastered = document.createElement("button");
       mastered.type = "button";
       mastered.className = "btn";
-      mastered.textContent = m.status === "已掌握" ? "标未掌握" : "标已掌握";
+      mastered.textContent = m.status === "宸叉帉鎻? ? "鏍囨湭鎺屾彙" : "鏍囧凡鎺屾彙";
       mastered.addEventListener("click", async () => {
-        m.status = m.status === "已掌握" ? "未掌握" : "已掌握";
+        m.status = m.status === "宸叉帉鎻? ? "鏈帉鎻? : "宸叉帉鎻?;
         await DB.putEntry(m);
         renderRecords();
       });
@@ -1133,7 +1133,7 @@
       const photoBtn = document.createElement("button");
       photoBtn.type = "button";
       photoBtn.className = "btn";
-      photoBtn.textContent = m.photoBlob ? "换照片" : "补照片";
+      photoBtn.textContent = m.photoBlob ? "鎹㈢収鐗? : "琛ョ収鐗?;
       photoBtn.addEventListener("click", () => {
         const inp = document.createElement("input");
         inp.type = "file";
@@ -1153,9 +1153,9 @@
       const del = document.createElement("button");
       del.type = "button";
       del.className = "btn";
-      del.textContent = "删除";
+      del.textContent = "鍒犻櫎";
       del.addEventListener("click", async () => {
-        if (!confirm("删除这条错题？")) return;
+        if (!confirm("鍒犻櫎杩欐潯閿欓锛?)) return;
         await DB.deleteEntry(m.id);
         renderRecords();
       });
@@ -1194,7 +1194,7 @@
           String(node.bookNo).padStart(2, "0") +
           "-" +
           node.title +
-          "-每日10分钟.pdf"
+          "-姣忔棩10鍒嗛挓.pdf"
       );
     } else showView("path");
   });
@@ -1229,7 +1229,7 @@
       prev.classList.remove("hidden");
       prev.innerHTML = "";
       const img = document.createElement("img");
-      img.alt = "预览";
+      img.alt = "棰勮";
       img.src = URL.createObjectURL(f);
       prev.appendChild(img);
     });
@@ -1237,7 +1237,7 @@
   const btnSaveMist = $("btnSaveMistake");
   if (btnSaveMist) {
     btnSaveMist.addEventListener("click", () => {
-      saveMistakeEntry().catch((e) => alert("保存失败：" + (e && e.message ? e.message : e)));
+      saveMistakeEntry().catch((e) => alert("淇濆瓨澶辫触锛? + (e && e.message ? e.message : e)));
     });
   }
 

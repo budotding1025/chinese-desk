@@ -267,7 +267,8 @@
   "full": {
     "u1": "printables/full/u01-full.pdf",
     "u2": "printables/full/u02-full.pdf",
-    "u3": "printables/full/u03-full.pdf"
+    "u3": "printables/full/u03-full.pdf",
+    "u4": "printables/full/u04-full.pdf"
   },
   "sprintAnswers": {
     "u1": "printables/sprint-answers/U1-sprint-answers.pdf",
@@ -277,12 +278,18 @@
   "fullAnswers": {
     "u1": "printables/full-answers/u01-full-answers.pdf",
     "u2": "printables/full-answers/u02-full-answers.pdf",
-    "u3": "printables/full-answers/u03-full-answers.pdf"
+    "u3": "printables/full-answers/u03-full-answers.pdf",
+    "u4": "printables/full-answers/u04-full-answers.pdf"
   },
   "book": "统编版四年级上册（2024）",
   "skills": {
     "weak": "printables/skills/weak-focus.pdf",
     "weakAnswers": "printables/skill-answers/weak-focus-answers.pdf",
-    "byUnit": {}
+    "byUnit": {
+      "u4": {
+        "daily": "printables/skills/u4-weak.pdf",
+        "answers": "printables/skill-answers/u4-weak-answers.pdf"
+      }
+    }
   }
 }

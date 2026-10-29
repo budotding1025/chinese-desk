@@ -1,0 +1,52 @@
+{
+  "unit": "u3",
+  "date": "2026-10-19",
+  "files": [
+    {
+      "raw": "units\\u03-四上第三单元\\source\\U3-raw-2026-10-19-01.png",
+      "index": 1,
+      "source": "D:\\AI_WorkSPACE\\Chinese Desk\\units\\u03-四上第三单元\\source\\U3-p1-p2.png",
+      "corrected": "D:\\AI_WorkSPACE\\Chinese Desk\\output\\preprocess\\U3-p1-p2-corrected.png",
+      "report": "D:\\AI_WorkSPACE\\Chinese Desk\\output\\preprocess\\U3-p1-p2-report.json",
+      "report_data": {
+        "source": "D:\\AI_WorkSPACE\\Chinese Desk\\units\\u03-四上第三单元\\source\\U3-p1-p2.png",
+        "backend_requested": "auto",
+        "install_opencv_requested": false,
+        "backend_used": "opencv",
+        "corrected_image": "D:\\AI_WorkSPACE\\Chinese Desk\\output\\preprocess\\U3-p1-p2-corrected.png",
+        "preview_image": "D:\\AI_WorkSPACE\\Chinese Desk\\output\\preprocess\\U3-p1-p2-preview.png",
+        "original_size": [
+          1024,
+          714
+        ],
+        "corrected_size": [
+          1004,
+          713
+        ],
+        "warnings": [],
+        "backend": "opencv",
+        "method": "deskew_fallback",
+        "perspective_corrected": false,
+        "deskew_angle_degrees": 0.0,
+        "crop_box": [
+          20,
+          1,
+          1024,
+          714
+        ],
+        "notes": [
+          "OpenCV was available, but no reliable four-corner page contour was found.",
+          "Used OpenCV deskew plus conservative crop instead."
+        ],
+        "geometry_changed": true
+      },
+      "source_for_ocr": "units\\u03-四上第三单元\\source\\U3-corrected-2026-10-19-01.png"
+    }
+  ],
+  "next": [
+    "用 .cursor/skills/exam-from-photo 视觉转录题面",
+    "遵守 .cursor/rules/exam-ingest.mdc（田字格/行距/页脚贴底）",
+    "更新 scripts/gen_unit_exams.py build_u3() 后: python scripts/gen_unit_exams.py u3",
+    "更新 gen_pack_answers.py FULL_ANSWERS 并生成答案 PDF"
+  ]
+}
