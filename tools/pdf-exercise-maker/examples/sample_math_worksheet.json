@@ -1,0 +1,53 @@
+{
+  "title": "数学练习题",
+  "subtitle": "清晰打印版",
+  "source": "IMG_1923.JPG",
+  "notes": "示例数据：真实使用时请由图片/PDF视觉转录，并标注模糊处。",
+  "sections": [
+    {
+      "title": "一、填空题",
+      "questions": [
+        {
+          "no": 1,
+          "prompt": "计算：lim(n→∞) Σ(i=1..n) 1/(-5)^i = ________.",
+          "prompt_tex": "计算：$\\displaystyle \\lim_{n\\to\\infty}\\sum_{i=1}^{n}\\frac{1}{(-5)^i}=\\fillblank$.",
+          "answer": "-1/6",
+          "answer_tex": "$-\\frac{1}{6}$",
+          "explanation": "这是无穷等比级数求和。",
+          "explanation_tex": "这是首项为 $-\\frac15$、公比为 $-\\frac15$ 的无穷等比级数，和为 $\\frac{a_1}{1-r}=-\\frac16$。"
+        },
+        {
+          "no": 2,
+          "prompt": "下列说法正确的是（    ）。",
+          "prompt_tex": "下列说法正确的是（\\quad）。",
+          "options": [
+            "任意两个正整数都有公因数 1",
+            "sqrt(n) 一定是整数",
+            "1/a + 1/b = 1/(a+b)",
+            "若 a>b，则 1/a>1/b"
+          ],
+          "options_tex": [
+            "任意两个正整数都有公因数 $1$",
+            "$\\sqrt n$ 一定是整数",
+            "$\\frac1a+\\frac1b=\\frac1{a+b}$",
+            "若 $a>b$，则 $\\frac1a>\\frac1b$"
+          ],
+          "answer": "A",
+          "answer_tex": "A",
+          "explanation": "任意两个正整数都至少有公因数 1。",
+          "explanation_tex": "任意两个正整数都至少有公因数 $1$，其余选项不恒成立。"
+        },
+        {
+          "no": 3,
+          "prompt": "如图，在矩形 ABCD 中，连接 AC，求图中三角形面积。",
+          "prompt_tex": "如图，在矩形 $ABCD$ 中，连接 $AC$，求图中三角形面积。",
+          "figure_tex": "\\begin{tikzpicture}[scale=0.6]\\coordinate (A) at (0,2);\\coordinate (B) at (0,0);\\coordinate (C) at (4,0);\\coordinate (D) at (4,2);\\coordinate (E) at (1.5,0);\\draw (A)--(B)--(C)--(D)--cycle;\\draw (A)--(C);\\draw (A)--(E);\\node[left] at (A) {$A$};\\node[left] at (B) {$B$};\\node[right] at (C) {$C$};\\node[right] at (D) {$D$};\\node[below] at (E) {$E$};\\end{tikzpicture}",
+          "answer": "需根据题目条件计算",
+          "answer_tex": "需根据题目条件计算",
+          "explanation": "这是 TikZ 图形示例；真实题目应根据转录条件补充讲解。",
+          "explanation_tex": "这是 TikZ 图形示例；真实题目应根据转录条件补充讲解。"
+        }
+      ]
+    }
+  ]
+}

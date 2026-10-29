@@ -41,6 +41,8 @@ def set_run_font(run, name_cn="宋体", size=12, bold=False, color=None):
     rPr = run._element.get_or_add_rPr()
     rFonts = rPr.get_or_add_rFonts()
     rFonts.set(qn("w:eastAsia"), name_cn)
+    rFonts.set(qn("w:ascii"), name_cn)
+    rFonts.set(qn("w:hAnsi"), name_cn)
 
 
 def add_para(
@@ -257,25 +259,32 @@ def exam_doc() -> Document:
     return doc
 
 
+# 练习卷：纯黑 + 楷体（笔画比宋体粗，打印更清晰）
+EXAM_INK = (0, 0, 0)
+EXAM_FONT = "楷体"
+EXAM_FONT_TITLE = "黑体"
+
+
 def exam_header(doc, title: str, *, incomplete: bool = False):
     """原卷式页眉：标题 + 学校班级姓名成绩（少装饰、少占高）。"""
     add_para(
         doc,
         title,
-        size=16,
+        size=20,
         bold=True,
         align=WD_ALIGN_PARAGRAPH.CENTER,
         space_after=6,
         space_before=0,
-        color=INK,
-        font="黑体",
+        color=EXAM_INK,
+        font=EXAM_FONT_TITLE,
     )
     add_para(
         doc,
         "学校：____________　班级：________　姓名：____________　成绩：________",
-        size=10.5,
+        size=13,
         space_after=8 if not incomplete else 3,
-        color=INK,
+        color=EXAM_INK,
+        font=EXAM_FONT,
     )
     if incomplete:
         add_para(
@@ -289,10 +298,19 @@ def exam_header(doc, title: str, *, incomplete: bool = False):
 
 
 def exam_section(doc, text: str):
-    add_para(doc, text, size=11, bold=True, space_before=8, space_after=4, color=INK)
+    add_para(
+        doc,
+        text,
+        size=14,
+        bold=True,
+        space_before=10,
+        space_after=6,
+        color=EXAM_INK,
+        font=EXAM_FONT_TITLE,
+    )
 
 
-def exam_body(doc, text: str, *, size=10.5, space_after=2, space_before=0, first_line=None, bold=False):
+def exam_body(doc, text: str, *, size=13, space_after=4, space_before=0, first_line=None, bold=False):
     return add_para(
         doc,
         text,
@@ -301,24 +319,130 @@ def exam_body(doc, text: str, *, size=10.5, space_after=2, space_before=0, first
         space_after=space_after,
         space_before=space_before,
         first_line=first_line,
-        color=INK,
+        color=EXAM_INK,
+        font=EXAM_FONT,
     )
 
 
 def exam_footer(doc, text: str):
+    """正文末临时页脚（兼容旧卷）。新卷请用 set_section_footer + new_exam_page。"""
     add_para(doc, text, size=8, align=WD_ALIGN_PARAGRAPH.CENTER, space_before=6, space_after=0, color=INK)
 
 
-def write_lines(doc, n: int = 1, *, size=12, space_after=2):
-    """作答横线：字号略大，方便手写。"""
+def set_section_footer(doc, text: str):
+    """当前节页脚贴纸张底，解决「内容短 → 页脚悬半页、下半截空」。"""
+    section = doc.sections[-1]
+    footer = section.footer
+    footer.is_linked_to_previous = False
+    p = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
+    for r in list(p.runs):
+        r._element.getparent().remove(r._element)
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(0)
+    run = p.add_run(text)
+    set_run_font(run, size=9, color=EXAM_INK)
+
+
+def end_exam_page(doc, footer_text: str, *, last: bool = False):
+    """为当前节设置页脚贴底；非末页则新开一节（新页），每页页脚可不同。"""
+    from docx.enum.section import WD_SECTION
+
+    set_section_footer(doc, footer_text)
+    if not last:
+        doc.add_section(WD_SECTION.NEW_PAGE)
+        prev = doc.sections[-2]
+        cur = doc.sections[-1]
+        cur.page_width = prev.page_width
+        cur.page_height = prev.page_height
+        cur.left_margin = prev.left_margin
+        cur.right_margin = prev.right_margin
+        cur.top_margin = prev.top_margin
+        cur.bottom_margin = prev.bottom_margin
+
+
+def write_lines(doc, n: int = 1, *, size=16, space_after=10):
+    """作答横线：默认小学手写行距（字号大、行距高）。填空/简答用这个，勿用正文行距。"""
     for _ in range(n):
         add_para(
             doc,
             "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿",
             size=size,
             space_after=space_after,
-            color=INK,
+            color=EXAM_INK,
         )
+
+
+def _stroke_icon_png(kind: str, size_px: int = 96) -> Path:
+    """清晰笔画图示：hengzhe / shu / ti / dian，避免冷僻字在 PDF 里糊掉。"""
+    assets = ROOT / "assets" / "strokes"
+    assets.mkdir(parents=True, exist_ok=True)
+    path = assets / f"{kind}-{size_px}.png"
+    from PIL import Image, ImageDraw
+
+    img = Image.new("RGB", (size_px, size_px), "white")
+    d = ImageDraw.Draw(img)
+    # 浅灰外框，方便辨认
+    d.rectangle([1, 1, size_px - 2, size_px - 2], outline=(180, 180, 180), width=1)
+    ink = (0, 0, 0)
+    w = max(5, size_px // 12)
+    m = size_px // 5
+    if kind == "hengzhe":
+        d.line([(m, m + 4), (size_px - m, m + 4)], fill=ink, width=w)
+        d.line([(size_px - m, m + 4), (size_px - m, size_px - m)], fill=ink, width=w)
+    elif kind == "shu":
+        d.line([(size_px // 2, m), (size_px // 2, size_px - m)], fill=ink, width=w)
+    elif kind == "ti":
+        # 提：自左下向右上，末端略细感（粗线）
+        d.line([(m, size_px - m - 2), (size_px - m - 2, m + 4)], fill=ink, width=w)
+        # 末端短折提示「提」
+        d.line(
+            [(size_px - m - 2, m + 4), (size_px - m + 2, m + 14)],
+            fill=ink,
+            width=max(3, w - 2),
+        )
+    elif kind == "dian":
+        r = max(7, size_px // 6)
+        cx, cy = size_px // 2 + 4, size_px // 2 - 6
+        d.ellipse([cx - r, cy - r // 2, cx + r // 3, cy + r], fill=ink)
+    else:
+        raise ValueError(kind)
+    img.save(path, format="PNG")
+    return path
+
+
+def add_stroke_choice_row(doc, items, *, icon_cm: float = 0.85, size: int = 12):
+    """笔画选择题：序号 + 清晰笔画图 + 中文名称。items: [(label, kind, name), ...]"""
+    from docx.enum.table import WD_TABLE_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH as ALG
+
+    table = doc.add_table(rows=1, cols=len(items))
+    table.alignment = WD_TABLE_ALIGNMENT.LEFT
+    table.autofit = True
+    _clear_table_borders(table)
+    for i, (label, kind, name) in enumerate(items):
+        cell = table.cell(0, i)
+        _set_cell_border(cell, top=None, left=None, bottom=None, right=None)
+        cell.text = ""
+        p = cell.paragraphs[0]
+        p.alignment = ALG.CENTER
+        p.paragraph_format.space_before = Pt(2)
+        p.paragraph_format.space_after = Pt(2)
+        r0 = p.add_run(f"{label} ")
+        set_run_font(r0, name_cn=EXAM_FONT, size=size, color=EXAM_INK)
+        r_pic = p.add_run()
+        r_pic.add_picture(str(_stroke_icon_png(kind, 160)), width=Cm(icon_cm))
+        r1 = p.add_run(f" {name}")
+        set_run_font(r1, name_cn=EXAM_FONT, size=size, bold=True, color=EXAM_INK)
+    spacer = doc.add_paragraph()
+    spacer.paragraph_format.space_after = Pt(8)
+
+
+def write_blank(doc, prompt: str = "", *, lines: int = 1):
+    """带提示的作答区：提示用正文，横线用小学手写尺寸。"""
+    if prompt:
+        exam_body(doc, prompt, size=11, space_after=4)
+    write_lines(doc, lines)
 
 
 def _cell_v_center(cell):
@@ -327,8 +451,8 @@ def _cell_v_center(cell):
     cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
 
 
-def _tianzige_png(size_px: int = 140) -> Path:
-    """生成可嵌入的田字格 PNG（外框实线 + 十字虚线）。嵌套表格转 PDF 会压扁，改用图片。"""
+def _tianzige_png(size_px: int = 280) -> Path:
+    """生成可嵌入的田字格 PNG（外框实线 + 十字虚线）。高分辨率，避免打印发糊。"""
     assets = ROOT / "assets"
     assets.mkdir(parents=True, exist_ok=True)
     path = assets / f"tianzige-{size_px}.png"
@@ -340,30 +464,35 @@ def _tianzige_png(size_px: int = 140) -> Path:
 
     img = Image.new("RGB", (size_px, size_px), "white")
     d = ImageDraw.Draw(img)
+    border = max(4, size_px // 55)
+    pad = border + 1
     # 外框：纯黑加粗，打印/屏幕都能看清
-    d.rectangle([2, 2, size_px - 3, size_px - 3], outline=(0, 0, 0), width=3)
+    d.rectangle([pad, pad, size_px - pad - 1, size_px - pad - 1], outline=(0, 0, 0), width=border)
     mid = size_px // 2
-    gray = (90, 90, 90)
-    step = max(4, size_px // 22)
-    dash = max(2, step - 1)
-    y = 6
-    while y < size_px - 6:
-        d.line([(mid, y), (mid, min(y + dash, size_px - 7))], fill=gray, width=2)
+    gray = (70, 70, 70)
+    cross_w = max(2, size_px // 90)
+    step = max(6, size_px // 18)
+    dash = max(3, step - 2)
+    y = pad + border
+    while y < size_px - pad - border:
+        d.line([(mid, y), (mid, min(y + dash, size_px - pad - border))], fill=gray, width=cross_w)
         y += step + 1
-    x = 6
-    while x < size_px - 6:
-        d.line([(x, mid), (min(x + dash, size_px - 7), mid)], fill=gray, width=2)
+    x = pad + border
+    while x < size_px - pad - border:
+        d.line([(x, mid), (min(x + dash, size_px - pad - border), mid)], fill=gray, width=cross_w)
         x += step + 1
-    img.save(path, format="PNG")
+    img.save(path, format="PNG", optimize=False)
     return path
 
 
-def _add_boxes_in_cell(cell, n: int, *, box_cm: float = 0.7):
-    """在单元格内嵌 n 个田字格图片（并排，Word→PDF 稳定可见）。"""
+def _add_boxes_in_cell(cell, n: int, *, box_cm: float = 1.05):
+    """在单元格内嵌 n 个田字格图片（并排，Word→PDF 稳定可见）。小学默认可写约 1cm 格。"""
     from docx.enum.table import WD_TABLE_ALIGNMENT
     from docx.enum.text import WD_ALIGN_PARAGRAPH as ALG
 
-    png = _tianzige_png(140)
+    # 约 200dpi 源图，放大到 1.3cm+ 仍清晰
+    px = max(280, int(round(box_cm * 220)))
+    png = _tianzige_png(px)
     # 用单行表格并排，避免段落折行把两格变成竖排
     host = cell.add_table(rows=1, cols=n)
     host.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -389,9 +518,10 @@ def _add_boxes_in_cell(cell, n: int, *, box_cm: float = 0.7):
     trPr.append(trHeight)
 
 
-def add_inline_pinyin_line(doc, segments, *, size=10.5, box_cm: float = 0.7, after: float = 3):
-    """一行内嵌拼音方格（与 JPG 原卷一致：拼音在格上、格嵌在句中）。
+def add_inline_pinyin_line(doc, segments, *, size=13, box_cm: float = 1.05, after: float = 8):
+    """一行内嵌拼音方格（拼音在格上、格嵌在句中）。
 
+    小学默认可写田字格约 1.05cm；勿为「塞满一页」把格压到 0.7 以下。
     segments: str 或 (pinyin, n_chars)
     """
     from docx.enum.table import WD_TABLE_ALIGNMENT
@@ -423,21 +553,23 @@ def add_inline_pinyin_line(doc, segments, *, size=10.5, box_cm: float = 0.7, aft
         if spec[0] == "text":
             # 勿压窄：宁可略宽，避免汉字被裁切
             text = spec[1]
-            cell.width = Cm(max(0.8, min(14.0, 0.52 * max(1, len(text)) + 0.3)))
+            cell.width = Cm(max(0.9, min(14.0, 0.62 * max(1, len(text)) + 0.4)))
             p0.alignment = ALG.LEFT
             run = p0.add_run(text)
-            set_run_font(run, size=size, color=INK)
+            set_run_font(run, name_cn=EXAM_FONT, size=size, color=EXAM_INK)
         else:
             py, n = spec[1], spec[2]
-            cell.width = Cm(box_cm * n + 0.45)
+            cell.width = Cm(box_cm * n + 0.5)
             p0.alignment = ALG.CENTER
-            p0.paragraph_format.space_after = Pt(1)
+            p0.paragraph_format.space_after = Pt(2)
             run = p0.add_run(py)
-            set_run_font(run, size=8.5, color=INK)
+            # 拼音用 Times，字号加大便于认读
+            set_run_font(run, name_cn="Times New Roman", size=12, color=EXAM_INK)
             rPr = run._element.get_or_add_rPr()
             rFonts = rPr.get_or_add_rFonts()
             rFonts.set(qn("w:ascii"), "Times New Roman")
             rFonts.set(qn("w:hAnsi"), "Times New Roman")
+            rFonts.set(qn("w:eastAsia"), EXAM_FONT)
             _add_boxes_in_cell(cell, n, box_cm=box_cm)
 
     # row height: 拼音 + 田字格图片，用 atLeast 避免被压扁
@@ -524,13 +656,30 @@ def add_page_break(doc):
 
 
 def docx_to_pdf(docx_path: Path, pdf_path: Path) -> None:
+    """Word → PDF：按打印质量导出，嵌入字体轮廓，避免屏幕优化发糊。"""
     import win32com.client
 
     word = win32com.client.Dispatch("Word.Application")
     word.Visible = False
+    word.DisplayAlerts = 0
     try:
-        d = word.Documents.Open(str(docx_path.resolve()))
-        d.SaveAs(str(pdf_path.resolve()), FileFormat=17)
+        d = word.Documents.Open(str(docx_path.resolve()), ReadOnly=True)
+        out = str(pdf_path.resolve())
+        # wdExportFormatPDF=17, wdExportOptimizeForPrint=0, wdExportCreateNoBookmarks=0
+        # BitmapMissingFonts=False → 尽量嵌矢量字体，不把缺字渲成位图
+        try:
+            d.ExportAsFixedFormat(
+                OutputFileName=out,
+                ExportFormat=17,
+                OpenAfterExport=False,
+                OptimizeFor=0,
+                BitmapMissingFonts=False,
+                DocStructureTags=True,
+                CreateBookmarks=0,
+                UseISO19005_1=False,
+            )
+        except Exception:
+            d.SaveAs(out, FileFormat=17)
         d.Close(False)
     finally:
         word.Quit()

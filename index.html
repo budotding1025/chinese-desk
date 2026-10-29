@@ -1,37 +1,37 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>语文书桌</title>
+  <title>璇枃涔︽</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./theme.css?v=28" />
+  <link rel="stylesheet" href="./theme.css?v=39" />
 </head>
 <body>
   <!-- HOME -->
   <div class="screen" id="screenHome">
     <div class="top">
-      <div class="brand">语文书桌</div>
-      <button type="button" class="icon-btn" id="btnSettings" aria-label="怎么用" title="怎么用">?</button>
+      <div class="brand">璇枃涔︽</div>
+      <button type="button" class="icon-btn" id="btnSettings" aria-label="鎬庝箞鐢? title="鎬庝箞鐢?>?</button>
     </div>
     <div class="home-main">
-      <div class="hero-mark" aria-hidden="true">语</div>
-      <p class="mascot-line">打印练习 · 自己做题 · 再看答案</p>
-      <p class="streak" id="streakLine">连续 <strong>0</strong> 天</p>
+      <div class="hero-mark" aria-hidden="true">璇?/div>
+      <p class="mascot-line">鎵撳嵃缁冧範 路 鑷繁鍋氶 路 鍐嶇湅绛旀</p>
+      <p class="streak" id="streakLine">杩炵画 <strong>0</strong> 澶?/p>
       <div class="today-card">
-        <p class="eyebrow" id="sessionEyebrow">第二单元</p>
-        <h1 id="sessionTitle">第8课 · 蝴蝶的家</h1>
-        <p class="meta" id="sessionMeta">今日练习</p>
+        <p class="eyebrow" id="sessionEyebrow">绗簩鍗曞厓</p>
+        <h1 id="sessionTitle">绗?璇?路 铦磋澏鐨勫</h1>
+        <p class="meta" id="sessionMeta">浠婃棩缁冧範</p>
         <div class="home-cta-row">
-          <button type="button" class="btn-start" id="btnPrintToday">练习下载</button>
-          <button type="button" class="btn-answer" id="btnViewAnswers">答案在线看</button>
+          <button type="button" class="btn-start" id="btnPrintToday">缁冧範涓嬭浇</button>
+          <button type="button" class="btn-answer" id="btnViewAnswers">绛旀鍦ㄧ嚎鐪?/button>
         </div>
-        <button type="button" class="btn-path" id="btnOpenPath">看学期路径</button>
+        <button type="button" class="btn-path" id="btnOpenPath">鐪嬪鏈熻矾寰?/button>
       </div>
-      <p class="unit-line" id="unitLine">第二单元</p>
-      <p class="path-summary" id="pathSummary">路径进度</p>
+      <p class="unit-line" id="unitLine">绗簩鍗曞厓</p>
+      <p class="path-summary" id="pathSummary">璺緞杩涘害</p>
     </div>
   </div>
 
@@ -39,18 +39,18 @@
   <div class="screen hidden" id="screenPath">
     <div class="path-top">
       <span style="width:48px"></span>
-      <h1>学期学习路径</h1>
+      <h1>瀛︽湡瀛︿範璺緞</h1>
       <span style="width:48px"></span>
     </div>
-    <p class="path-meta" id="pathMeta">按单元 · 课文顺序 · 点课下载</p>
+    <p class="path-meta" id="pathMeta">鎸夊崟鍏?路 璇炬枃椤哄簭 路 鐐硅涓嬭浇</p>
     <div class="path-scroll" id="pathList"></div>
   </div>
 
   <div class="overlay is-center hidden" id="pathLessonOverlay" aria-hidden="true">
     <div class="sheet" role="dialog" aria-labelledby="pathLessonTitle">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <h2 id="pathLessonTitle">这一课</h2>
-        <button type="button" class="icon-btn" id="pathLessonClose" aria-label="关闭">×</button>
+        <h2 id="pathLessonTitle">杩欎竴璇?/h2>
+        <button type="button" class="icon-btn" id="pathLessonClose" aria-label="鍏抽棴">脳</button>
       </div>
       <p class="meta" id="pathLessonMeta"></p>
       <div class="mod-grid" id="pathModGrid"></div>
@@ -61,44 +61,44 @@
   <div class="screen hidden" id="screenRecords">
     <div class="path-top records-top">
       <span style="width:48px"></span>
-      <h1>记录 · 错题库</h1>
+      <h1>璁板綍 路 閿欓搴?/h1>
       <span style="width:48px"></span>
     </div>
     <div class="records-score" id="recordsScore"></div>
-    <p class="path-meta">红笔批改后，在原卷上用红笔圈出错题 → 考前重练原题 / 同类练习</p>
+    <p class="path-meta">绾㈢瑪鎵规敼鍚庯紝鍦ㄥ師鍗蜂笂鐢ㄧ孩绗斿湀鍑洪敊棰?鈫?鑰冨墠閲嶇粌鍘熼 / 鍚岀被缁冧範</p>
 
     <div class="mark-cta-wrap">
       <button type="button" class="btn-mark-cta" id="btnOpenMark">
-        卷面对照
-        <small>打开原卷，用红笔直接圈出错题</small>
+        鍗烽潰瀵圭収
+        <small>鎵撳紑鍘熷嵎锛岀敤绾㈢瑪鐩存帴鍦堝嚭閿欓</small>
       </button>
     </div>
 
     <details class="mistake-advanced">
-      <summary>更多录入方式（拍照 / 勾选题号）</summary>
+      <summary>鏇村褰曞叆鏂瑰紡锛堟媿鐓?/ 鍕鹃€夐鍙凤級</summary>
       <div class="records-toolbar" id="recordsToolbar"></div>
     </details>
 
     <div class="records-actions hidden" id="recordsActions"></div>
-    <p class="path-meta" id="recordsMeta">我的错题</p>
+    <p class="path-meta" id="recordsMeta">鎴戠殑閿欓</p>
     <div class="path-scroll" id="recordsList"></div>
     <div class="path-footer">
-      <button type="button" class="btn-start" id="btnRecordsToPath">去学期路径</button>
+      <button type="button" class="btn-start" id="btnRecordsToPath">鍘诲鏈熻矾寰?/button>
     </div>
   </div>
 
   <!-- LESSON -->
   <div class="screen hidden" id="screenLesson">
     <div class="lesson-top">
-      <button type="button" class="icon-btn" id="btnCloseLesson" aria-label="回主页">←</button>
+      <button type="button" class="icon-btn" id="btnCloseLesson" aria-label="鍥炰富椤?>鈫?/button>
       <div class="progress" aria-hidden="true"><i id="progressFill"></i></div>
       <span style="width:48px"></span>
     </div>
     <div class="lesson-body">
-      <p class="card-type" id="cardType">练习</p>
+      <p class="card-type" id="cardType">缁冧範</p>
       <p class="lesson-unit" id="lessonUnitTitle"></p>
       <p class="lesson-name" id="lessonNameTitle"></p>
-      <p class="card-prompt" id="cardPrompt">—</p>
+      <p class="card-prompt" id="cardPrompt">鈥?/p>
       <p class="card-sub" id="cardSub"></p>
       <div id="cardExtra"></div>
       <div class="feedback hidden" id="cardFeedback"></div>
@@ -106,98 +106,98 @@
     </div>
   </div>
 
-  <nav class="app-nav" id="appNav" aria-label="主导航">
+  <nav class="app-nav" id="appNav" aria-label="涓诲鑸?>
     <button type="button" class="nav-item is-on" data-nav="home" id="navHome">
-      <span class="nav-emoji" aria-hidden="true">⌂</span>
-      <span class="nav-label">主页</span>
+      <span class="nav-emoji" aria-hidden="true">鈱?/span>
+      <span class="nav-label">涓婚〉</span>
     </button>
     <button type="button" class="nav-item" data-nav="path" id="navPath">
-      <span class="nav-emoji" aria-hidden="true">◈</span>
-      <span class="nav-label">路径</span>
+      <span class="nav-emoji" aria-hidden="true">鈼?/span>
+      <span class="nav-label">璺緞</span>
     </button>
     <button type="button" class="nav-item" data-nav="records" id="navRecords">
-      <span class="nav-emoji" aria-hidden="true">≡</span>
-      <span class="nav-label">记录</span>
+      <span class="nav-emoji" aria-hidden="true">鈮?/span>
+      <span class="nav-label">璁板綍</span>
     </button>
   </nav>
 
   <div class="overlay is-center hidden" id="answerOverlay">
     <div class="sheet" role="dialog" aria-labelledby="answerTitle">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <h2 id="answerTitle">答案</h2>
-        <button type="button" class="icon-btn" id="btnCloseAnswer" aria-label="关闭">×</button>
+        <h2 id="answerTitle">绛旀</h2>
+        <button type="button" class="icon-btn" id="btnCloseAnswer" aria-label="鍏抽棴">脳</button>
       </div>
       <div id="answerBody" style="max-height:55vh;overflow:auto;margin:14px 0 18px"></div>
-      <button type="button" class="btn-start" id="btnAnswerDownload">下载答案（A4）</button>
+      <button type="button" class="btn-start" id="btnAnswerDownload">涓嬭浇绛旀锛圓4锛?/button>
     </div>
   </div>
 
   <div class="overlay is-center hidden" id="mistakeOverlay">
     <div class="sheet sheet-mistake" role="dialog" aria-labelledby="mistakeTitle">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <h2 id="mistakeTitle">录入错题</h2>
-        <button type="button" class="icon-btn" id="btnCloseMistake" aria-label="关闭">×</button>
+        <h2 id="mistakeTitle">褰曞叆閿欓</h2>
+        <button type="button" class="icon-btn" id="btnCloseMistake" aria-label="鍏抽棴">脳</button>
       </div>
-      <p class="meta">勾选题号即可入库；卷面照片可选，也可稍后补拍</p>
-      <label class="mist-label">卷面照片（可选，可后补）
+      <p class="meta">鍕鹃€夐鍙峰嵆鍙叆搴擄紱鍗烽潰鐓х墖鍙€夛紝涔熷彲绋嶅悗琛ユ媿</p>
+      <label class="mist-label">鍗烽潰鐓х墖锛堝彲閫夛紝鍙悗琛ワ級
         <input type="file" id="mistakePhoto" accept="image/*" capture="environment" />
       </label>
       <div class="mist-preview hidden" id="mistakePreview"></div>
-      <label class="mist-label">单元
+      <label class="mist-label">鍗曞厓
         <select id="mistakeUnit"></select>
       </label>
-      <label class="mist-label">来源
+      <label class="mist-label">鏉ユ簮
         <select id="mistakeSource">
-          <option value="daily1">日常①</option>
-          <option value="daily2">日常②</option>
-          <option value="daily3">日常③</option>
-          <option value="sprint">考前 · 单元冲刺</option>
-          <option value="full">考前 · 摸底卷</option>
-          <option value="school">校内真实卷</option>
-          <option value="garden">语文园地</option>
+          <option value="daily1">鏃ュ父鈶?/option>
+          <option value="daily2">鏃ュ父鈶?/option>
+          <option value="daily3">鏃ュ父鈶?/option>
+          <option value="sprint">鑰冨墠 路 鍗曞厓鍐插埡</option>
+          <option value="full">鑰冨墠 路 鎽稿簳鍗?/option>
+          <option value="school">鏍″唴鐪熷疄鍗?/option>
+          <option value="garden">璇枃鍥湴</option>
         </select>
       </label>
-      <div class="mist-label">错题题号（可多选）</div>
+      <div class="mist-label">閿欓棰樺彿锛堝彲澶氶€夛級</div>
       <div class="mist-qnos" id="mistakeQnos"></div>
-      <label class="mist-label">备注（可选）
-        <input type="text" id="mistakeNote" placeholder="如：看拼音写词语第3题" maxlength="80" />
+      <label class="mist-label">澶囨敞锛堝彲閫夛級
+        <input type="text" id="mistakeNote" placeholder="濡傦細鐪嬫嫾闊冲啓璇嶈绗?棰? maxlength="80" />
       </label>
       <div class="lesson-actions" style="margin-top:14px">
-        <button type="button" class="btn-start" id="btnSaveMistake">存入错题本</button>
+        <button type="button" class="btn-start" id="btnSaveMistake">瀛樺叆閿欓鏈?/button>
       </div>
     </div>
   </div>
 
-  <!-- 卷面对照 · 红笔圈错题 -->
+  <!-- 鍗烽潰瀵圭収 路 绾㈢瑪鍦堥敊棰?-->
   <div class="overlay is-center hidden" id="markOverlay">
     <div class="sheet mark-sheet" role="dialog" aria-labelledby="markTitle">
       <div class="mark-head">
         <div>
-          <h2 id="markTitle">卷面对照</h2>
-          <p class="meta" id="markMeta">在原卷上用红笔画圈，圈完点「记上了」</p>
+          <h2 id="markTitle">鍗烽潰瀵圭収</h2>
+          <p class="meta" id="markMeta">鍦ㄥ師鍗蜂笂鐢ㄧ孩绗旂敾鍦堬紝鍦堝畬鐐广€岃涓婁簡銆?/p>
         </div>
-        <button type="button" class="icon-btn" id="markClose" aria-label="关闭">×</button>
+        <button type="button" class="icon-btn" id="markClose" aria-label="鍏抽棴">脳</button>
       </div>
 
       <div class="mark-filters">
-        <label>单元
+        <label>鍗曞厓
           <select id="markUnit"></select>
         </label>
-        <label>来源
+        <label>鏉ユ簮
           <select id="markSource">
-            <option value="sprint">单元冲刺</option>
-            <option value="full">完整摸底卷</option>
-            <option value="school">校内真实卷</option>
-            <option value="garden">语文园地</option>
+            <option value="sprint">鍗曞厓鍐插埡</option>
+            <option value="full">瀹屾暣鎽稿簳鍗?/option>
+            <option value="school">鏍″唴鐪熷疄鍗?/option>
+            <option value="garden">璇枃鍥湴</option>
           </select>
         </label>
       </div>
 
       <div class="mark-paper-tools">
-        <button type="button" class="btn" id="markPrevPage" hidden>上一页</button>
+        <button type="button" class="btn" id="markPrevPage" hidden>涓婁竴椤?/button>
         <span class="mark-page-label" id="markPageLabel"></span>
-        <button type="button" class="btn" id="markNextPage" hidden>下一页</button>
-        <label class="photo-btn-inline mark-photo-btn">用照片当卷面
+        <button type="button" class="btn" id="markNextPage" hidden>涓嬩竴椤?/button>
+        <label class="photo-btn-inline mark-photo-btn">鐢ㄧ収鐗囧綋鍗烽潰
           <input type="file" id="markPhoto" accept="image/*" capture="environment" hidden />
         </label>
       </div>
@@ -205,15 +205,15 @@
       <div class="mark-stage-wrap" id="markStageWrap">
         <div class="mark-stage" id="markStage">
           <canvas id="markBase" aria-hidden="true"></canvas>
-          <canvas id="markInk" aria-label="红笔层"></canvas>
+          <canvas id="markInk" aria-label="绾㈢瑪灞?></canvas>
         </div>
-        <p class="mark-paper-hint" id="markPaperHint">正在打开卷面…</p>
+        <p class="mark-paper-hint" id="markPaperHint">姝ｅ湪鎵撳紑鍗烽潰鈥?/p>
       </div>
 
       <div class="mark-actions">
-        <button type="button" class="btn" id="markUndo">撤销一笔</button>
-        <button type="button" class="btn" id="markClear">清空红笔</button>
-        <button type="button" class="btn primary" id="markSave">记上了</button>
+        <button type="button" class="btn" id="markUndo">鎾ら攢涓€绗?/button>
+        <button type="button" class="btn" id="markClear">娓呯┖绾㈢瑪</button>
+        <button type="button" class="btn primary" id="markSave">璁颁笂浜?/button>
       </div>
     </div>
   </div>
@@ -221,36 +221,36 @@
   <div class="overlay is-center hidden" id="helpOverlay">
     <div class="sheet">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <h2>怎么用</h2>
-        <button type="button" class="icon-btn" id="btnCloseHelp" aria-label="关闭">×</button>
+        <h2>鎬庝箞鐢?/h2>
+        <button type="button" class="icon-btn" id="btnCloseHelp" aria-label="鍏抽棴">脳</button>
       </div>
       <ul class="help-list">
         <li>
-          <strong>主页</strong>
-          <span>今日课文 · 练习下载 / 答案在线看</span>
+          <strong>涓婚〉</strong>
+          <span>浠婃棩璇炬枃 路 缁冧範涓嬭浇 / 绛旀鍦ㄧ嚎鐪?/span>
         </li>
         <li>
-          <strong>路径</strong>
-          <span>课文练习 + 园地 + 薄弱加练 + 单元冲刺 / 完整摸底卷</span>
+          <strong>璺緞</strong>
+          <span>璇炬枃缁冧範 + 鍥湴 + 钖勫急鍔犵粌 + 鍗曞厓鍐插埡 / 瀹屾暣鎽稿簳鍗?/span>
         </li>
         <li>
-          <strong>记录</strong>
-          <span>卷面对照红笔圈错题入库；本机 IndexedDB，可导出备份</span>
+          <strong>璁板綍</strong>
+          <span>鍗烽潰瀵圭収绾㈢瑪鍦堥敊棰樺叆搴擄紱鏈満 IndexedDB锛屽彲瀵煎嚭澶囦唤</span>
         </li>
         <li>
-          <strong>建议</strong>
-          <span>做完红笔批改 → 卷面对照圈错题 → 考前调原题或同类练习</span>
+          <strong>寤鸿</strong>
+          <span>鍋氬畬绾㈢瑪鎵规敼 鈫?鍗烽潰瀵圭収鍦堥敊棰?鈫?鑰冨墠璋冨師棰樻垨鍚岀被缁冧範</span>
         </li>
       </ul>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="./data.js?v=30"></script>
-  <script src="./progress.js?v=30"></script>
-  <script src="./mistakes-db.js?v=30"></script>
-  <script src="./mark-sheet.js?v=30"></script>
-  <script src="./app.js?v=30"></script>
+  <script src="./data.js?v=39"></script>
+  <script src="./progress.js?v=39"></script>
+  <script src="./mistakes-db.js?v=39"></script>
+  <script src="./mark-sheet.js?v=39"></script>
+  <script src="./app.js?v=39"></script>
   <script>
     document.getElementById("btnSettings").onclick = function () {
       document.getElementById("helpOverlay").classList.remove("hidden");
