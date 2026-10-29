@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=39")
+    return fetch("./print-index.json?v=40")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -381,7 +381,7 @@
 
     const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-" + node.title + "-绛旀.pdf";
     const mdUrl = pr.answerMd || "answers/lessons/L" + pad + "-" + node.title + "-绛旀.md";
-    const src = encodeURI(pdfUrl) + "?v=39";
+    const src = encodeURI(pdfUrl) + "?v=40";
 
     $("btnAnswerDownload").onclick = () => openPdf(pdfUrl);
 
@@ -410,7 +410,7 @@
       body.innerHTML = '<div class="a4-paper">' + pr.answerHtml + "</div>";
       return;
     }
-    fetch(encodeURI(mdUrl) + "?v=39")
+    fetch(encodeURI(mdUrl) + "?v=40")
       .then((r) => {
         if (!r.ok) throw new Error("missing");
         return r.text();
@@ -447,7 +447,7 @@
       body.innerHTML =
         '<iframe class="a4-iframe" title="鍥湴A4绛旀" src="' +
         encodeURI(pdfUrl) +
-        '?v=39"></iframe>';
+        '?v=40"></iframe>';
       const tip = document.createElement("button");
       tip.type = "button";
       tip.className = "btn-path";

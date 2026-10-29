@@ -576,10 +576,10 @@ def add_reading_card_table(doc):
         c1.text = ""
         p0 = c0.paragraphs[0]
         r0 = p0.add_run(lab)
-        set_run_font(r0, size=11, bold=True, color=INK)
+        set_run_font(r0, name_cn="黑体", size=12, bold=True, color=(0, 0, 0))
         p1 = c1.paragraphs[0]
         r1 = p1.add_run("\n")
-        set_run_font(r1, size=11, color=INK)
+        set_run_font(r1, name_cn="楷体", size=12, color=(0, 0, 0))
         for cell in (c0, c1):
             _set_cell_border(cell)
         tr = table.rows[i]._tr

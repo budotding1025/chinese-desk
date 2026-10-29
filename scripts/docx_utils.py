@@ -242,8 +242,14 @@ def add_pinyin_write_grid(doc, items, *, cols=3, py_size=14, gap_after=10):
         spacer.paragraph_format.space_after = Pt(gap_after)
 
 
+# 练习卷：纯黑 + 楷体（禁止混入宋体，细笔画预览易发糊）
+EXAM_INK = (0, 0, 0)
+EXAM_FONT = "楷体"
+EXAM_FONT_TITLE = "黑体"
+
+
 def exam_doc() -> Document:
-    """A4 完整摸底卷：边距贴近小学单元测原卷。"""
+    """A4 完整摸底卷：正文默认楷体，避免 Word 回落到细笔画宋体。"""
     doc = Document()
     section = doc.sections[0]
     section.page_width = Cm(21.0)
@@ -253,16 +259,16 @@ def exam_doc() -> Document:
     section.top_margin = Cm(1.3)
     section.bottom_margin = Cm(1.3)
     style = doc.styles["Normal"]
-    style.font.name = "宋体"
-    style.font.size = Pt(10.5)
-    style._element.rPr.rFonts.set(qn("w:eastAsia"), "宋体")
+    style.font.name = EXAM_FONT
+    style.font.size = Pt(13)
+    style.font.color.rgb = RGBColor(*EXAM_INK)
+    rPr = style._element.get_or_add_rPr()
+    rFonts = rPr.get_or_add_rFonts()
+    rFonts.set(qn("w:ascii"), EXAM_FONT)
+    rFonts.set(qn("w:hAnsi"), EXAM_FONT)
+    rFonts.set(qn("w:eastAsia"), EXAM_FONT)
+    rFonts.set(qn("w:cs"), EXAM_FONT)
     return doc
-
-
-# 练习卷：纯黑 + 楷体（笔画比宋体粗，打印更清晰）
-EXAM_INK = (0, 0, 0)
-EXAM_FONT = "楷体"
-EXAM_FONT_TITLE = "黑体"
 
 
 def exam_header(doc, title: str, *, incomplete: bool = False):
@@ -341,7 +347,7 @@ def set_section_footer(doc, text: str):
     p.paragraph_format.space_before = Pt(0)
     p.paragraph_format.space_after = Pt(0)
     run = p.add_run(text)
-    set_run_font(run, size=9, color=EXAM_INK)
+    set_run_font(run, name_cn=EXAM_FONT, size=9, color=EXAM_INK)
 
 
 def end_exam_page(doc, footer_text: str, *, last: bool = False):
@@ -370,6 +376,7 @@ def write_lines(doc, n: int = 1, *, size=16, space_after=10):
             size=size,
             space_after=space_after,
             color=EXAM_INK,
+            font=EXAM_FONT,
         )
 
 
