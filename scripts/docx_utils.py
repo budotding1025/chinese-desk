@@ -242,14 +242,14 @@ def add_pinyin_write_grid(doc, items, *, cols=3, py_size=14, gap_after=10):
         spacer.paragraph_format.space_after = Pt(gap_after)
 
 
-# 练习卷：纯黑 + 楷体（禁止混入宋体，细笔画预览易发糊）
+# 练习卷：纯黑 + 宋体正文 / 黑体标题（exam-from-photo 全局标准）
 EXAM_INK = (0, 0, 0)
-EXAM_FONT = "楷体"
+EXAM_FONT = "宋体"
 EXAM_FONT_TITLE = "黑体"
 
 
 def exam_doc() -> Document:
-    """A4 完整摸底卷：正文默认楷体，避免 Word 回落到细笔画宋体。"""
+    """A4 完整摸底卷：正文默认宋体，标题用黑体。"""
     doc = Document()
     section = doc.sections[0]
     section.page_width = Cm(21.0)

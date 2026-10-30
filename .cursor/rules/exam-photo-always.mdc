@@ -1,0 +1,13 @@
+---
+description: 用户上传试卷截图/照片时，必须走 Word 清晰重排 PDF（宋体+黑体，禁止贴图交付）
+alwaysApply: true
+---
+
+# 截图试卷 → 一律 Word 清晰重排
+
+只要用户**上传或提到**练习卷/单元测的**截图、照片、扫描件**（或说录入/入库/高清 PDF/可打印）：
+
+1. **立即**按 `.cursor/skills/exam-from-photo/SKILL.md` 执行（全局 Skill 同名：`exam-from-photo`）。  
+2. **硬性遵守** `.cursor/rules/exam-ingest.mdc`：python-docx 重排 → Word 打印导出；正文**宋体**、标题**黑体**。  
+3. **禁止**把原图嵌进 PDF 当作「高清卷」交付。  
+4. 交付保留 `.docx` + `.pdf` + 答案页；上线则更新 `print-index` 并 bump 缓存。
