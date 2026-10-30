@@ -1,36 +1,42 @@
 ---
-description: 录入/重排单元练习卷为可打印 PDF 时的小学书写与版面硬规则（叠 exam-from-photo / PDF-Exercise-Maker）
+description: 截图/拍照试卷 → Word 宋体清晰可打印 PDF 的硬规则（叠 exam-from-photo）
 globs: scripts/gen_unit_exams.py,scripts/docx_utils.py,scripts/gen_pack_answers.py,scripts/ingest_exam_photo.py,printables/full/**,printables/full-answers/**,tools/pdf-exercise-maker/**
 alwaysApply: false
 ---
 
-# 练习卷入库 · 小学生书写版面（硬规则）
+# 练习卷入库 · Word 清晰排版 + 小学生书写（硬规则）
 
-录入或重排「真实单元练习卷 / 摸底卷」为 A4 PDF 时必须遵守。宁可多一页，也不要挤在上半截、下半截留白浪费且作答空格写不下。
+用户上传**试卷截图 / 照片 / 扫描件**并要求入库、高清、可打印时：**禁止**把扫描图当 PDF 交付；必须 **Word（python-docx）重排 → Word COM 打印质量导出 PDF**。
 
-拍照/扫描入口见 `.cursor/skills/exam-from-photo/SKILL.md` 与 `scripts/ingest_exam_photo.py`（预处理来自 `tools/pdf-exercise-maker/`）。
+完整流程见 `.cursor/skills/exam-from-photo/SKILL.md`（并与全局 `exam-from-photo` 字体标准一致）。
 
-## 书写空间（优先于「视觉像原卷缩印」）
+## A. 清晰度（最高优先级）
 
-1. **田字格**：默认边长约 **1.0–1.1cm**（`add_inline_pinyin_line(..., box_cm=1.05)`）。禁止为塞页压到 0.7cm 以下。
-2. **作答横线**：用 `write_lines` / `write_blank`，默认字号 ≥16、行距 `space_after` ≥8–10pt。简答至少 2 行；「说说理由 / 发现」至少 2–3 行；习作横线够写半页左右。
-3. **括号填空**：序号括号与横线两侧留空，勿贴死汉字。
-4. **表格作答格**：空单元格要看得见高度（约一行半以上），不要扁条。
+1. **管道**：`exam_doc()` / `build_uN()` → `.docx` → `docx_to_pdf()`（`ExportAsFixedFormat`，`OptimizeFor=Print`，`BitmapMissingFonts=False`）。禁止仅用屏幕优化 `SaveAs` 当最终手段（仅作回退）。
+2. **字体（全局统一）**：
+   - 正文 / 作答横线 / 页脚：**宋体**（`EXAM_FONT`）
+   - 大标题 / 大题号：**黑体**（`EXAM_FONT_TITLE`）
+   - 拼音：Times New Roman
+   - `exam_doc()` 的 Normal 样式默认宋体；`write_lines` / `set_section_footer` / 表格标签一致
+3. **冷僻笔画字**（如 𠃍、㇀）：用 `add_stroke_choice_row` 图示 + 中文名称（横折/竖/提/点）。
+4. **田字格**：高分辨率 PNG（约 `box_cm * 220` px），边长约 **1.2–1.35cm**；禁止为塞页压到 0.7cm 以下。
+5. **勿用聊天 PDF 缩略图判断清晰度**；以 Word 打开 `.docx` 或本机打印为准。交付保留 `.docx` + `.pdf`。
 
-## 版面利用
+## B. 书写空间
 
-5. **禁止「上半截挤满、下半截大片空白」**：一页内容若结束太早，应放大作答区 / 段距 / 田字格。
-6. **页脚必须贴纸张底部**：用 `end_exam_page` / `set_section_footer`（分节+真正页脚），禁止把页脚当正文段落插在内容后面（否则会悬在半页）。
-7. **分页以书写舒适为准**：阅读长文可跨页；题干与紧挨的作答尽量同页。完整卷不要写「不完整 / 待补」。
+6. **作答横线**：`write_lines` / `write_blank`，字号 ≥16、`space_after` ≥8–10pt。简答 ≥2 行；理由题 ≥2–3 行。
+7. **括号填空**：两侧留空。
+8. **表格作答格**：行高约一行半以上。
 
-## 保真内容
+## C. 版面
 
-8. **文字**：按原卷重录（OCR 后人工校对），出处行保留（选自…有删改）。
-9. **图**：需看清的图用矢量/高清重绘或清晰裁切；装饰图可省略。
-10. **答案**：另出 `printables/full-answers/` + `answers/` markdown；开放题给示例、注明意思对即可。
+9. **禁止「上半截挤满、下半截大片空白」**（用户若要求「与原图留白一致 / 去掉习作 / 压成 N 页」则从其要求）。
+10. **页脚贴纸张底**：`end_exam_page` / `set_section_footer`。
+11. **分页**：阅读可跨页；题干与作答尽量同页。完整卷不要写「不完整 / 待补」。
 
-## 入库产物
+## D. 保真与入库
 
-11. 练习 `printables/full/u0N-full.pdf`、答案 `printables/full-answers/u0N-full-answers.pdf`，原扫描进 `units/.../source/`，更新 `print-index.json` 与单元 README。
-12. 改完后应用 PDF 首页预览自检：田字格能否写字、作答行是否够高、页底是否大片空。
-13. 手机照片先 `python scripts/ingest_exam_photo.py <图> --unit uN`（或单独跑 preprocess），再用 corrected 图转录。
+12. **文字**：按原卷重录（OCR + 校对）；出处行保留。
+13. **答案**：`printables/full-answers/u0N-full-answers.pdf`（尽量一页）+ `answers/u0N-….md`。
+14. **产物**：`printables/full/u0N-full.pdf`（+ `.docx`）、`units/.../source/`、`print-index.json`；上线 bump `?v=`。
+15. 照片先 `python scripts/ingest_exam_photo.py <图> --unit uN`。
