@@ -84,6 +84,26 @@
         title: "完整摸底卷",
         kind: "考前",
       });
+      if (u.id === "u4") {
+        nodes.push({
+          type: "midterm-basic",
+          id: "midterm-basic",
+          unitId: "midterm",
+          unitTitle: "期中",
+          bookNo: null,
+          title: "期中基础知识练习",
+          kind: "第一至四单元 · 每课填空",
+        });
+        nodes.push({
+          type: "midterm-mock",
+          id: "midterm-mock",
+          unitId: "midterm",
+          unitTitle: "期中",
+          bookNo: null,
+          title: "模拟考试练习",
+          kind: "综合测试卷 · 待入库",
+        });
+      }
     });
     return nodes;
   }
