@@ -89,19 +89,19 @@
           type: "midterm-basic",
           id: "midterm-basic",
           unitId: "midterm",
-          unitTitle: "期中复习",
+          unitTitle: "期中",
           bookNo: null,
-          title: "基础练习",
+          title: "期中基础知识练习",
           kind: "第一至四单元 · 每课填空",
         });
         nodes.push({
           type: "midterm-mock",
           id: "midterm-mock",
           unitId: "midterm",
-          unitTitle: "期中复习",
+          unitTitle: "期中",
           bookNo: null,
-          title: "模拟试卷",
-          kind: "考前模拟 · 待上传",
+          title: "模拟考试练习",
+          kind: "综合测试卷 · 待入库",
         });
       }
     });

@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=43")
+    return fetch("./print-index.json?v=44")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -374,16 +374,16 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "下载基础练习<small>第一至四单元 · 每课填空 · A4</small>";
+      dl.innerHTML = "下载基础知识练习<small>第一至四单元 · 每课填空 · A4</small>";
       dl.addEventListener("click", () => {
         if (mt) openPdf(mt);
-        else alert("期中基础练习正在准备");
+        else alert("期中基础知识练习正在准备");
       });
       grid.appendChild(dl);
       const ans = document.createElement("button");
       ans.type = "button";
       ans.className = "mod-btn is-answer";
-      ans.innerHTML = "基础练习答案<small>做完再看 · 可打印</small>";
+      ans.innerHTML = "基础知识答案<small>做完再看 · 可打印</small>";
       ans.addEventListener("click", () => {
         if (mtAns) openPdf(mtAns);
         else alert("答案页尚未上传");
@@ -405,19 +405,19 @@
       const dl = document.createElement("button");
       dl.type = "button";
       dl.className = "mod-btn is-primary";
-      dl.innerHTML = "下载模拟试卷<small>考前模拟 · 可打印 A4</small>";
+      dl.innerHTML = "下载模拟考试练习<small>90分钟综合卷 · 可打印 A4</small>";
       dl.addEventListener("click", () => {
         if (mock) openPdf(mock);
-        else alert("期中模拟试卷待上传，发卷子照片即可入库。");
+        else alert("模拟考试练习待入库，发完整卷照片即可。");
       });
       grid.appendChild(dl);
       const ans = document.createElement("button");
       ans.type = "button";
       ans.className = "mod-btn is-answer";
-      ans.innerHTML = "模拟卷答案<small>做完再看</small>";
+      ans.innerHTML = "模拟考试答案<small>做完再看</small>";
       ans.addEventListener("click", () => {
         if (mockAns) openPdf(mockAns);
-        else alert("模拟卷答案待上传");
+        else alert("模拟考试答案待上传");
       });
       grid.appendChild(ans);
       const done = document.createElement("button");
@@ -448,7 +448,7 @@
 
     const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-" + node.title + "-答案.pdf";
     const mdUrl = pr.answerMd || "answers/lessons/L" + pad + "-" + node.title + "-答案.md";
-    const src = encodeURI(pdfUrl) + "?v=43";
+    const src = encodeURI(pdfUrl) + "?v=44";
 
     $("btnAnswerDownload").onclick = () => openPdf(pdfUrl);
 
@@ -477,7 +477,7 @@
       body.innerHTML = '<div class="a4-paper">' + pr.answerHtml + "</div>";
       return;
     }
-    fetch(encodeURI(mdUrl) + "?v=43")
+    fetch(encodeURI(mdUrl) + "?v=44")
       .then((r) => {
         if (!r.ok) throw new Error("missing");
         return r.text();
@@ -514,7 +514,7 @@
       body.innerHTML =
         '<iframe class="a4-iframe" title="园地A4答案" src="' +
         encodeURI(pdfUrl) +
-        '?v=43"></iframe>';
+        '?v=44"></iframe>';
       const tip = document.createElement("button");
       tip.type = "button";
       tip.className = "btn-path";

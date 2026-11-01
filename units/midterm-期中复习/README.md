@@ -1,10 +1,13 @@
-# 四上 · 期中复习
+# 四上 · 期中
 
-路径节点在第四单元摸底卷之后：**基础练习** + **模拟试卷**。
+路径在**第四单元摸底卷之后**出现分组「期中」，含两站：
 
-## 基础练习
+1. **期中基础知识练习** — 第一至四单元每课填空  
+2. **模拟考试练习** — 90 分钟综合测试卷（待完整入库）
 
-原卷扫描：`source/p1.png` … `source/p4.png`（第一至四单元每课填空）。
+## 期中基础知识练习
+
+原卷：`source/p1.png` … `source/p4.png`
 
 | 类型 | 文件 |
 | --- | --- |
@@ -14,6 +17,6 @@
 
 生成：`python scripts/gen_midterm_basic.py`
 
-## 模拟试卷
+## 模拟考试练习
 
-待上传。发模拟卷照片后按 `exam-from-photo` 入库。
+待完整 6 页入库后写入 `printables/midterm/midterm-mock.pdf`，并在 `print-index.json` → `midterm.mock` / `mockAnswers` 挂上。
