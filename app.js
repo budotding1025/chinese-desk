@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=42")
+    return fetch("./print-index.json?v=43")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -98,7 +98,8 @@
   function renderPath() {
     const store = P.ensure();
     const path = P.semesterPath();
-    $("pathMeta").textContent = "共 " + path.length + " 站 · 已练 " + P.completedCount() + " 站（含园地 / 加练 / 冲刺 / 摸底）";
+    $("pathMeta").textContent =
+      "共 " + path.length + " 站 · 已练 " + P.completedCount() + " 站（含园地 / 加练 / 冲刺 / 摸底 / 期中）";
     const host = $("pathList");
     host.innerHTML = "";
     let lastUnit = "";
@@ -121,10 +122,14 @@
           : node.type === "weak"
             ? "练"
             : node.type === "sprint"
-            ? "冲"
-            : node.type === "full"
-              ? "摸"
-              : String(node.bookNo);
+              ? "冲"
+              : node.type === "full"
+                ? "摸"
+                : node.type === "midterm-basic"
+                  ? "基"
+                  : node.type === "midterm-mock"
+                    ? "模"
+                    : String(node.bookNo);
       btn.innerHTML =
         '<span class="path-badge">' +
         badge +
@@ -363,6 +368,68 @@
         renderPath();
       });
       grid.appendChild(done);
+    } else if (node.type === "midterm-basic") {
+      const mt = (pi.midterm && pi.midterm.basic) || null;
+      const mtAns = (pi.midterm && pi.midterm.basicAnswers) || null;
+      const dl = document.createElement("button");
+      dl.type = "button";
+      dl.className = "mod-btn is-primary";
+      dl.innerHTML = "下载基础练习<small>第一至四单元 · 每课填空 · A4</small>";
+      dl.addEventListener("click", () => {
+        if (mt) openPdf(mt);
+        else alert("期中基础练习正在准备");
+      });
+      grid.appendChild(dl);
+      const ans = document.createElement("button");
+      ans.type = "button";
+      ans.className = "mod-btn is-answer";
+      ans.innerHTML = "基础练习答案<small>做完再看 · 可打印</small>";
+      ans.addEventListener("click", () => {
+        if (mtAns) openPdf(mtAns);
+        else alert("答案页尚未上传");
+      });
+      grid.appendChild(ans);
+      const done = document.createElement("button");
+      done.type = "button";
+      done.className = "mod-btn";
+      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.addEventListener("click", () => {
+        P.markDone(node.id, "midterm-basic");
+        $("pathLessonOverlay").classList.add("hidden");
+        renderPath();
+      });
+      grid.appendChild(done);
+    } else if (node.type === "midterm-mock") {
+      const mock = (pi.midterm && pi.midterm.mock) || null;
+      const mockAns = (pi.midterm && pi.midterm.mockAnswers) || null;
+      const dl = document.createElement("button");
+      dl.type = "button";
+      dl.className = "mod-btn is-primary";
+      dl.innerHTML = "下载模拟试卷<small>考前模拟 · 可打印 A4</small>";
+      dl.addEventListener("click", () => {
+        if (mock) openPdf(mock);
+        else alert("期中模拟试卷待上传，发卷子照片即可入库。");
+      });
+      grid.appendChild(dl);
+      const ans = document.createElement("button");
+      ans.type = "button";
+      ans.className = "mod-btn is-answer";
+      ans.innerHTML = "模拟卷答案<small>做完再看</small>";
+      ans.addEventListener("click", () => {
+        if (mockAns) openPdf(mockAns);
+        else alert("模拟卷答案待上传");
+      });
+      grid.appendChild(ans);
+      const done = document.createElement("button");
+      done.type = "button";
+      done.className = "mod-btn";
+      done.innerHTML = "标记已练<small>记入路径进度</small>";
+      done.addEventListener("click", () => {
+        P.markDone(node.id, "midterm-mock");
+        $("pathLessonOverlay").classList.add("hidden");
+        renderPath();
+      });
+      grid.appendChild(done);
     }
     $("pathLessonOverlay").classList.remove("hidden");
   }
@@ -381,7 +448,7 @@
 
     const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-" + node.title + "-答案.pdf";
     const mdUrl = pr.answerMd || "answers/lessons/L" + pad + "-" + node.title + "-答案.md";
-    const src = encodeURI(pdfUrl) + "?v=42";
+    const src = encodeURI(pdfUrl) + "?v=43";
 
     $("btnAnswerDownload").onclick = () => openPdf(pdfUrl);
 
@@ -410,7 +477,7 @@
       body.innerHTML = '<div class="a4-paper">' + pr.answerHtml + "</div>";
       return;
     }
-    fetch(encodeURI(mdUrl) + "?v=42")
+    fetch(encodeURI(mdUrl) + "?v=43")
       .then((r) => {
         if (!r.ok) throw new Error("missing");
         return r.text();
@@ -447,7 +514,7 @@
       body.innerHTML =
         '<iframe class="a4-iframe" title="园地A4答案" src="' +
         encodeURI(pdfUrl) +
-        '?v=42"></iframe>';
+        '?v=43"></iframe>';
       const tip = document.createElement("button");
       tip.type = "button";
       tip.className = "btn-path";

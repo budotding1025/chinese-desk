@@ -282,6 +282,12 @@
     "u4": "printables/full-answers/u04-full-answers.pdf"
   },
   "book": "统编版四年级上册（2024）",
+  "midterm": {
+    "basic": "printables/midterm/midterm-basic.pdf",
+    "basicAnswers": "printables/midterm-answers/midterm-basic-answers.pdf",
+    "mock": null,
+    "mockAnswers": null
+  },
   "skills": {
     "weak": "printables/skills/weak-focus.pdf",
     "weakAnswers": "printables/skill-answers/weak-focus-answers.pdf",
