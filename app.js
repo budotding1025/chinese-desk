@@ -16,7 +16,7 @@
   };
 
   function loadPrintIndex() {
-    return fetch("./print-index.json?v=44")
+    return fetch("./print-index.json?v=45")
       .then((r) => r.json())
       .then((j) => {
         state.printIndex = j;
@@ -448,7 +448,7 @@
 
     const pdfUrl = pr.answerPdf || "printables/answers/L" + pad + "-" + node.title + "-答案.pdf";
     const mdUrl = pr.answerMd || "answers/lessons/L" + pad + "-" + node.title + "-答案.md";
-    const src = encodeURI(pdfUrl) + "?v=44";
+    const src = encodeURI(pdfUrl) + "?v=45";
 
     $("btnAnswerDownload").onclick = () => openPdf(pdfUrl);
 
@@ -477,7 +477,7 @@
       body.innerHTML = '<div class="a4-paper">' + pr.answerHtml + "</div>";
       return;
     }
-    fetch(encodeURI(mdUrl) + "?v=44")
+    fetch(encodeURI(mdUrl) + "?v=45")
       .then((r) => {
         if (!r.ok) throw new Error("missing");
         return r.text();
@@ -514,7 +514,7 @@
       body.innerHTML =
         '<iframe class="a4-iframe" title="园地A4答案" src="' +
         encodeURI(pdfUrl) +
-        '?v=44"></iframe>';
+        '?v=45"></iframe>';
       const tip = document.createElement("button");
       tip.type = "button";
       tip.className = "btn-path";

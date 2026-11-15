@@ -787,6 +787,391 @@ def build_u4():
     return doc
 
 
+def add_egg_table(doc):
+    """春分竖蛋：第③段第二枚蛋表格。"""
+    table = doc.add_table(rows=2, cols=3)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    headers = ["“我”的做法", "“我”的想法", "“我”的心情"]
+    for j, h in enumerate(headers):
+        cell = table.rows[0].cells[j]
+        cell.text = ""
+        p = cell.paragraphs[0]
+        run = p.add_run(h)
+        set_run_font(run, size=11, bold=True, color=INK)
+        p.alignment = 1
+        _set_cell_border(cell)
+    vals = ["第二枚蛋\n\n", "希望成功，只好认输", "\n\n"]
+    for j, text in enumerate(vals):
+        cell = table.rows[1].cells[j]
+        cell.text = ""
+        p = cell.paragraphs[0]
+        run = p.add_run(text)
+        set_run_font(run, size=11, color=INK)
+        _set_cell_border(cell)
+    tr = table.rows[1]._tr
+    trPr = tr.get_or_add_trPr()
+    trHeight = OxmlElement("w:trHeight")
+    trHeight.set(qn("w:val"), "700")
+    trHeight.set(qn("w:hRule"), "atLeast")
+    trPr.append(trHeight)
+    add_para(doc, "", size=4, space_after=3)
+
+
+def build_u5():
+    """第五单元练习（习作单元）：宋体正文；共 4 页。"""
+    doc = exam_doc()
+    exam_header(doc, "语文·四上·第五单元练习")
+
+    exam_section(doc, "一、看拼音，写词语。")
+    add_inline_pinyin_line(
+        doc,
+        ["1. 小麻雀站在地上", ("hún shēn", 2), "发抖，", ("wú kě nài hé", 4), "地拍打着小翅膀。"],
+        box_cm=1.2,
+        size=13,
+        after=6,
+    )
+    add_inline_pinyin_line(
+        doc,
+        [
+            "2. 一种强大的",
+            ("lì liàng", 2),
+            "让我带着狗走开，我被一只小鸟",
+            ("xī shēng", 2),
+            "自己保护孩子的",
+            ("yǒng qì", 2),
+            "深深震撼。",
+        ],
+        box_cm=1.15,
+        size=12,
+        after=8,
+    )
+
+    exam_section(doc, "二、在加点字的正确读音下面画“√”。")
+    exam_body(doc, "1. 小狗嗅（yòu　xiù）到雏鸟的味道慢慢靠近，小鸟无可奈（lài　nài）地呆立在原地。", space_after=4)
+    exam_body(doc, "2. 陈明送我一条小木船形状的钥匙链（lián　liàn），它象征着我们的友谊。", space_after=6)
+
+    exam_section(doc, "三、按要求选择正确答案，将序号填在括号里。")
+    exam_body(doc, "1. “鼓”用部首查字法，应查（　　）部。", space_after=2)
+    exam_body(doc, "　　①上　　②豆　　③鼓", space_after=4)
+    exam_body(doc, "2. “躯”字的第九笔是（　　）。", space_after=2)
+    add_stroke_choice_row(
+        doc,
+        [
+            ("①", "hengzhe", "横折（乚）"),
+            ("②", "shu", "竖钩（亅）"),
+            ("③", "dian", "点"),
+        ],
+        icon_cm=0.9,
+        size=12,
+    )
+    exam_body(
+        doc,
+        "3. “年（　　）对友谊来说不是问题，我（　　）忆中有很多忘年交。”句中括号里应填的字是（　　）。",
+        space_after=2,
+    )
+    exam_body(doc, "　　①纪　记　　②纪　纪　　③记　记", space_after=4)
+    end_exam_page(doc, "语文·四上·第五单元　第 1 页（共 4 页）")
+
+    exam_section(doc, "四、在句中的【　】里选择合适的词语，在下面画“√”。")
+    exam_body(doc, "1. 运动员在最后一圈【奋斗　奋力】冲刺，超越了对手。", space_after=4)
+    exam_body(doc, "2. 他凭借【庞大　强大】的意志力战胜了困难，登上顶峰。", space_after=6)
+
+    exam_section(doc, "五、阅读短文，回答问题。")
+    exam_body(doc, "（一）春分，一个好玩的节气", bold=True, space_after=2)
+    exam_body(doc, "陈熙", size=11, space_after=3)
+    exam_body(
+        doc,
+        "①春分是一个很有趣的节气，以前我只知道这一天的白天跟黑夜一样长，今年为了更多地了解一些春分的习俗，我就上网查了查，春分有一个有趣的习俗深深地吸引了我——竖蛋。",
+        first_line=Cm(0.74),
+        size=12,
+        space_after=3,
+    )
+    exam_body(
+        doc,
+        "②我赶紧拿了钱，到楼下的超市买了十个鸡蛋。回来的路上，我心里一直嘀咕：竖蛋，是怎么竖的呢？这圆溜溜的鸡蛋真的能竖起来吗？我摸着那一个个光滑的鸡蛋，忍不住笑了，心里充满了期待。",
+        first_line=Cm(0.74),
+        size=12,
+        space_after=3,
+    )
+    exam_body(
+        doc,
+        "③一进家门，鞋都还没来得及换，我就快速拿出一个蛋来。不料，一下子没拿稳，鸡蛋“啪”一声掉在地上，像一朵花似的。我赶紧清理干净，又小心翼翼地拿出一个蛋，先抚摸了一会儿，细细一看：它圆圆的，一头略大，一头略尖些，像一个胖娃娃似的。我瞪着鸡蛋，自言自语道：“你可要争气哦，一定要成功，不然我就吃了你！”我试着把它立在厨房光滑的大理石上，倒了；又立，再倒；再立……手扶着鸡蛋上边，不成，我就扶着鸡蛋的下边。右手累了，又换成左手。重复了十几下，我只好认输了——看来这个蛋真是“扶不起的阿斗”啊！",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=3,
+    )
+    end_exam_page(doc, "语文·四上·第五单元　第 2 页（共 4 页）")
+
+    exam_body(
+        doc,
+        "④我从剩下的八个鸡蛋里挑挑拣拣，又取出一个，抚摸了一会儿，温柔地说：“小鸡蛋啊，我这次可全靠你了，等你成功了，我就封你为‘鸡蛋国王’！”我聚精会神地盯着它，双手把它稳住，轻轻转动，又定了好几秒钟，然后缓缓地松开手。嘿，它稳稳地立在那儿了！我看着它，开心一笑，说：“可爱的小鸡蛋，我要把你留作纪念；剩下的鸡蛋，就是今晚的美食。”我打着火，把其余的八个蛋做成煎蛋，淋上酱油，就是全家人的一顿美餐啦。不过，爸爸妈妈回来的时候，他们夸得更多的不是我的厨艺，而是那个立起来的高傲的“国王”。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "⑤俗话说：“春分到，蛋儿俏。”春分，可真是个好玩的节气呀！（有删改）",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=4,
+    )
+
+    exam_body(doc, "1. 根据短文内容，请你按照起因、经过、结果的顺序排序，将序号填在括号里。", space_after=2)
+    exam_body(doc, "　　（　　）“我”把剩下的鸡蛋做成煎蛋，和爸爸妈妈一起享用。", space_after=1)
+    exam_body(doc, "　　（　　）“我”上网查找，被春分竖鸡蛋的习俗深深吸引。", space_after=1)
+    exam_body(doc, "　　（　　）“我”下楼买了鸡蛋，回家后不断挑战，终于成功。", space_after=3)
+    exam_body(doc, "2. 小作者把竖蛋的整个过程写得很清楚。请阅读短文第③自然段，完成下面的表格。", space_after=2)
+    add_egg_table(doc)
+    exam_body(doc, "3. 为什么作者觉得春分是个好玩的节气？", space_after=1)
+    write_lines(doc, 1, size=14, space_after=4)
+
+    exam_body(doc, "（二）巧手奶奶　　赵浅麦", bold=True, space_before=2, space_after=2)
+    exam_body(
+        doc,
+        "①瞧，不远处有一只五彩斑斓的蝴蝶正栖息在一朵娇艳的鲜花上。它昂着头，翅膀微微张开，一对触角竖向脑后。这可不是一派美丽的自然风光，而是心灵手巧的奶奶绣在毛衣上的图案。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "②只需要几团普普通通的毛线、几根长长短短的竹针，奶奶便能织出一件件漂亮的毛衣。用不了多长时间，各种各样的图案便巧妙而自然地呈现在毛衣上。人像、动物、植物，要什么有什么，个个栩栩如生、惟妙惟肖，令人拍案叫绝！",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    end_exam_page(doc, "语文·四上·第五单元　第 3 页（共 4 页）")
+
+    exam_body(
+        doc,
+        "③奶奶织毛衣的技术在老家是出了名的。常有左邻右舍送来毛线请奶奶帮忙。奶奶总会把穿着对象、具体要求、想要的图案等问题一一搞清楚，绝不含糊。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "④干完农活后，奶奶便开始织毛衣。她搬来一张小凳子，坐在院子的大门边，戴上她的老花镜，用竹筐把毛线一兜，边晒太阳边织毛衣。奶奶倚在门边上，手指像两只蝴蝶一样上下翻飞，看得我眼花缭乱，令我惊叹不已！十天半个月后，委托人来取毛衣时，总要由衷地夸赞几句。这时候，奶奶会不好意思地挠挠头，摆摆手，像个害羞的小姑娘。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "⑤一传十，十传百，上门讨教的人越来越多，奶奶从不拒绝，总是耐心地手把手教她们。我总劝她歇一歇，可奶奶只是笑笑说：“不打紧，织个毛衣不费事。”如果别人灵光一闪想出个好主意，奶奶一定会虚心采纳。奶奶还常给自己“充电”呢！每次她来我们家，总会奔向书店，买上几本关于织毛衣的书，好回去仔细研究！",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "⑥每当穿上奶奶织的毛衣，我眼前就浮现出奶奶翻飞的手指、专注的神情，耳畔响起那竹针碰撞的声音……奶奶织毛衣的高超技艺令人拍案叫绝，奶奶的热情、谦虚、勤奋更让我备受感染！（有删改）",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=3,
+    )
+
+    exam_body(doc, "1. 根据短文内容判断，正确的画“√”，错误的画“×”。", space_after=1)
+    exam_body(doc, "　　（1）奶奶帮邻居织毛衣前，会仔细问清楚穿着对象、具体要求和想要的图案。（　　）", space_after=1)
+    exam_body(doc, "　　（2）奶奶织毛衣时手指动作缓慢，能让人清清楚楚地看清每个步骤。（　　）", space_after=1)
+    exam_body(doc, "　　（3）面对别人的讨教，奶奶从不拒绝，还会虚心采纳别人想出的好主意。（　　）", space_after=1)
+    exam_body(doc, "　　（4）奶奶织毛衣的技艺全靠天生，从来不需要学习新的编织方法。（　　）", space_after=2)
+    exam_body(doc, "2. 短文第④自然段对奶奶织毛衣的动作描写极具画面感，请你用“　　”画出相关语句。", space_after=2)
+    exam_body(
+        doc,
+        "3. 文中第⑥自然段写道：“奶奶织毛衣的高超技艺令人拍案叫绝，奶奶的热情、谦虚、勤奋更让我备受感染！”请结合短文说说你对这句话的理解。",
+        size=11,
+        space_after=1,
+    )
+    write_lines(doc, 1, size=14, space_after=4)
+
+    exam_section(doc, "六、习作。")
+    exam_body(
+        doc,
+        "生活值得细细品味，你亲历的每一件事，都会让你有所收获。请写一写你印象最深的一件事。写之前先想清楚这件事的起因、经过和结果，再按一定的顺序把这件事写清楚，题目自拟。",
+        size=11,
+        space_after=2,
+    )
+    write_lines(doc, 4, size=14, space_after=5)
+    end_exam_page(doc, "语文·四上·第五单元　第 4 页（共 4 页）", last=True)
+    return doc
+
+
+def build_u6():
+    """第六单元练习（世界文化遗产）：宋体正文；共 4 页。"""
+    doc = exam_doc()
+    exam_header(doc, "语文·四上·第六单元练习")
+
+    exam_section(doc, "一、看拼音，写词语。")
+    # 拆两行横排：整句 + 多格塞一行会被 Word 挤成竖排
+    add_inline_pinyin_line(
+        doc,
+        ["劳动人民依靠非凡的", ("zhì huì", 2), "造就了宏伟的工程，"],
+        box_cm=1.2,
+        size=13,
+        after=6,
+    )
+    add_inline_pinyin_line(
+        doc,
+        [("xiū zhù", 2), "出", ("jīn bì huī huáng", 4), "的皇家宫殿。"],
+        box_cm=1.2,
+        size=13,
+        after=8,
+    )
+
+    exam_section(doc, "二、找出句子中的错别字，用横线画出并改正在括号里。")
+    exam_body(doc, "1. 夏天的树木十分冒盛，小鸟在枝头欢快地歌唱。（　　）", space_after=3)
+    exam_body(doc, "2. 肥皂泡破裂后，水面上只剩下一层白色的泡末。（　　）", space_after=3)
+    exam_body(doc, "3. 河水缓慢地流淌，像一条银色的带子园绕着村庄。（　　）", space_after=6)
+
+    exam_section(doc, "三、读句子，体会画线部分的用法，再照样子介绍一种事物。")
+    exam_body(doc, "例句1：这条长廊有七百多米长，分成二百七十三间。", size=12, space_after=2)
+    exam_body(
+        doc,
+        "例句2：一号坑东西长230米，南北宽62米，总面积14260平方米，坑里的兵马俑也最多，有6000多件。",
+        size=12,
+        space_after=3,
+    )
+    write_lines(doc, 2, size=14, space_after=5)
+
+    exam_section(doc, "四、读一读，用学过的修改符号修改下面这段话。")
+    exam_body(
+        doc,
+        "因庆放假，我参观了举世闻名的都江堰。它是李冰战国时期主持修建的，是非常古老的水力工程。它设计巧妙，能自动防洪、灌溉，令人惊讶的是，虽然经过了两千多年，但至今仍在发挥作用。讲解员介绍说，四川被称为“天府之国”，都江理有很大的功劳，它真是造福人民的！",
+        first_line=Cm(0.74),
+        size=12,
+        space_after=4,
+    )
+    end_exam_page(doc, "语文·四上·第六单元　第 1 页（共 4 页）")
+
+    exam_section(doc, "五、默写古诗。")
+    exam_body(doc, "黄鹤楼送孟浩然之广陵", bold=True, space_after=2)
+    exam_body(doc, "［唐］李白", size=12, space_after=3)
+    write_lines(doc, 4, size=15, space_after=6)
+
+    exam_section(doc, "六、阅读短文，回答问题。")
+    exam_body(doc, "（一）良渚——被誉为文明圣地的世界遗产", bold=True, space_after=2)
+    exam_body(doc, "赵晔", size=11, space_after=3)
+    exam_body(
+        doc,
+        "①久闻良渚古城遗址是中华五千年文明的实证，这座距今约5000年的长江下游环太湖地区早期国家都城，2019年被列入《世界遗产名录》。闲暇时，我踏入良渚古城遗址公园，探寻千年密码，感受文明传承。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "②入园后，最先看到的便是遗址公园的核心区域——城址区。这也是2019年申遗成功后最先向公众开放的部分，是解读良渚“王都”气象的起点。漫步在城址区的步道上，脚下的每一寸土地都刻着远古的印记，平整的夯土台基隐约可见，依稀勾勒出当年都城的恢宏格局。沿途的标识牌详细介绍着遗址的保护历程，每一段文字都诉说着对这片文明瑰宝的珍视。偶尔能看到工作人员身着制服巡查，让我读懂了“保护第一”的理念并非一句口号，而是日复一日的坚守。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "③逛完核心城址区，我循着指引来到了2021年开放的瑶山祭坛与贵族墓地。从都城的恢宏过渡到先民的精神信仰，我仿佛穿越了良渚王国的日常生活与祭祀场景。这里的分等级墓地清晰地展现了当年良渚社会的阶级分化，而祭坛上留存的痕迹，默默诉说着上古先民的祭祀仪式与精神追求。那些象征礼制的玉器虽已被珍藏于博物馆，却仍能从遗址的布局中，感受到当年“以玉事神、以礼立邦”的厚重底蕴。沿途的草木郁郁葱葱，很难想象这里曾经历过拆迁、居民外迁等一系列保护举措，正是这些努力，才让这片遗址得以褪去喧嚣，恢复本来面目。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    end_exam_page(doc, "语文·四上·第六单元　第 2 页（共 4 页）")
+
+    exam_body(
+        doc,
+        "④之后，我们抵达了2022年开放的老虎岭遗址。这里是良渚复杂水利系统的缩影，也是良渚先民智慧最直观的体现。站在老虎岭遗址的观景台，远眺蜿蜒的堤坝遗址，其规模之宏大、设计之精巧，令人叹为观止。听工作人员介绍，为了保护这片水利遗址，高速公路和国道改道，这些看似不起眼的举措，背后是对遗址完整性的极致守护。漫步在堤坝遗址旁，能清晰地感受到良渚先民顺应自然、改造自然的智慧，也读懂了良渚遗址保护从“单体保护”到“整体保护”、从“被动保护”到“主动保护”的转变。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "⑤夕阳西下，我返程回望。这场良渚之行，不仅让我直观领略了五千年前良渚王国的“王都”气象，更让我明白，这份跨越五千年的文明瑰宝，离不开一代代人的坚守与守护。而我们每一次踏访，都是对中华优秀传统文化的传承与致敬。（有删改）",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=3,
+    )
+
+    exam_body(doc, "1. 读文章，想一想作者是按怎样的顺序游览的。", space_after=2)
+    exam_body(doc, "　　（　　　　　　）→（　　　　　　　　　　）→（　　　　　　）→返回", space_after=3)
+    exam_body(doc, "2. 为保护老虎岭遗址，人们采取了哪些举措？用“　　”画出相关语句。", space_after=3)
+    exam_body(doc, "3. 结合全文，谈谈你对文中最后一句话的理解。", space_after=1)
+    write_lines(doc, 2, size=14, space_after=4)
+
+    exam_body(doc, "（二）鼓浪屿——全球公民精神的重要课堂", bold=True, space_before=2, space_after=2)
+    exam_body(doc, "郭语涵", size=11, space_after=2)
+    exam_body(
+        doc,
+        "①作为2017年入选世界文化遗产的小岛，鼓浪屿以多元文化为魂、历史建筑为骨，既是文明交融的见证，也是兼具烟火与诗意的家园。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "②鼓浪屿没有车马的喧嚣，只有海风轻拂耳畔。我循着青石板路的纹路，开启了这场兼具自然之美与人文底蕴的漫游，也慢慢解锁这座世界遗产小岛的独特魅力。沿着码头前行，目光所及的每一栋建筑，都在诉说着鼓浪屿作为国际社区的过往。19—20世纪全球化的浪潮中，这座小岛汇聚了华人、归国华侨与其他多国居民，成为多元文化碰撞交融的舞台。脚下的青石板光洁，两侧的建筑错落有致，既有闽南古厝的飞檐翘角，又有西方洋楼的花廊柱，这便是独属于鼓浪屿的“厦门装饰风格”，每一处细节都藏着东西方文化交融的痕迹，更印证着它对东南亚沿海地区建筑风格的深远影响。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    end_exam_page(doc, "语文·四上·第六单元　第 3 页（共 4 页）")
+
+    exam_body(
+        doc,
+        "③深入小岛腹地，我愈发体会到鼓浪屿多元文化交融的深厚底蕴，也读懂了它三大核心价值的真谛：这里从传统农业社区发展为新型社区，在亚太地区都极为罕见。漫步间，既能看到中式古宅里的传统纹样，也能遇见西洋建筑上的宗教符号。全球多元文化在此碰撞、共生，不仅孕育了别具一格的建筑风貌，更教会人们尊重差异、包容多样。恰如博科娃女士所言，这里是全球公民精神的重要课堂。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "④一路探寻，我也渐渐了解到这座小岛的“多重身份”，更看到了它在保护与发展中的坚守与困境。鼓浪屿不仅是世界文化遗产，还是国家级风景名胜区、国家5A级旅游景区，有超一万常住人口。改革开放以来，厦门保留了岛上20世纪30年代的城市面貌，让近千栋历史建筑得以延续生机。",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=2,
+    )
+    exam_body(
+        doc,
+        "⑤夕阳西下，我漫步在鼓浪屿的海岸线，心中满是感慨与思索。这座小岛既有多元文化交融的辉煌，也面临着现实的挑战——历史文化内涵未被充分挖掘，旅游热潮给社区生活带来压力，基础资源的剧减让老居民渐渐离去。但我相信，只要坚守保护初心，深挖文化底蕴，这座承载着文明与温度的小岛，终将在岁月中继续绽放独特光彩。（有删改）",
+        first_line=Cm(0.74),
+        size=11,
+        space_after=3,
+    )
+
+    exam_body(doc, "1. 根据短文内容判断，正确的画“√”，错误的画“×”。", space_after=1)
+    exam_body(
+        doc,
+        "　　（1）作者游览鼓浪屿时，首先沿着码头前行，欣赏到了兼具闽南传统与西方特色的“厦门装饰风格”建筑。（　　）",
+        size=11,
+        space_after=1,
+    )
+    exam_body(
+        doc,
+        "　　（2）鼓浪屿的“厦门装饰风格”建筑仅融合了闽南传统建筑特色，未受到西方建筑的影响。（　　）",
+        size=11,
+        space_after=2,
+    )
+    exam_body(doc, "2. 请用“　　”在文中画出能概括全文主要内容的一个关键句。", space_after=2)
+    exam_body(doc, "3. 联系上下文，我理解了“别具一格”的意思是：________________________", space_after=3)
+    exam_body(
+        doc,
+        "4. 旅游热潮给鼓浪屿的社区生活带来了一些压力，请你结合本文，提出一条既能保护社区烟火气，又能兼顾旅游发展的解决方案。",
+        size=11,
+        space_after=1,
+    )
+    write_lines(doc, 2, size=14, space_after=4)
+
+    exam_section(doc, "七、习作。")
+    exam_body(
+        doc,
+        "中国的世界文化遗产凝结着我国劳动人民的聪明才智，是中国人民的骄傲，更是人类文明的瑰宝。在本单元学习的基础上，让我们把了解到的一处中国世界文化遗产清楚地写下来。",
+        size=11,
+        space_after=2,
+    )
+    write_lines(doc, 4, size=14, space_after=5)
+    end_exam_page(doc, "语文·四上·第六单元　第 4 页（共 4 页）", last=True)
+    return doc
+
+
 def save_pair(doc, stem: str):
     PRINT.mkdir(parents=True, exist_ok=True)
     docx_path = PRINT / f"{stem}.docx"
@@ -818,6 +1203,8 @@ def main():
         "u2": ("u02-full", build_u2),
         "u3": ("u03-full", build_u3),
         "u4": ("u04-full", build_u4),
+        "u5": ("u05-full", build_u5),
+        "u6": ("u06-full", build_u6),
     }
     for t in targets:
         stem, fn = builders[t]

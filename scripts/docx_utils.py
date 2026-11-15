@@ -545,7 +545,8 @@ def add_inline_pinyin_line(doc, segments, *, size=13, box_cm: float = 1.05, afte
 
     table = doc.add_table(rows=1, cols=len(specs))
     table.alignment = WD_TABLE_ALIGNMENT.LEFT
-    table.autofit = True
+    # 关闭 autofit：过宽时 Word 会把文字格压窄，汉字变成一字一竖排
+    table.autofit = False
     _clear_table_borders(table)
 
     for i, spec in enumerate(specs):
@@ -558,10 +559,17 @@ def add_inline_pinyin_line(doc, segments, *, size=13, box_cm: float = 1.05, afte
         p0.paragraph_format.space_after = Pt(0)
 
         if spec[0] == "text":
-            # 勿压窄：宁可略宽，避免汉字被裁切
+            # 按字宽估宽，并禁止单元格内换行（保持横排）
             text = spec[1]
-            cell.width = Cm(max(0.9, min(14.0, 0.62 * max(1, len(text)) + 0.4)))
+            cell.width = Cm(max(0.9, min(14.0, 0.55 * max(1, len(text)) + 0.35)))
             p0.alignment = ALG.LEFT
+            # w:wordWrap off → 不在格内折成竖排
+            tcPr = cell._tc.get_or_add_tcPr()
+            for child in list(tcPr):
+                if child.tag == qn("w:tcW"):
+                    pass
+            no_wrap = OxmlElement("w:noWrap")
+            tcPr.append(no_wrap)
             run = p0.add_run(text)
             set_run_font(run, name_cn=EXAM_FONT, size=size, color=EXAM_INK)
         else:
